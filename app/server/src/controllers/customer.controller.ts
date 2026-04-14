@@ -1,4 +1,4 @@
-import { UniqueConstraint } from '@/error/UniqueConstraint';
+import { UniqueConstraint } from '@/error/index';
 import {
   activeCustomer,
   createCustomer,
@@ -9,29 +9,14 @@ import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 export const createCustomerController = async (req: Request, res: Response) => {
-  try {
-    const customerData = req.body;
+  const customerData = req.body;
+  const customer = await createCustomer(customerData);
 
-    const customer = await createCustomer(customerData);
-
-    res.status(StatusCodes.OK).send({
-      status: ReasonPhrases.OK,
-      message: 'Cliente cadastrado com sucesso',
-      data: customer,
-    });
-  } catch (error) {
-    if (error instanceof UniqueConstraint) {
-      return res.status(error.statusCode).send({
-        status: ReasonPhrases.CONFLICT,
-        errorName: error.name,
-        error: error.message,
-      });
-    }
-
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
-    });
-  }
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Cliente cadastrado com sucesso',
+    data: customer,
+  });
 };
 
 export const modifyCustomerController = async (req: Request, res: Response) => {
