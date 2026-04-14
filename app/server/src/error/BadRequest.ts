@@ -5,8 +5,8 @@ export class BadRequest extends Error {
 
   constructor(
     message: string,
-    statusCode = StatusCodes.CONFLICT,
-    reasonPhrases = ReasonPhrases.CONFLICT,
+    statusCode = StatusCodes.BAD_REQUEST,
+    reasonPhrases = ReasonPhrases.BAD_REQUEST,
   ) {
     super(message);
     this.statusCode = statusCode;
