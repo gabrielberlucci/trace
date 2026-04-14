@@ -1,7 +1,11 @@
 import { NotFound } from '@/error/NotFound';
 import { UniqueConstraint } from '@/error/UniqueConstraint';
-import { createSupplier, modifySupplier } from '@/services/supplier.service';
-import type { Request, Response } from 'express';
+import {
+  createSupplier,
+  inactiveSupplier,
+  modifySupplier,
+} from '@/services/supplier.service';
+import type { NextFunction, Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 export const createSupplierController = async (req: Request, res: Response) => {
@@ -64,5 +68,33 @@ export const modifySupplierController = async (req: Request, res: Response) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       error: ReasonPhrases.INTERNAL_SERVER_ERROR,
     });
+  }
+};
+
+export const inactiveSupplierController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const supplierId = req.params['id'];
+
+    const convertedId = Number(supplierId);
+
+    if (Number.isNaN(convertedId)) {
+      return res.status(StatusCodes.BAD_REQUEST).send({
+        error: ReasonPhrases.BAD_REQUEST,
+        message: `ID ${supplierId} inválido`,
+      });
+    }
+    const disabledSupplier = await inactiveSupplier(convertedId);
+
+    res.status(StatusCodes.OK).send({
+      status: StatusCodes.OK,
+      message: 'Fornecedor inativado com sucesso',
+      data: disabledSupplier,
+    });
+  } catch (error) {
+    next(error);
   }
 };
