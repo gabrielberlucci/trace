@@ -10,19 +10,7 @@ export const createSupplier = async (
 ) => {
   try {
     const supplier = await prisma.supplier.create({
-      data: {
-        document: supplierData.document,
-        typePerson: supplierData.typePerson,
-        name: supplierData.name,
-        phone: supplierData.phone,
-        address: supplierData.address,
-        zipcode: supplierData.zipcode,
-        addressNumber: supplierData.addressNumber,
-        complement: supplierData.complement,
-        email: supplierData.email,
-        ie: supplierData.ie,
-        city: supplierData.city,
-      },
+      data: supplierData,
     });
 
     return supplier;
@@ -33,7 +21,6 @@ export const createSupplier = async (
           `O campo ${formatPrismaError(error)} não pode ser nulo`,
         );
       }
-
       if (error.code === 'P2002') {
         throw new UniqueConstraint(
           `O fornecedor com o ${formatPrismaError(error)} já existe`,
@@ -54,20 +41,7 @@ export const modifySupplier = async (
       where: {
         id: supplierId,
       },
-
-      data: {
-        typePerson: supplierData.typePerson,
-        name: supplierData.name,
-        phone: supplierData.phone,
-        address: supplierData.address,
-        zipcode: supplierData.zipcode,
-        addressNumber: supplierData.addressNumber,
-        complement: supplierData.complement,
-        email: supplierData.email,
-        ie: supplierData.ie,
-        city: supplierData.city,
-        active: supplierData.active,
-      },
+      data: supplierData,
     });
 
     return modifiedSupplier;
@@ -76,6 +50,11 @@ export const modifySupplier = async (
       if (error.code === 'P2025') {
         throw new NotFound(
           `O fornecedor com o id ${supplierId} não foi encontrado`,
+        );
+      }
+      if (error.code === 'P2002') {
+        throw new UniqueConstraint(
+          `O fornecedor com o ${formatPrismaError(error)} já existe`,
         );
       }
     }
