@@ -2,7 +2,9 @@ import { BadRequest } from '@/error/BadRequest';
 import { NotFound } from '@/error/NotFound';
 import { UniqueConstraint } from '@/error/UniqueConstraint';
 import type { NextFunction, Request, Response } from 'express';
+import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { formatPrismaError } from '@/utils/formatPrismaError';
 
 export const validateError = (
   error: Error,
@@ -29,6 +31,15 @@ export const validateError = (
       errorName: error.name,
       message: error.message,
     });
+  }
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      return res.status(StatusCodes.CONFLICT).send({
+        errorName: ReasonPhrases.CONFLICT,
+        message: `O campo ${formatPrismaError(error).firstMessage} já existe para o ${formatPrismaError(error).modelName}`,
+      });
+    }
   }
 
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
