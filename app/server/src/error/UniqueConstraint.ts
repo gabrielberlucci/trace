@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-export class BadRequest extends Error {
+export class UniqueConstraint extends Error {
   public readonly statusCode: number;
 
   constructor(
