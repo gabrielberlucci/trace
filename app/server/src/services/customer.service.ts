@@ -7,20 +7,7 @@ export const createCustomer = async (
 ) => {
   try {
     const customer = await prisma.customer.create({
-      data: {
-        document: customerData.document,
-        typePerson: customerData.typePerson,
-        name: customerData.name,
-        birthdate: customerData.birthdate,
-        phone: customerData.phone,
-        address: customerData.address,
-        zipcode: customerData.zipcode,
-        addressNumber: customerData.addressNumber,
-        complement: customerData.complement,
-        email: customerData.email,
-        ie: customerData.ie,
-        city: customerData.city,
-      },
+      data: customerData,
     });
 
     return customer;
@@ -50,20 +37,7 @@ export const modifyCustomer = async (
     where: {
       id: customerId,
     },
-    data: {
-      document: customerData.document,
-      typePerson: customerData.typePerson,
-      name: customerData.name,
-      birthdate: customerData.birthdate,
-      phone: customerData.phone,
-      address: customerData.address,
-      zipcode: customerData.zipcode,
-      addressNumber: customerData.addressNumber,
-      complement: customerData.complement,
-      email: customerData.email,
-      ie: customerData.ie,
-      city: customerData.city,
-    },
+    data: customerData,
   });
 
   return modifiedCustomer;
