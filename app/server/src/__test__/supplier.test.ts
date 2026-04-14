@@ -7,7 +7,9 @@ import { StatusCodes } from 'http-status-codes';
 
 describe('Supplier Route Testes', () => {
   beforeEach(async () => {
-    await prisma.$executeRawUnsafe(`TRUNCATE TABLE "Supplier" CASCADE;`);
+    await prisma.$queryRawUnsafe(`
+        DELETE FROM "Supplier"
+        WHERE id > 2`);
   });
 
   it(`Expect that it returns ${StatusCodes.OK} for supplier creation`, async () => {
@@ -52,24 +54,18 @@ describe('Supplier Route Testes', () => {
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect that it returns ${StatusCodes.CONFLICT} for supplier creation`, async () => {
+  it(`Expect that it returns ${StatusCodes.CONFLICT} for supplier modify using the same CNPJ`, async () => {
     await request(app)
-      .post('/api/supplier/modify:')
+      .patch('/api/supplier/modify/2')
       .send({
-        document: '35897854033',
-        typePerson: 'PM',
-        name: 'Gabriel Berlucci',
+        document: '06934630000110',
       })
-      .expect(StatusCodes.BAD_REQUEST);
+      .expect(StatusCodes.CONFLICT);
   });
 
   afterAll(async () => {
-    await prisma.customer.deleteMany({
-      where: {
-        id: {
-          notIn: [1, 2],
-        },
-      },
-    });
+    await prisma.$queryRawUnsafe(`
+        DELETE FROM "Supplier"
+        WHERE id > 2`);
   });
 });
