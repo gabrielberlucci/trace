@@ -53,6 +53,14 @@ export const modifySupplierController = async (req: Request, res: Response) => {
       });
     }
 
+    if (error instanceof UniqueConstraint) {
+      return res.status(error.statusCode).send({
+        error: ReasonPhrases.CONFLICT,
+        errorName: error.name,
+        message: error.message,
+      });
+    }
+
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       error: ReasonPhrases.INTERNAL_SERVER_ERROR,
     });
