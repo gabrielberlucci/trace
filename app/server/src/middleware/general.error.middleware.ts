@@ -1,3 +1,4 @@
+import { BadRequest } from '@/error/BadRequest';
 import { NotFound } from '@/error/NotFound';
 import { UniqueConstraint } from '@/error/UniqueConstraint';
 import type { NextFunction, Request, Response } from 'express';
@@ -11,7 +12,6 @@ export const validateError = (
 ) => {
   if (error instanceof NotFound) {
     return res.status(error.statusCode).send({
-      error: ReasonPhrases.NOT_FOUND,
       errorName: error.name,
       message: error.message,
     });
@@ -19,7 +19,13 @@ export const validateError = (
 
   if (error instanceof UniqueConstraint) {
     return res.status(error.statusCode).send({
-      error: ReasonPhrases.CONFLICT,
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
+  if (error instanceof BadRequest) {
+    return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
     });
