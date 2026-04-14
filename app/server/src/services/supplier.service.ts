@@ -62,3 +62,29 @@ export const modifySupplier = async (
     throw error;
   }
 };
+
+export const inactiveSupplier = async (supplierId: number) => {
+  //TODO: add validation if not founded, for example
+  try {
+    const inactiveSupplier = await prisma.supplier.update({
+      where: {
+        id: supplierId,
+      },
+      data: {
+        active: 'NO',
+      },
+    });
+
+    return inactiveSupplier;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        throw new NotFound(
+          `O fornecedor com ID ${supplierId} não foi encontrado`,
+        );
+      }
+    }
+
+    throw error;
+  }
+};
