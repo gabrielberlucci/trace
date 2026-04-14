@@ -1,5 +1,4 @@
 import { BadRequest } from '@/error/BadRequest';
-import { NotFound, UniqueConstraint } from '@/error/index';
 import {
   createSupplier,
   inactiveSupplier,
