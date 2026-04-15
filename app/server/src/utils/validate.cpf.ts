@@ -1,17 +1,17 @@
 /*
 * sum cpf digits
 
-* @param verifyDigitValue - controls the logic of weight: if you want to validate the sum of first digit,
+* @param verifyDigitValue:number - controls the logic of weight: if you want to validate the sum of first digit,
 * pass the value 0; if you want to validate the sum of last digit, pass the value 1
 * 
-* @param cpf - user's CPF
-* @param digits - indicates the which digit you want to validate,
+* @param cpf: string - user's CPF
+* @param digits: number - indicates the which digit you want to validate,
 * pass the value 1 if you want to validate 10th digit;
-* pass the value 2 if you want to validate 11th digit
+* pass the value 2 if you want to validate 11th digit;
 * 
-* @exemples
-* verifyDigits(0, cpf, 2); // returns 295
-* verifyDigits(1, cpf, 1); // returns 347
+* @examples
+* verifyDigits(0, '52998224725', 2); // returns 295
+* verifyDigits(1, '52998224725', 1); // returns 347
 */
 
 const verifyDigits = (
@@ -31,6 +31,10 @@ const verifyDigits = (
   return sum;
 };
 
+/*
+ * this will be used in ZOD context, so no need to validate cpf len
+ * but it could be just an early return
+ */
 export const validateCpf = (cpf: string): boolean => {
   const tenthDigit = Number(cpf.at(9));
   const eleventhDigit = Number(cpf.at(-1));
