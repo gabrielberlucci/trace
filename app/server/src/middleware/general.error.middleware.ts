@@ -40,6 +40,13 @@ export const validateError = (
         message: `O campo ${formatPrismaError(error).firstMessage} já existe para o ${formatPrismaError(error).modelName}`,
       });
     }
+
+    if (error.code === 'P2025') {
+      return res.status(StatusCodes.NOT_FOUND).send({
+        errorName: ReasonPhrases.NOT_FOUND,
+        message: `Não foi possível encontrar o ${formatPrismaError(error)}`,
+      });
+    }
   }
 
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
