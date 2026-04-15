@@ -24,7 +24,7 @@ export const modifySupplierController = async (req: Request, res: Response) => {
   const convertedId = Number(supplierId);
   const supplierData = req.body;
 
-  if (Number.isNaN(supplierData)) {
+  if (Number.isNaN(convertedId)) {
     throw new BadRequest(
       `O fornecedor com o ID ${supplierId} não está correto`,
     );
