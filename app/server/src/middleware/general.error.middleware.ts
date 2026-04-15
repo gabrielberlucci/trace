@@ -4,7 +4,7 @@ import { UniqueConstraint } from '@/error/UniqueConstraint';
 import type { NextFunction, Request, Response } from 'express';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { formatPrismaError } from '@/utils/formatPrismaError';
+import { formatPrismaError } from '@/utils/index';
 
 export const validateError = (
   error: Error,
