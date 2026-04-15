@@ -1,4 +1,4 @@
-import { BadRequest, UniqueConstraint } from '@/error/index';
+import { UnprocessableEntity } from '@/error/index';
 import {
   activeCustomer,
   createCustomer,
@@ -25,8 +25,8 @@ export const modifyCustomerController = async (req: Request, res: Response) => {
   const convertedId = Number(customerId);
 
   if (Number.isNaN(convertedId)) {
-    throw new BadRequest(
-      `O fornecedor com o ID ${convertedId} não está correto`,
+    throw new UnprocessableEntity(
+      `O cliente com o ID ${customerId} não está correto`,
     );
   }
   const modifiedCustomer = await modifyCustomer(customerData, convertedId);
@@ -42,32 +42,36 @@ export const inactiveCustomerController = async (
   req: Request,
   res: Response,
 ) => {
-  try {
-    const customerId = req.params;
+  const customerId = req.params['id'];
+  const convertedId = Number(customerId);
 
-    const disabledCustomer = await inactiveCustomer(
-      parseInt(String(customerId.id), 10),
+  if (Number.isNaN(convertedId)) {
+    throw new UnprocessableEntity(
+      `O cliente com o ID ${customerId} não está correto`,
     );
-
-    res.status(StatusCodes.OK).send({
-      status: ReasonPhrases.OK,
-      message: 'Cliente desabilitado com sucesso',
-      data: disabledCustomer,
-    });
-  } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
-    });
   }
+
+  const disabledCustomer = await inactiveCustomer(convertedId);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Cliente desabilitado com sucesso',
+    data: disabledCustomer,
+  });
 };
 
 export const activeCustomerController = async (req: Request, res: Response) => {
   try {
-    const customerId = req.params;
+    const customerId = req.params['id'];
+    const convertedId = Number(customerId);
 
-    const activatedCustomer = await activeCustomer(
-      parseInt(String(customerId.id), 10),
-    );
+    if (Number.isNaN(convertedId)) {
+      throw new UnprocessableEntity(
+        `O cliente com o ID ${customerId} não está correto`,
+      );
+    }
+
+    const activatedCustomer = await activeCustomer(convertedId);
 
     res.status(StatusCodes.OK).send({
       status: ReasonPhrases.OK,
