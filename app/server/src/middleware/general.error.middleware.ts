@@ -1,8 +1,9 @@
-import { BadRequest, NotFound, UniqueConstraint } from '@/error/index';
+import { BadRequest } from '@/error/index';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { formatPrismaError } from '@/utils/index';
 import type { NextFunction, Request, Response } from 'express';
+import { UnprocessableEntity } from '@/error/UnprocessableEntity';
 
 export const validateError = (
   error: Error,
@@ -10,21 +11,14 @@ export const validateError = (
   res: Response,
   _next: NextFunction,
 ) => {
-  if (error instanceof NotFound) {
-    return res.status(error.statusCode).send({
-      errorName: error.name,
-      message: error.message,
-    });
-  }
-
-  if (error instanceof UniqueConstraint) {
-    return res.status(error.statusCode).send({
-      errorName: error.name,
-      message: error.message,
-    });
-  }
-
   if (error instanceof BadRequest) {
+    return res.status(error.statusCode).send({
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
+  if (error instanceof UnprocessableEntity) {
     return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
