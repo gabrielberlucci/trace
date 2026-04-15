@@ -1,10 +1,8 @@
-import { BadRequest } from '@/error/BadRequest';
-import { NotFound } from '@/error/NotFound';
-import { UniqueConstraint } from '@/error/UniqueConstraint';
-import type { NextFunction, Request, Response } from 'express';
+import { BadRequest, NotFound, UniqueConstraint } from '@/error/index';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { formatPrismaError } from '@/utils/index';
+import type { NextFunction, Request, Response } from 'express';
 
 export const validateError = (
   error: Error,
