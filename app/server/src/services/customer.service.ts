@@ -1,32 +1,14 @@
 import { prisma } from 'lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
-import { UniqueConstraint } from '@/error/UniqueConstraint';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
 ) => {
-  try {
-    const customer = await prisma.customer.create({
-      data: customerData,
-    });
+  const customer = await prisma.customer.create({
+    data: customerData,
+  });
 
-    return customer;
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        const jsonError = JSON.parse(JSON.stringify(error.meta));
-        const errorMessage = jsonError.driverAdapterError.cause.originalMessage;
-        const match = errorMessage?.match(/\"(.*?)\"/);
-        const finalMessage = match[1].match(/\_(.*?)\_/);
-
-        throw new UniqueConstraint(
-          `O usuário com o ${finalMessage[1]} já existe`,
-        );
-      }
-    }
-
-    throw error;
-  }
+  return customer;
 };
 
 export const modifyCustomer = async (

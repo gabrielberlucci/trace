@@ -1,4 +1,4 @@
-import { UniqueConstraint } from '@/error/index';
+import { BadRequest, UniqueConstraint } from '@/error/index';
 import {
   activeCustomer,
   createCustomer,
@@ -20,25 +20,22 @@ export const createCustomerController = async (req: Request, res: Response) => {
 };
 
 export const modifyCustomerController = async (req: Request, res: Response) => {
-  try {
-    const customerData = req.body;
-    const customerId = req.params;
+  const customerData = req.body;
+  const customerId = req.params['id'];
+  const convertedId = Number(customerId);
 
-    const modifiedCustomer = await modifyCustomer(
-      customerData,
-      parseInt(String(customerId.id), 10),
+  if (Number.isNaN(convertedId)) {
+    throw new BadRequest(
+      `O fornecedor com o ID ${convertedId} não está correto`,
     );
-
-    res.status(StatusCodes.OK).send({
-      status: ReasonPhrases.OK,
-      message: 'Cliente modificado com sucesso',
-      data: modifiedCustomer,
-    });
-  } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
-    });
   }
+  const modifiedCustomer = await modifyCustomer(customerData, convertedId);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Cliente modificado com sucesso',
+    data: modifiedCustomer,
+  });
 };
 
 export const inactiveCustomerController = async (
