@@ -1,10 +1,5 @@
 import { UnprocessableEntity } from '@/error/index';
-import {
-  activeCustomer,
-  createCustomer,
-  inactiveCustomer,
-  modifyCustomer,
-} from '@/services/customer.service';
+import { createCustomer, modifyCustomer } from '@/services/customer.service';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 

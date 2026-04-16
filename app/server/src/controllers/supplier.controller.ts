@@ -1,10 +1,5 @@
 import { BadRequest } from '@/error/BadRequest';
-import {
-  activeSupplier,
-  createSupplier,
-  inactiveSupplier,
-  modifySupplier,
-} from '@/services/supplier.service';
+import { createSupplier, modifySupplier } from '@/services/supplier.service';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
