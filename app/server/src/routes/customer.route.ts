@@ -24,7 +24,4 @@ customerRoute.patch(
   modifyCustomerController,
 );
 
-customerRoute.patch('/inactive/:id', inactiveCustomerController);
-customerRoute.patch('/active/:id', activeCustomerController);
-
 export { customerRoute };

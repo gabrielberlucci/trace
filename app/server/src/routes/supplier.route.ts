@@ -1,4 +1,5 @@
 import {
+  activeSupplierController,
   createSupplierController,
   inactiveSupplierController,
   modifySupplierController,
@@ -22,6 +23,5 @@ supplierRoute.patch(
   validateData(modifySupplierSchema),
   modifySupplierController,
 );
-supplierRoute.patch('/inactive/:id', inactiveSupplierController);
 
 export { supplierRoute };
