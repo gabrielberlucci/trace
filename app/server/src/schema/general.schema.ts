@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-enum ActiveStatus {
+export enum ActiveStatus {
   ACTIVE = 1,
   INACTIVE = 0,
 }
