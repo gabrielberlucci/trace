@@ -1,5 +1,10 @@
 import * as z from 'zod';
 
+enum ActiveStatus {
+  ACTIVE = 1,
+  INACTIVE = 0,
+}
+
 export const defaultSchema = z.object({
   document: z
     .string()
@@ -42,8 +47,8 @@ export const defaultSchema = z.object({
     .max(14, { error: 'IE muito longa. Use no máximo 14 caracteres' })
     .optional(),
   active: z
-    .enum(['YES', 'NO'], { error: 'Ativo informado diferente de YES ou NO' })
-    .default('YES')
+    .enum(ActiveStatus, { error: 'Ativo informado diferente de SIM ou NÃO' })
+    .default(1)
     .optional(),
   city: z.int({ error: 'Cidade inválida' }).optional(),
 });
