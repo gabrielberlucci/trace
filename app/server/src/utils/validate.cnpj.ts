@@ -22,7 +22,7 @@ const verifyDigit = (cnpj: string, digits: number): number => {
   return sum;
 };
 
-const validateCnpj = (cnpj: string): boolean => {
+export const validateCnpj = (cnpj: string): boolean => {
   if (cnpj === cnpj.at(0)?.repeat(14)) return false;
 
   const thirteenthDigit: number = Number(cnpj.at(12));
@@ -50,7 +50,3 @@ const validateCnpj = (cnpj: string): boolean => {
     fourteenDigitDivision === fourteenthDigit
   );
 };
-
-console.log(validateCnpj('15497151000174'));
-console.log(validateCnpj('11111111111111'));
-console.log(validateCnpj('15197151000174'));
