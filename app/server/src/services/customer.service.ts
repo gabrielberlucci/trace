@@ -31,7 +31,7 @@ export const inactiveCustomer = async (customerId: number) => {
       id: customerId,
     },
     data: {
-      active: 'NO',
+      active: 0,
     },
   });
 
@@ -44,7 +44,7 @@ export const activeCustomer = async (customerId: number) => {
       id: customerId,
     },
     data: {
-      active: 'YES',
+      active: 1,
     },
   });
 

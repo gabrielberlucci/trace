@@ -31,7 +31,7 @@ export const inactiveSupplier = async (supplierId: number) => {
       id: supplierId,
     },
     data: {
-      active: 'NO',
+      active: 0,
     },
   });
 
