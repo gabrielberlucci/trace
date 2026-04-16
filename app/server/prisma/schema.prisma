@@ -25,7 +25,7 @@ model Customer {
   complement    String?
   email         String?    @unique
   ie            String?    @unique
-  active        Active     @default(YES)
+  active        Int        @default(1)
   city          City?      @relation(fields: [cityId], references: [id])
   cityId        Int?
   sale          Sale[]
@@ -43,7 +43,7 @@ model Supplier {
   complement    String?
   email         String?    @unique
   ie            String?    @unique
-  active        Active     @default(YES)
+  active        Int        @default(1)
   city          City?      @relation(fields: [cityId], references: [id])
   cityId        Int?
   products      Product[]
@@ -146,9 +146,4 @@ enum Movement {
   SERVICO
   AJUSTE
   PERDA
-}
-
-enum Active {
-  YES
-  NO
 }
