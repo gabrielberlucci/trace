@@ -37,3 +37,17 @@ export const inactiveSupplier = async (supplierId: number) => {
 
   return inactiveSupplier;
 };
+
+export const activeSupplier = async (supplierId: number) => {
+  const activeSupplier = await prisma.supplier.update({
+    where: {
+      id: supplierId,
+    },
+
+    data: {
+      active: 1,
+    },
+  });
+
+  return activeSupplier;
+};
