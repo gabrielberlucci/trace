@@ -55,10 +55,10 @@ model Product {
   barcode      String
   unity        Unity
   currentStock Float           @default(0)
-  costPrice    Decimal
-  salePrice    Decimal
-  supplier     Supplier        @relation(fields: [supplierId], references: [id])
-  supplierId   Int
+  costPrice    Decimal         @db.Decimal(9, 2)
+  salePrice    Decimal         @db.Decimal(9, 2)
+  supplier     Supplier?       @relation(fields: [supplierId], references: [id])
+  supplierId   Int?
   movement     StockMovement[]
   item         SaleItem[]
 }
