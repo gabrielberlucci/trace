@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { z } from '../config/zod.config';
 
 export enum ActiveStatus {
   ACTIVE = 1,
@@ -7,7 +7,7 @@ export enum ActiveStatus {
 
 export const defaultSchema = z.object({
   document: z
-    .string()
+    .string({ error: 'Documento inválido' })
     .trim()
     .refine((val) => val.length === 11 || val.length === 14, {
       message: 'Documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos',

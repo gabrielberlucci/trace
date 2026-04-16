@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { z } from '../config/zod.config';
 
 export const productSchema = z.object({
   description: z
@@ -33,9 +33,7 @@ export const productSchema = z.object({
   unity: z.enum(['UN', 'CM', 'MT', 'MM'], {
     error: 'Unidades de medida devem ser UN, CM, MT ou MM',
   }),
-  currentStock: z
-    .float32({ error: 'Insira um valor para o estoque' })
-    .default(0),
+  currentStock: z.float32({ error: 'Insira um valor para o estoque' }),
   costPrice: z.float64({ error: 'Insira um preço de custo' }),
   salePrice: z.float64({ error: 'Insira um preço de venda' }),
   supplierId: z.int({ error: 'ID do fornecedor inválido' }).optional(),
