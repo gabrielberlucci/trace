@@ -4,9 +4,7 @@ import {
   modifyCustomerSchema,
 } from '@/schema/customer.schema';
 import {
-  activeCustomerController,
   createCustomerController,
-  inactiveCustomerController,
   modifyCustomerController,
 } from '@/controllers/customer.controller';
 import { validateData } from '@/middleware/general.validation.middleware';

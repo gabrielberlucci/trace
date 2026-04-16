@@ -1,7 +1,5 @@
 import {
-  activeSupplierController,
   createSupplierController,
-  inactiveSupplierController,
   modifySupplierController,
 } from '@/controllers/supplier.controller';
 import { validateData } from '@/middleware/general.validation.middleware';

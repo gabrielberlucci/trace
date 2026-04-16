@@ -1,5 +1,6 @@
 import { BadRequest } from '@/error/BadRequest';
 import {
+  activeSupplier,
   createSupplier,
   inactiveSupplier,
   modifySupplier,
@@ -36,26 +37,5 @@ export const modifySupplierController = async (req: Request, res: Response) => {
     status: ReasonPhrases.OK,
     message: 'Fornecedor alterado com sucesso!',
     data: modifiedSupplier,
-  });
-};
-
-export const inactiveSupplierController = async (
-  req: Request,
-  res: Response,
-) => {
-  const supplierId = req.params['id'];
-  const convertedId = Number(supplierId);
-
-  if (Number.isNaN(convertedId)) {
-    throw new BadRequest(
-      `O fornecedor com o ID ${supplierId} não está correto`,
-    );
-  }
-  const disabledSupplier = await inactiveSupplier(convertedId);
-
-  res.status(StatusCodes.OK).send({
-    status: StatusCodes.OK,
-    message: 'Fornecedor inativado com sucesso',
-    data: disabledSupplier,
   });
 };
