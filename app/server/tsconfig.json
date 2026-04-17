@@ -45,7 +45,6 @@
     "ignoreDeprecations": "6.0",
 
     // Typescript path to project files
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
