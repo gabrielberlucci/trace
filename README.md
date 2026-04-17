@@ -23,6 +23,9 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 - [x] Modelagem do Banco de Dados (Prisma Schema)
 - [x] Configuração do Zod e validações de documentos (CPF/CNPJ)
 - [x] CRUD e testes de integração das rotas de Fornecedores (com Vitest/Supertest)
+- [ ] Implementar StackTrace Logs com o Winston
+- [ ] CRUD e testes de integração das rotas de Produtos (com Vitest/Supertest)
+- [ ] CRUD e testes de integração das rotas de Usuarios (com Vitest/Supertest)
 - [ ] Implementação do módulo de Controle de Estoque (`StockMovement`)
 - [ ] Construção do fluxo transacional de Vendas
 - [ ] Autenticação e Rate-Limiting
@@ -49,7 +52,7 @@ Crie um arquivo `.env` na raiz do projeto com as credenciais do seu PostgreSQL:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/db_name?schema=public"
-PORT= 1234
+PORT= 3000
 ```
 
 **4. Execute as Migrations para montar o banco:**
