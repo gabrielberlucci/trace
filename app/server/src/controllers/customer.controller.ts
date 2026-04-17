@@ -7,8 +7,8 @@ export const createCustomerController = async (req: Request, res: Response) => {
   const customerData = req.body;
   const customer = await createCustomer(customerData);
 
-  res.status(StatusCodes.OK).send({
-    status: ReasonPhrases.OK,
+  res.status(StatusCodes.CREATED).send({
+    status: ReasonPhrases.CREATED,
     message: 'Cliente cadastrado com sucesso',
     data: customer,
   });

@@ -8,8 +8,8 @@ export const createSupplierController = async (req: Request, res: Response) => {
 
   const supplier = await createSupplier(supplierData);
 
-  res.status(StatusCodes.OK).send({
-    status: ReasonPhrases.OK,
+  res.status(StatusCodes.CREATED).send({
+    status: ReasonPhrases.CREATED,
     message: 'Fornecedor cadastrado com sucesso',
     data: supplier,
   });

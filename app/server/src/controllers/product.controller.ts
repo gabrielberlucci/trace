@@ -1,4 +1,3 @@
-import { BadRequest } from '@/error/index';
 import { createProduct } from '@/services/product.service';
 import { type Request, type Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -8,8 +7,8 @@ export const createProductController = async (req: Request, res: Response) => {
 
   const product = await createProduct(productData);
 
-  res.status(StatusCodes.OK).send({
-    status: ReasonPhrases.OK,
+  res.status(StatusCodes.CREATED).send({
+    status: ReasonPhrases.CREATED,
     message: 'Produto cadastrado com sucesso',
     data: product,
   });
