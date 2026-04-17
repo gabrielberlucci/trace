@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { describe, it, afterAll, beforeEach } from 'vitest';
 import { app } from '../app';
-import { prisma } from 'lib/prisma';
+import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { StatusCodes } from 'http-status-codes';
 
