@@ -5,6 +5,7 @@ export const logger = pino({
   serializers: {
     err: pino.stdSerializers.err,
   },
+
   transport:
     process.env.NODE_ENV === 'development'
       ? {
@@ -15,5 +16,11 @@ export const logger = pino({
             ignore: 'pid,hostname',
           },
         }
-      : undefined,
+      : {
+          target: '@axiomhq/pino',
+          options: {
+            dataset: process.env.AXIOM_DATASET,
+            token: process.env.AXIOM_TOKEN,
+          },
+        },
 });
