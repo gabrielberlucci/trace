@@ -3,7 +3,7 @@ import { z } from '../config/zod.config';
 
 export const validateData =
   (schema: z.ZodObject) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    schema.strict().parse(req.body);
+  (req: Request, _res: Response, next: NextFunction) => {
+    req.body = schema.strict().parse(req.body);
     next();
   };
