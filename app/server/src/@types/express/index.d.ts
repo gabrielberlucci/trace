@@ -10,5 +10,7 @@ namespace NodeJS {
     BASE_URL: string;
     JWT_SECRET: string;
     LOG_LEVEL: string;
+    AXIOM_DATASET: string;
+    AXIOM_TOKEN: string;
   }
 }
