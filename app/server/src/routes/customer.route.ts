@@ -12,12 +12,12 @@ import { validateData } from '@/middleware/general.validation.middleware';
 const customerRoute: Router = Router();
 
 customerRoute.post(
-  '/create',
+  '/',
   validateData(createCustomerSchema),
   createCustomerController,
 );
 customerRoute.patch(
-  '/modify/:id',
+  '/:id',
   validateData(modifyCustomerSchema),
   modifyCustomerController,
 );

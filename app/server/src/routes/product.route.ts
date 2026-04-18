@@ -8,14 +8,10 @@ import { Router } from 'express';
 
 const productRouter: Router = Router();
 
-productRouter.post(
-  '/create',
-  validateData(productSchema),
-  createProductController,
-);
+productRouter.post('/', validateData(productSchema), createProductController);
 
 productRouter.patch(
-  '/modify/:id',
+  '/:id',
   validateData(modifyProductSchema),
   modifyProductController,
 );

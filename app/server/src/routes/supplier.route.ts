@@ -12,12 +12,12 @@ import { Router } from 'express';
 const supplierRoute: Router = Router();
 
 supplierRoute.post(
-  '/create',
+  '/',
   validateData(createSupplierSchema),
   createSupplierController,
 );
 supplierRoute.patch(
-  '/modify/:id',
+  '/:id',
   validateData(modifySupplierSchema),
   modifySupplierController,
 );
