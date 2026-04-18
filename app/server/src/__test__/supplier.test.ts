@@ -12,7 +12,7 @@ describe('Supplier Route Testes', () => {
         WHERE id > 2`);
   });
 
-  it(`Expect that it returns ${StatusCodes.OK} for supplier creation`, async () => {
+  it(`Expect that it returns ${StatusCodes.CREATED} for supplier creation`, async () => {
     await request(app)
       .post('/api/supplier/create')
       .send({
@@ -20,7 +20,7 @@ describe('Supplier Route Testes', () => {
         typePerson: 'PJ',
         name: 'Gabriel Berlucci',
       })
-      .expect(StatusCodes.OK);
+      .expect(StatusCodes.CREATED);
   });
 
   it(`Expect that it returns ${StatusCodes.CONFLICT} for supplier creation`, async () => {
