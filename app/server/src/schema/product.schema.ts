@@ -38,3 +38,5 @@ export const productSchema = z.object({
   salePrice: z.float64({ error: 'Insira um preço de venda' }),
   supplierId: z.int({ error: 'ID do fornecedor inválido' }).optional(),
 });
+
+export const modifyProductSchema = productSchema.partial();
