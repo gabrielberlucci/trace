@@ -1,5 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
+import { loggerStorage } from '@/logger/storage';
+import type { QueryProductParams } from '@/types/';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
@@ -25,28 +27,63 @@ export const modifyCustomer = async (
   return modifiedCustomer;
 };
 
-export const inactiveCustomer = async (customerId: number) => {
-  const inactiveCustomer = await prisma.customer.update({
-    where: {
-      id: customerId,
-    },
-    data: {
-      active: 0,
-    },
-  });
+export const getPaginatedCustomers = async (
+  queryFilters: QueryProductParams,
+) => {
+  const PAGE_SIZE = 50;
 
-  return inactiveCustomer;
-};
-
-export const activeCustomer = async (customerId: number) => {
-  const activeCustomer = await prisma.customer.update({
-    where: {
-      id: customerId,
+  const queryOptions: Prisma.CustomerFindManyArgs = {
+    take: PAGE_SIZE,
+    where: {},
+    orderBy: {
+      id: 'asc',
     },
-    data: {
-      active: 1,
-    },
-  });
+  };
 
-  return activeCustomer;
+  if (queryFilters.page) {
+    queryOptions.skip = (queryFilters.page - 1) * PAGE_SIZE;
+  }
+
+  if (queryFilters.active) {
+    queryOptions.where = {
+      ...queryOptions.where,
+      active: Number(queryFilters.active),
+    };
+  }
+
+  if (queryFilters.name) {
+    queryOptions.where = {
+      ...queryOptions.where,
+      name: { contains: queryFilters.name, mode: 'insensitive' },
+    };
+  }
+
+  if (queryFilters.document) {
+    queryOptions.where = {
+      ...queryOptions.where,
+      document: queryFilters.document,
+    };
+  }
+
+  const [totalCustomers, paginatedCustomers] = await prisma.$transaction([
+    prisma.customer.count({
+      where: queryOptions.where,
+    }),
+    prisma.customer.findMany(queryOptions),
+  ]);
+
+  const totalPages = Math.ceil(totalCustomers / PAGE_SIZE);
+
+  const hasPrevious: boolean = queryFilters.page !== 1;
+  /* in this situation we can force that page will not be undefined
+  because our middleware ALWAYS send page = 1 if no pages is specified */
+  const hasNext: boolean = queryFilters.page < totalPages;
+
+  return {
+    totalCustomers,
+    paginatedCustomers,
+    hasPrevious,
+    hasNext,
+    totalPages,
+  };
 };
