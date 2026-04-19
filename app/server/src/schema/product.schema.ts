@@ -12,7 +12,7 @@ export const productSchema = z.object({
     .pipe(
       z
         .string()
-        .min(8, 'Insira pelo menos 8 caracteres no código de barras')
+        .min(6, 'Insira pelo menos 6 caracteres no código de barras')
         .max(13, 'Insira no máximo 13 caracteres no código de barras'),
     ),
   unity: z.enum(['UN', 'CM', 'MT', 'MM'], {
