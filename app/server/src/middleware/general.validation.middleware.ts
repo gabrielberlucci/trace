@@ -7,3 +7,10 @@ export const validateData =
     req.body = schema.strict().parse(req.body);
     next();
   };
+
+export const validateQuery =
+  (schema: z.ZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    res.locals.query = schema.parse(req.query);
+    next();
+  };
