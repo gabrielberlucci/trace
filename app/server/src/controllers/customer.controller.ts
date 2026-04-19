@@ -1,5 +1,10 @@
 import { UnprocessableEntity } from '@/error/index';
-import { createCustomer, modifyCustomer } from '@/services/customer.service';
+import { loggerStorage } from '@/logger/storage';
+import {
+  createCustomer,
+  getPaginatedCustomers,
+  modifyCustomer,
+} from '@/services/customer.service';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -30,5 +35,29 @@ export const modifyCustomerController = async (req: Request, res: Response) => {
     status: ReasonPhrases.OK,
     message: 'Cliente modificado com sucesso',
     data: modifiedCustomer,
+  });
+};
+
+export const getCustomerController = async (_req: Request, res: Response) => {
+  const query = res.locals.query;
+
+  // loggerStorage.getStore()?.info(typeof active);
+
+  const {
+    totalCustomers,
+    paginatedCustomers,
+    hasPrevious,
+    hasNext,
+    totalPages,
+  } = await getPaginatedCustomers(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Clientes resgatados com sucesso',
+    totalCustomers: totalCustomers,
+    hasPrevious: hasPrevious,
+    hasNext: hasNext,
+    totalPages: totalPages,
+    data: paginatedCustomers,
   });
 };
