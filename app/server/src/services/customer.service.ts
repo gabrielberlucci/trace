@@ -75,8 +75,6 @@ export const getPaginatedCustomers = async (
   const totalPages = Math.ceil(totalCustomers / PAGE_SIZE);
 
   const hasPrevious: boolean = queryFilters.page !== 1;
-  /* in this situation we can force that page will not be undefined
-  because our middleware ALWAYS send page = 1 if no pages is specified */
   const hasNext: boolean = queryFilters.page < totalPages;
 
   return {
