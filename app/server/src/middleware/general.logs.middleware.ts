@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { loggerStorage } from '@/logger/storage';
+import { loggerStorage } from '@/logger';
 
 export const logsMiddleware = (
   req: Request,

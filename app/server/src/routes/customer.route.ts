@@ -1,18 +1,12 @@
 import { Router } from 'express';
-import {
-  createCustomerSchema,
-  modifyCustomerSchema,
-} from '@/schema/customer.schema';
+import { createCustomerSchema, modifyCustomerSchema } from '@/schemas';
 import {
   createCustomerController,
   getCustomerController,
   modifyCustomerController,
-} from '@/controllers/customer.controller';
-import {
-  validateData,
-  validateQuery,
-} from '@/middleware/general.validation.middleware';
-import { querySchema } from '@/schema/query.schema';
+} from '@/controllers/';
+import { validateData, validateQuery } from '@/middleware';
+import { querySchema } from '@/schemas';
 
 const customerRoute: Router = Router();
 

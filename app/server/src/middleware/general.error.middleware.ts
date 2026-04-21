@@ -1,7 +1,7 @@
-import { BadRequest, UnprocessableEntity } from '@/error/index';
+import { BadRequest, UnprocessableEntity } from '@/error';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { formatPrismaError } from '@/utils/index';
+import { formatPrismaError } from '@/utils';
 import type { NextFunction, Request, Response } from 'express';
 import z, { ZodError } from 'zod';
 

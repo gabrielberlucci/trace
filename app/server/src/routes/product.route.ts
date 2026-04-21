@@ -1,9 +1,10 @@
 import {
   createProductController,
+  getProductController,
   modifyProductController,
-} from '@/controllers/product.controller';
-import { validateData } from '@/middleware/general.validation.middleware';
-import { modifyProductSchema, productSchema } from '@/schema/product.schema';
+} from '@/controllers';
+import { validateData } from '@/middleware';
+import { modifyProductSchema, productSchema } from '@/schemas';
 import { Router } from 'express';
 
 const productRouter: Router = Router();
@@ -15,5 +16,7 @@ productRouter.patch(
   validateData(modifyProductSchema),
   modifyProductController,
 );
+
+productRouter.get('/', getProductController);
 
 export { productRouter };

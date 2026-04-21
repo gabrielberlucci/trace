@@ -1,7 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { loggerStorage } from '@/logger/storage';
-import type { QueryProductParams } from '@/types/';
+import type { QueryProductParams } from '@/types';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
