@@ -41,8 +41,6 @@ export const modifyCustomerController = async (req: Request, res: Response) => {
 export const getCustomerController = async (_req: Request, res: Response) => {
   const query = res.locals.query;
 
-  // loggerStorage.getStore()?.info(typeof active);
-
   const {
     totalCustomers,
     paginatedCustomers,
