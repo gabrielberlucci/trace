@@ -1,7 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { loggerStorage } from '@/logger/storage';
-import type { QueryProductParams } from '@/types';
+import type { CustomerQueryParamsFilters } from '@/types';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
@@ -37,7 +37,7 @@ export const modifyCustomer = async (
 };
 
 export const getPaginatedCustomers = async (
-  queryFilters: QueryProductParams,
+  queryFilters: CustomerQueryParamsFilters,
 ) => {
   const PAGE_SIZE = 50;
 
