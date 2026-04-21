@@ -1,3 +1,4 @@
-import type { QueryProductParams } from './query.params';
+import { type PaginationQueryParams } from './common.pagination.type';
+import { type CustomerQueryParamsFilters } from './customer.pagination.type';
 
-export type { QueryProductParams };
+export type { PaginationQueryParams, CustomerQueryParamsFilters };
