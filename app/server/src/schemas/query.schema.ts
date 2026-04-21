@@ -9,7 +9,7 @@ export const queryFilterSchema = z.object({
     .default(1),
 
   active: z
-    .union([z.literal(0), z.literal(1)], {
+    .enum(['0', '1'], {
       error: 'Ativo deve ser 0 ou 1',
     })
     .optional(),
