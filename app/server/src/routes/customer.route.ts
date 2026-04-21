@@ -6,7 +6,7 @@ import {
   modifyCustomerController,
 } from '@/controllers/';
 import { validateData, validateQuery } from '@/middlewares';
-import { querySchema } from '@/schemas';
+import { queryFilterSchema } from '@/schemas';
 
 const customerRoute: Router = Router();
 
@@ -20,6 +20,6 @@ customerRoute.patch(
   validateData(modifyCustomerSchema),
   modifyCustomerController,
 );
-customerRoute.get('/', validateQuery(querySchema), getCustomerController);
+customerRoute.get('/', validateQuery(queryFilterSchema), getCustomerController);
 
 export { customerRoute };
