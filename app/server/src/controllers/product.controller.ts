@@ -31,3 +31,5 @@ export const modifyProductController = async (req: Request, res: Response) => {
     data: modifiedProduct,
   });
 };
+
+export const getProductController = async (req: Request, res: Response) => {};
