@@ -9,19 +9,20 @@ export const commonSchema = z.object({
     .string({ error: 'Insira um documento' })
     .trim()
     .transform((val) => val.replace(/\s+/g, ''))
+    .transform((val) => val.replace(/\D/g, ''))
     .refine((val) => val.length === 11 || val.length === 14, {
       error: 'O documento deve ter 11 ou 14 caracteres',
       abort: true,
     })
     .refine(
-      (val) => (val.length === 1 ? validateCpf(val) : validateCnpj(val)),
+      (val) => (val.length === 11 ? validateCpf(val) : validateCnpj(val)),
       { error: 'Documento inválido' },
     ),
 
   typePerson: z
     .enum(['PJ', 'PF'], { error: 'O tipo de pessoa deve ser PJ ou PF' })
-    .transform((val) => val.replace(/\s+/g, ''))
-    .default('PJ'),
+    .transform((val) => val!.replace(/\s+/g, ''))
+    .optional(),
 
   name: z
     .string({ error: 'Insira um nome' })
