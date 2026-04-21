@@ -5,7 +5,7 @@ import {
   getCustomerController,
   modifyCustomerController,
 } from '@/controllers/';
-import { validateData, validateQuery } from '@/middleware';
+import { validateData, validateQuery } from '@/middlewares';
 import { querySchema } from '@/schemas';
 
 const customerRoute: Router = Router();

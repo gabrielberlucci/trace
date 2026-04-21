@@ -2,10 +2,10 @@ import express, { type Express } from 'express';
 import cors from 'cors';
 import { routes } from '@/routes/index';
 import cookieParser from 'cookie-parser';
-import { validateError } from '@/middleware/general.error.middleware';
+import { validateError } from '@/middlewares';
 import { logger } from '@/logger/pino.logger';
 import { pinoHttp } from 'pino-http';
-import { logsMiddleware } from './middleware/general.logs.middleware';
+import { logsMiddleware } from '@/middlewares';
 
 const app: Express = express();
 

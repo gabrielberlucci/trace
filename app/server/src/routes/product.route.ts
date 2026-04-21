@@ -3,7 +3,7 @@ import {
   getProductController,
   modifyProductController,
 } from '@/controllers';
-import { validateData } from '@/middleware';
+import { validateData } from '@/middlewares';
 import { modifyProductSchema, productSchema } from '@/schemas';
 import { Router } from 'express';
 

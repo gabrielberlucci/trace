@@ -2,7 +2,7 @@ import {
   createSupplierController,
   modifySupplierController,
 } from '@/controllers';
-import { validateData } from '@/middleware';
+import { validateData } from '@/middlewares';
 import { createSupplierSchema, modifySupplierSchema } from '@/schemas';
 import { Router } from 'express';
 
