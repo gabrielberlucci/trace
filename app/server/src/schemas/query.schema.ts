@@ -18,7 +18,8 @@ export const queryFilterSchema = z.object({
     .string({ error: 'Insira um nome' })
     .trim()
     .min(2, { error: 'Nome muito curto. Insira pelo menos 3 caracteres' })
-    .max(50, { error: 'Nome muito longo. Insira no máximo 50 caracteres' }),
+    .max(50, { error: 'Nome muito longo. Insira no máximo 50 caracteres' })
+    .optional(),
 
   document: z
     .string({ error: 'Insira um documento' })
@@ -32,5 +33,6 @@ export const queryFilterSchema = z.object({
     .refine(
       (val) => (val.length === 11 ? validateCpf(val) : validateCnpj(val)),
       { error: 'Documento inválido' },
-    ),
+    )
+    .optional(),
 });
