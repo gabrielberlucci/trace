@@ -8,4 +8,9 @@ export default defineConfig({
       lib: path.resolve(__dirname, './lib'),
     },
   },
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['src/__test__/**/*.test.ts'],
+  },
 });
