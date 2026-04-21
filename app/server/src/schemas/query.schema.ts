@@ -30,9 +30,5 @@ export const queryFilterSchema = z.object({
       error: 'O documento deve ter 11 ou 14 caracteres',
       abort: true,
     })
-    .refine(
-      (val) => (val.length === 11 ? validateCpf(val) : validateCnpj(val)),
-      { error: 'Documento inválido' },
-    )
     .optional(),
 });
