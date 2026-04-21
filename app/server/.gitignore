@@ -27,3 +27,6 @@ dist-ssr
 /generated/prisma
 
 .env
+
+# Test
+test.info.md
