@@ -6,6 +6,15 @@ import type { QueryProductParams } from '@/types/';
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
 ) => {
+  /*
+  TODO: make this a function
+  */
+  if (customerData.document.length === 11) {
+    customerData.typePerson = 'PF';
+  } else {
+    customerData.typePerson = 'PJ';
+  }
+
   const customer = await prisma.customer.create({
     data: customerData,
   });
