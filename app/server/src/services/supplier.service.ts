@@ -1,5 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
+import type { SupplierQueryParamsFilters } from '@/types';
+import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 
 export const createSupplier = async (
   supplierData: Prisma.SupplierCreateInput,
@@ -25,29 +27,30 @@ export const modifySupplier = async (
   return modifiedSupplier;
 };
 
-export const inactiveSupplier = async (supplierId: number) => {
-  const inactiveSupplier = await prisma.supplier.update({
-    where: {
-      id: supplierId,
-    },
-    data: {
-      active: 0,
-    },
-  });
+export const getPaginatedSuppliers = async (
+  queryFilters: SupplierQueryParamsFilters,
+) => {
+  const where: Prisma.SupplierWhereInput = {
+    ...(queryFilters.document && { document: queryFilters.document }),
+    ...(queryFilters.name && {
+      name: { contains: queryFilters.name, mode: 'insensitive' },
+    }),
+    ...(queryFilters.active && { active: Number(queryFilters.active) }),
+  };
 
-  return inactiveSupplier;
-};
+  const {
+    totalGenerics: totalSuppliers,
+    paginatedGenerics: totalPaginatedSuppliers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  } = await getPaginatedData(prisma, prisma.supplier, where, queryFilters.page);
 
-export const activeSupplier = async (supplierId: number) => {
-  const activeSupplier = await prisma.supplier.update({
-    where: {
-      id: supplierId,
-    },
-
-    data: {
-      active: 1,
-    },
-  });
-
-  return activeSupplier;
+  return {
+    totalSuppliers,
+    totalPaginatedSuppliers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  };
 };
