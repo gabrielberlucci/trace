@@ -52,10 +52,12 @@ export const getCustomerController = async (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Clientes resgatados com sucesso',
-    totalCustomers: totalCustomers,
-    hasPrevious: hasPrevious,
-    hasNext: hasNext,
-    totalPages: totalPages,
+    meta: {
+      totalCustomers: totalCustomers,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+      totalPages: totalPages,
+    },
     data: paginatedCustomers,
   });
 };
