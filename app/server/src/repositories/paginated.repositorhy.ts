@@ -26,12 +26,12 @@ export const getPaginatedData = async <T>(
       where: where,
       skip: skip,
       take: PAGE_SIZE,
-      orderBy: { id: '' },
+      orderBy: { id: 'asc' },
     }),
   ]);
 
   const totalPages = Math.ceil(totalGenerics / PAGE_SIZE);
-  const hasPrevious: boolean = page !== 1;
+  const hasPrevious: boolean = page > 1;
   const hasNext: boolean = page < totalPages;
 
   return {
