@@ -7,6 +7,7 @@ import {
 import {
   createSupplierController,
   modifySupplierController,
+  getSuppliersController,
 } from './supplier.controller';
 
 import {
@@ -24,4 +25,5 @@ export {
   modifyCustomerController,
   modifyProductController,
   modifySupplierController,
+  getSuppliersController,
 };
