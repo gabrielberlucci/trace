@@ -2,10 +2,9 @@ import { z } from '@/config/zod.config';
 import { validateCnpj, validateCpf } from '@/utils';
 
 export const queryFilterSchema = z.object({
-  page: z
-    .string({ error: 'Insira uma página' })
-    .trim()
-    .transform((val) => Number(val))
+  page: z.coerce
+    .number({ error: 'Insira uma página' })
+    .positive({ error: 'Insira um número positivo' })
     .default(1),
 
   active: z
