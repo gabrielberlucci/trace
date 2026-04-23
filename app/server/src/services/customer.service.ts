@@ -2,6 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { loggerStorage } from '@/logger/storage';
 import type { CustomerQueryParamsFilters } from '@/types';
+import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
@@ -39,19 +40,12 @@ export const modifyCustomer = async (
 export const getPaginatedCustomers = async (
   queryFilters: CustomerQueryParamsFilters,
 ) => {
-  const PAGE_SIZE = 50;
-
+  /*
+  TODO: refactor this queryOptions, because is only passed to the generic function the where 
+  */
   const queryOptions: Prisma.CustomerFindManyArgs = {
-    take: PAGE_SIZE,
     where: {},
-    orderBy: {
-      id: 'asc',
-    },
   };
-
-  if (queryFilters.page) {
-    queryOptions.skip = (queryFilters.page - 1) * PAGE_SIZE;
-  }
 
   if (queryFilters.active) {
     queryOptions.where = {
@@ -74,17 +68,18 @@ export const getPaginatedCustomers = async (
     };
   }
 
-  const [totalCustomers, paginatedCustomers] = await prisma.$transaction([
-    prisma.customer.count({
-      where: queryOptions.where,
-    }),
-    prisma.customer.findMany(queryOptions),
-  ]);
-
-  const totalPages = Math.ceil(totalCustomers / PAGE_SIZE);
-
-  const hasPrevious: boolean = queryFilters.page !== 1;
-  const hasNext: boolean = queryFilters.page < totalPages;
+  const {
+    totalGenerics: totalCustomers,
+    paginatedGenerics: paginatedCustomers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  } = await getPaginatedData(
+    prisma,
+    prisma.customer,
+    queryOptions.where,
+    queryFilters.page,
+  );
 
   return {
     totalCustomers,
