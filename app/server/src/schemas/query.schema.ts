@@ -1,5 +1,4 @@
 import { z } from '@/config/zod.config';
-import { validateCnpj, validateCpf } from '@/utils';
 
 export const queryFilterSchema = z.object({
   page: z.coerce
