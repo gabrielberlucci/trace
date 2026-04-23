@@ -1,5 +1,9 @@
 import { BadRequest } from '@/error/BadRequest';
-import { createSupplier, modifySupplier } from '@/services/supplier.service';
+import {
+  createSupplier,
+  getPaginatedSuppliers,
+  modifySupplier,
+} from '@/services/supplier.service';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -32,5 +36,29 @@ export const modifySupplierController = async (req: Request, res: Response) => {
     status: ReasonPhrases.OK,
     message: 'Fornecedor alterado com sucesso!',
     data: modifiedSupplier,
+  });
+};
+
+export const getSuppliersController = async (_req: Request, res: Response) => {
+  const query = res.locals.query;
+
+  const {
+    totalSuppliers,
+    totalPaginatedSuppliers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  } = await getPaginatedSuppliers(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Fornecedores resgatados com sucesso',
+    meta: {
+      totalSuppliers: totalSuppliers,
+      totalPages: totalPages,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+    },
+    data: totalPaginatedSuppliers,
   });
 };
