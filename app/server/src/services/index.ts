@@ -4,7 +4,11 @@ import {
   getPaginatedCustomers,
 } from './customer.service';
 
-import { createProduct, modifyProduct } from './product.service';
+import {
+  createProduct,
+  modifyProduct,
+  getPaginatedProducts,
+} from './product.service';
 
 import { createSupplier, modifySupplier } from './supplier.service';
 
@@ -16,4 +20,5 @@ export {
   modifyProduct,
   createSupplier,
   modifySupplier,
+  getPaginatedProducts,
 };
