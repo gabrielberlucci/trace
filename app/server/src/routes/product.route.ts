@@ -3,8 +3,12 @@ import {
   getProductController,
   modifyProductController,
 } from '@/controllers';
-import { validateData } from '@/middlewares';
-import { modifyProductSchema, productSchema } from '@/schemas';
+import { validateData, validateQuery } from '@/middlewares';
+import {
+  modifyProductSchema,
+  productSchema,
+  queryFilterSchema,
+} from '@/schemas';
 import { Router } from 'express';
 
 const productRouter: Router = Router();
@@ -17,6 +21,6 @@ productRouter.patch(
   modifyProductController,
 );
 
-productRouter.get('/', getProductController);
+productRouter.get('/', validateQuery(queryFilterSchema), getProductController);
 
 export { productRouter };
