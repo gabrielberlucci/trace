@@ -24,7 +24,7 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 - [x] Configuração do Zod e validações de documentos (CPF/CNPJ)
 - [x] CRUD e testes de integração das rotas de Fornecedores (com Vitest/Supertest)
 - [x] Implementar logs com o PINE
-- [ ] CRUD e testes de integração das rotas de Produtos (com Vitest/Supertest)
+- [x] CRUD e testes de integração das rotas de Produtos (com Vitest/Supertest)
 - [ ] CRUD e testes de integração das rotas de Usuarios (com Vitest/Supertest)
 - [ ] Implementação do módulo de Controle de Estoque (`StockMovement`)
 - [ ] Construção do fluxo transacional de Vendas
