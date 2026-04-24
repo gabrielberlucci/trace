@@ -1,5 +1,5 @@
 import { BadRequest } from '@/error';
-import { createProduct, modifyProduct } from '@/services/product.service';
+import { createProduct, getPaginatedProducts, modifyProduct } from '@/services';
 import { type Request, type Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -32,4 +32,22 @@ export const modifyProductController = async (req: Request, res: Response) => {
   });
 };
 
-export const getProductController = async (req: Request, res: Response) => {};
+export const getProductController = async (_req: Request, res: Response) => {
+  const query = res.locals.query;
+
+  const { totalProducts, paginatedProducts, hasPrevious, hasNext, totalPages } =
+    await getPaginatedProducts(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Produtos resgatados com sucesso',
+    meta: {
+      totalProducts: totalProducts,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+      totalPages: totalPages,
+    },
+
+    data: paginatedProducts,
+  });
+};
