@@ -77,8 +77,8 @@ model StockMovement {
 
 model City {
   id        Int        @id // come from API SEED
-  name      String
-  state     String
+  name      String?
+  state     String?
   customers Customer[]
   suppliers Supplier[]
   users     User[]

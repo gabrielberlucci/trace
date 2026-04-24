@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client';
-import { type Prisma } from '../generated/prisma/client';
 import { faker } from '@faker-js/faker';
 import { typePerson } from '../generated/prisma/client';
+import { getCitiesInformation } from '@/clients/cities.clients';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -23,9 +23,13 @@ const customer = faker.helpers.multiple(createRandomCustomer, {
 });
 
 const seed = async () => {
-  const seedCustomer = await prisma.customer.createMany({
-    data: customer,
-  });
+  // await prisma.customer.createMany({
+  //   data: customer,
+  // });
+  // const mapped = await getCitiesInformation();
+  // await prisma.city.createMany({
+  //   data: mapped,
+  // });
 };
 
 seed();
