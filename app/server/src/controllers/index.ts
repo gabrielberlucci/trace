@@ -16,6 +16,8 @@ import {
   modifyProductController,
 } from './product.controller';
 
+import { registerUserController } from './user.controller';
+
 export {
   createCustomerController,
   createProductController,
@@ -26,4 +28,5 @@ export {
   modifyProductController,
   modifySupplierController,
   getSuppliersController,
+  registerUserController,
 };
