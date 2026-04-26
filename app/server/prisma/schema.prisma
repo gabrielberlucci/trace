@@ -95,9 +95,10 @@ model User {
   complement    String?
   email         String?   @unique
   password      String
+  username      String    @unique
   role          Role
   city          City?     @relation(fields: [cityId], references: [id])
-  cityId        Int
+  cityId        Int?
 }
 
 model Sale {
