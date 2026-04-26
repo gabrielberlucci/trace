@@ -3,6 +3,7 @@ import { productSchema, modifyProductSchema } from './product.schema';
 import { createSupplierSchema, modifySupplierSchema } from './supplier.schema';
 import { commonSchema } from './common.schema';
 import { queryFilterSchema } from './query.schema';
+import { userSchema } from './user.schema';
 
 export {
   createCustomerSchema,
@@ -13,4 +14,5 @@ export {
   modifySupplierSchema,
   commonSchema,
   queryFilterSchema,
+  userSchema,
 };
