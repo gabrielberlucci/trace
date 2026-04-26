@@ -12,6 +12,8 @@ import {
 
 import { createSupplier, modifySupplier } from './supplier.service';
 
+import { createUser } from './user.service';
+
 export {
   createCustomer,
   modifyCustomer,
@@ -21,4 +23,5 @@ export {
   createSupplier,
   modifySupplier,
   getPaginatedProducts,
+  createUser,
 };
