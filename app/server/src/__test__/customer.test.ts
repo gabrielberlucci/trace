@@ -4,107 +4,124 @@ import { app } from '../app';
 import { prisma } from '../../lib/prisma';
 import { StatusCodes } from 'http-status-codes';
 
-describe('Customer route Tests', () => {
+describe('Customer', () => {
+  const apiRoute = '/api/v1/customers';
+  const validCnpj = '60.342.789/0001-90';
+  const validCpf = '480.053.150-07';
+  const invalidCnpj = '30.142.681/0001-19';
+  const invalidCpf = '381.253.130-11';
+
+  const payloadWithoutDocument = {
+    name: 'Customer Teste',
+  };
+  const payloadWithoutName = {
+    document: validCpf,
+  };
+  const payloadWithBodyNotSpecified = {
+    potato: '888=.121312',
+  };
+  const payload = {
+    document: '71.295.179/0001-08',
+    name: 'Gabriel',
+    phone: '11111111111',
+    email: 'teste@gmail.com',
+    address: 'Rua teste',
+    addressNumber: 1220,
+    birthdate: '2005-04-21T22:55:18+00:00',
+  };
+
   beforeEach(async () => {
     await prisma.$queryRawUnsafe(`
                 DELETE FROM "Customer"
-                WHERE id > 104`);
+                WHERE id NOT IN (1, 3)`);
   });
 
-  it(`Expect it returns ${StatusCodes.CREATED} for Customer creation`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation with no body`, async () => {
+    await request(app).post(apiRoute).send({}).expect(StatusCodes.BAD_REQUEST);
+  });
+
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation when sending body without name`, async () => {
     await request(app)
-      .post('/api/v1/customers')
-      .send({
-        document: '869.469.410-71',
-        name: 'Supertest user',
-      })
-      .expect(StatusCodes.CREATED);
+      .post(apiRoute)
+      .send(payloadWithoutName)
+      .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.OK} when changing customer info`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation when sending body without document`, async () => {
     await request(app)
-      .patch('/api/v1/customers/103')
-      .send({
-        address: 'Rua Teste Customer',
-        addressNumber: 120,
-      })
-      .expect(StatusCodes.OK);
+      .post(apiRoute)
+      .send(payloadWithoutDocument)
+      .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.OK} when getting customers`, async () => {
-    await request(app).get('/api/v1/customers').expect(StatusCodes.OK);
-  });
-
-  it(`Expect it returns ${StatusCodes.BAD_REQUEST} when trying to change document`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation when sending body with a not mapped camp from JSON`, async () => {
     await request(app)
-      .patch('/api/v1/customers/103')
+      .post(apiRoute)
+      .send(payloadWithBodyNotSpecified)
+      .expect(StatusCodes.BAD_REQUEST);
+  });
+
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation with invalid document(CPF)`, async () => {
+    await request(app)
+      .post(apiRoute)
       .send({
-        document: '869.469.410-71',
+        document: invalidCpf,
       })
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for Customer creation with no body`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation with invalid document(CNPJ)`, async () => {
     await request(app)
-      .post('/api/v1/customers')
-      .send({})
-      .expect(StatusCodes.BAD_REQUEST);
-  });
-
-  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for Customer creation with no document`, async () => {
-    await request(app)
-      .post('/api/v1/customers')
+      .post(apiRoute)
       .send({
-        name: 'teste@gmail.com',
+        document: invalidCnpj,
       })
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for Customer creation with no name`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation with invalid personType`, async () => {
     await request(app)
-      .post('/api/v1/customers')
+      .post(apiRoute)
       .send({
-        document: '293.101.380-33',
+        document: '778.076.340-49',
+        name: 'Test',
+        typePerson: 'BAD',
       })
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for Customer creation with invalid document`, async () => {
+  it(`Expect it returns ${StatusCodes.BAD_REQUEST} for customer creation with invalid email`, async () => {
     await request(app)
-      .post('/api/v1/customers')
+      .post(apiRoute)
       .send({
-        document: '861.469.410-71',
-        name: 'Supertest user',
+        document: '778.076.340-49',
+        name: 'Test',
+        email: 'notanemail.com',
       })
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it(`Expect it returns ${StatusCodes.NOT_FOUND} for Customer not founded`, async () => {
-    await request(app)
-      .post('/api/v1/customers/234')
-      .send({
-        document: '861.469.410-71',
-        name: 'Supertest user',
-      })
-      .expect(StatusCodes.NOT_FOUND);
+  it(`Expect it returns ${StatusCodes.CREATED} for customer creation with valid data`, async () => {
+    await request(app).post(apiRoute).send(payload).expect(StatusCodes.CREATED);
   });
 
-  it(`Expect it returns ${StatusCodes.CONFLICT} for Customer creation with same document`, async () => {
+  it(`Expect it returns ${StatusCodes.CONFLICT} for customer creation with valid data`, async () => {
     await request(app)
-      .post('/api/v1/customers')
+      .post(apiRoute)
       .send({
-        document: '83557663000139',
-        name: 'Supertest user',
+        document: '05172639000178',
+        name: 'Test',
       })
       .expect(StatusCodes.CONFLICT);
   });
 
-  it(`Expect it returns ${StatusCodes.CONFLICT} for Customer creation with same email`, async () => {
+  it(`Expect it returns ${StatusCodes.CONFLICT} for customer creation with valid data`, async () => {
     await request(app)
-      .post('/api/v1/customers')
+      .post(apiRoute)
       .send({
-        document: '83557663000139',
-        name: 'teste@gmail.com',
+        document: '07.545.018/0001-18',
+        name: 'Test',
+        email: 'testepj@gmail.com',
       })
       .expect(StatusCodes.CONFLICT);
   });
@@ -112,6 +129,6 @@ describe('Customer route Tests', () => {
   afterAll(async () => {
     await prisma.$queryRawUnsafe(`
         DELETE FROM "Customer"
-        WHERE id > 104`);
+        WHERE id NOT IN (1, 3)`);
   });
 });
