@@ -1,3 +1,4 @@
+import { omit } from 'zod/mini';
 import type { Prisma } from '../../generated/prisma/client';
 import type { PrismaPromise } from '@prisma/client/runtime/client';
 
@@ -14,6 +15,7 @@ export const getPaginatedData = async <T>(
   model: PrismaDelegate<T>,
   where: any,
   page: number,
+  omit?: any,
 ) => {
   const PAGE_SIZE = 50;
   const skip = (page - 1) * PAGE_SIZE;
@@ -27,6 +29,7 @@ export const getPaginatedData = async <T>(
       skip: skip,
       take: PAGE_SIZE,
       orderBy: { id: 'asc' },
+      omit: omit,
     }),
   ]);
 
