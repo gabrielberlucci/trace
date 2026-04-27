@@ -1,5 +1,4 @@
-import { NotFound } from '@/error';
-import { createUser, loginUser } from '@/services';
+import { createUser, getPaginatedUsers, loginUser } from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -25,5 +24,26 @@ export const loginUserController = async (req: Request, res: Response) => {
   res.cookie('access_token', loggedUser).status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Login feito com sucesso',
+  });
+};
+
+export const getUsersController = async (_req: Request, res: Response) => {
+  const query = res.locals.query;
+
+  const { totalUsers, paginatedUsers, totalPages, hasPrevious, hasNext } =
+    await getPaginatedUsers(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Usuários resgatados com sucesso',
+    meta: {
+      totalUsers: totalUsers,
+      totalPages: totalPages,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+    },
+    data: {
+      userData: paginatedUsers,
+    },
   });
 };
