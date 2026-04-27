@@ -65,13 +65,23 @@ export const getPaginatedUsers = async (
     ...(queryFilters.username && { username: queryFilters.username }),
   };
 
+  const omit: Prisma.UserSelect = {
+    password: true,
+  };
+
   const {
     totalGenerics: totalUsers,
     paginatedGenerics: paginatedUsers,
     totalPages,
     hasPrevious,
     hasNext,
-  } = await getPaginatedData(prisma, prisma.user, where, queryFilters.page);
+  } = await getPaginatedData(
+    prisma,
+    prisma.user,
+    where,
+    queryFilters.page,
+    omit,
+  );
 
   return {
     totalUsers,
