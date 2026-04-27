@@ -1,10 +1,11 @@
-import type { UserLogin } from '@/types';
+import type { UserLogin, UserQueryParamsFilters } from '@/types';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { NotFound, Unauthorized } from '@/error';
 import 'dotenv/config';
+import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 
 export const createUser = async (userData: Prisma.UserCreateInput) => {
   const saltRounds = 10;
@@ -55,4 +56,28 @@ export const loginUser = async (userData: UserLogin) => {
   }
 
   throw new Unauthorized('Username ou senha inválidos');
+};
+
+export const getPaginatedUsers = async (
+  queryFilters: UserQueryParamsFilters,
+) => {
+  const where: Prisma.UserWhereInput = {
+    ...(queryFilters.username && { username: queryFilters.username }),
+  };
+
+  const {
+    totalGenerics: totalUsers,
+    paginatedGenerics: paginatedUsers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  } = await getPaginatedData(prisma, prisma.user, where, queryFilters.page);
+
+  return {
+    totalUsers,
+    paginatedUsers,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  };
 };
