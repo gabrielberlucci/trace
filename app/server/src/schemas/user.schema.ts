@@ -45,12 +45,7 @@ export const userLoginSchema = z.object(userSchema.shape).pick({
   password: true,
 });
 
-export const userQueryFilterSchema = queryFilterSchema
-  .pick({
-    page: true,
-  })
-  .extend(
-    z.object(userSchema.shape).pick({
-      username: true,
-    }),
-  );
+export const userQueryFilterSchema = z.object({
+  ...queryFilterSchema.pick({ page: true }).shape,
+  username: userSchema.shape.username.optional(),
+});
