@@ -1,5 +1,6 @@
 import { commonSchema } from './common.schema';
 import { z } from '@/config/zod.config';
+import { queryFilterSchema } from './query.schema';
 
 export const userSchema = commonSchema
   .omit({
@@ -43,3 +44,13 @@ export const userLoginSchema = z.object(userSchema.shape).pick({
   username: true,
   password: true,
 });
+
+export const userQueryFilterSchema = queryFilterSchema
+  .pick({
+    page: true,
+  })
+  .extend(
+    z.object(userSchema.shape).pick({
+      username: true,
+    }),
+  );
