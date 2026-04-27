@@ -1,9 +1,10 @@
-import { BadRequest, UnprocessableEntity } from '@/error';
+import { BadRequest, NotFound, UnprocessableEntity } from '@/error';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { formatPrismaError } from '@/utils';
 import type { NextFunction, Request, Response } from 'express';
 import z, { ZodError } from 'zod';
+import { loggerStorage } from '@/logger';
 
 export const validateError = (
   error: Error,
@@ -36,6 +37,13 @@ export const validateError = (
     });
   }
 
+  if (error instanceof NotFound) {
+    return res.status(error.statusCode).send({
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === 'P2002') {
       return res.status(StatusCodes.CONFLICT).send({
@@ -51,7 +59,6 @@ export const validateError = (
       });
     }
   }
-
   console.error(error);
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
     error: ReasonPhrases.INTERNAL_SERVER_ERROR,
