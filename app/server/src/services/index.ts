@@ -12,7 +12,12 @@ import {
 
 import { createSupplier, modifySupplier } from './supplier.service';
 
-import { createUser, loginUser, getPaginatedUsers } from './user.service';
+import {
+  createUser,
+  loginUser,
+  getPaginatedUsers,
+  modifyUser,
+} from './user.service';
 
 export {
   createCustomer,
@@ -26,4 +31,5 @@ export {
   createUser,
   loginUser,
   getPaginatedUsers,
+  modifyUser,
 };

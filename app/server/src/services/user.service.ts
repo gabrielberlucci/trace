@@ -91,3 +91,36 @@ export const getPaginatedUsers = async (
     hasNext,
   };
 };
+
+export const modifyUser = async (
+  userId: number,
+  userData: Prisma.UserUpdateInput,
+) => {
+  const saltRounds = 10;
+
+  if (userData.password) {
+    userData.password = await bcrypt.hash(
+      userData.password.toString(),
+      saltRounds,
+    );
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    const exits = await tx.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!exits) throw new NotFound('Usuário não encontrado');
+
+    return await tx.user.update({
+      where: { id: userId },
+      data: userData,
+
+      omit: {
+        password: true,
+      },
+    });
+  });
+
+  return result;
+};
