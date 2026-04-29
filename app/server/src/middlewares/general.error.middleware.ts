@@ -1,4 +1,9 @@
-import { BadRequest, NotFound, UnprocessableEntity } from '@/error';
+import {
+  BadRequest,
+  NotFound,
+  Unauthorized,
+  UnprocessableEntity,
+} from '@/error';
 import { Prisma } from '../../generated/prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { formatPrismaError } from '@/utils';
@@ -38,6 +43,13 @@ export const validateError = (
   }
 
   if (error instanceof NotFound) {
+    return res.status(error.statusCode).send({
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
+  if (error instanceof Unauthorized) {
     return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
