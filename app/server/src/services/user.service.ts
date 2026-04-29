@@ -6,11 +6,10 @@ import jwt from 'jsonwebtoken';
 import { NotFound, Unauthorized } from '@/error';
 import 'dotenv/config';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { hashPassword, verifyPassword } from '@/utils';
 
 export const createUser = async (userData: Prisma.UserCreateInput) => {
-  const saltRounds = 10;
-
-  userData.password = await bcrypt.hash(userData.password, saltRounds);
+  userData.password = await hashPassword(userData.password);
 
   const user = await prisma.user.create({
     data: userData,
@@ -42,9 +41,9 @@ export const loginUser = async (userData: UserLogin) => {
     role: result.role,
   };
 
-  const validatedPassword = await bcrypt.compare(
+  const validatedPassword = await verifyPassword(
     userData.password,
-    result!.password,
+    result.password,
   );
 
   if (validatedPassword) {
@@ -96,13 +95,8 @@ export const modifyUser = async (
   userId: number,
   userData: Prisma.UserUpdateInput,
 ) => {
-  const saltRounds = 10;
-
   if (userData.password) {
-    userData.password = await bcrypt.hash(
-      userData.password.toString(),
-      saltRounds,
-    );
+    userData.password = await hashPassword(userData.password.toString());
   }
 
   const result = await prisma.$transaction(async (tx) => {
