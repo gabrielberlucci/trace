@@ -40,33 +40,13 @@ export const modifyCustomer = async (
 export const getPaginatedCustomers = async (
   queryFilters: CustomerQueryParamsFilters,
 ) => {
-  /*
-  TODO: refactor this queryOptions, because is only passed to the generic function the where 
-  */
-  const queryOptions: Prisma.CustomerFindManyArgs = {
-    where: {},
-  };
-
-  if (queryFilters.active) {
-    queryOptions.where = {
-      ...queryOptions.where,
-      active: Number(queryFilters.active),
-    };
-  }
-
-  if (queryFilters.name) {
-    queryOptions.where = {
-      ...queryOptions.where,
+  const where: Prisma.CustomerWhereInput = {
+    ...(queryFilters.active && { active: Number(queryFilters.active) }),
+    ...(queryFilters.name && {
       name: { contains: queryFilters.name, mode: 'insensitive' },
-    };
-  }
-
-  if (queryFilters.document) {
-    queryOptions.where = {
-      ...queryOptions.where,
-      document: queryFilters.document,
-    };
-  }
+    }),
+    ...(queryFilters.document && { document: queryFilters.document }),
+  };
 
   const {
     totalGenerics: totalCustomers,
@@ -74,12 +54,7 @@ export const getPaginatedCustomers = async (
     totalPages,
     hasPrevious,
     hasNext,
-  } = await getPaginatedData(
-    prisma,
-    prisma.customer,
-    queryOptions.where,
-    queryFilters.page,
-  );
+  } = await getPaginatedData(prisma, prisma.customer, where, queryFilters.page);
 
   return {
     totalCustomers,
