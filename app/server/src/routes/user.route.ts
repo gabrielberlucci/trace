@@ -2,6 +2,7 @@ import {
   loginUserController,
   registerUserController,
   getUsersController,
+  modifyUserController,
 } from '@/controllers';
 import { validateData, validateQuery } from '@/middlewares';
 import {
@@ -17,6 +18,6 @@ const userRouter: Router = Router();
 userRouter.post('/register', validateData(userSchema), registerUserController);
 userRouter.post('/login', validateData(userLoginSchema), loginUserController);
 userRouter.get('/', validateQuery(userQueryFilterSchema), getUsersController);
-userRouter.patch('/:id', validateData(modifyUserSchema));
+userRouter.patch('/:id', validateData(modifyUserSchema), modifyUserController);
 
 export { userRouter };
