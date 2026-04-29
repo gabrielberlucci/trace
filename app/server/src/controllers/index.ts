@@ -20,6 +20,7 @@ import {
   registerUserController,
   loginUserController,
   getUsersController,
+  modifyUserController,
 } from './user.controller';
 
 export {
@@ -35,4 +36,5 @@ export {
   registerUserController,
   loginUserController,
   getUsersController,
+  modifyUserController,
 };

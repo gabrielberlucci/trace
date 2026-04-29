@@ -1,4 +1,10 @@
-import { createUser, getPaginatedUsers, loginUser } from '@/services';
+import { BadRequest } from '@/error';
+import {
+  createUser,
+  getPaginatedUsers,
+  loginUser,
+  modifyUser,
+} from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -45,5 +51,23 @@ export const getUsersController = async (_req: Request, res: Response) => {
     data: {
       userData: paginatedUsers,
     },
+  });
+};
+
+export const modifyUserController = async (req: Request, res: Response) => {
+  const userId = req.params['id'];
+  const convertedId = Number(userId);
+  const userData = req.body;
+
+  delete userData.confirmedPassword;
+
+  if (Number.isNaN(convertedId)) throw new BadRequest('ID do usuário inválido');
+
+  const user = await modifyUser(convertedId, userData);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Usuário alterado com sucesso',
+    data: user,
   });
 };
