@@ -1,6 +1,7 @@
 import { commonSchema } from './common.schema';
 import { z } from '@/config/zod.config';
 import { queryFilterSchema } from './query.schema';
+import { abort } from 'node:process';
 
 export const userSchema = commonSchema
   .omit({
@@ -49,3 +50,28 @@ export const userQueryFilterSchema = z.object({
   ...queryFilterSchema.pick({ page: true }).shape,
   username: userSchema.shape.username.optional(),
 });
+
+export const modifyUserSchema = z
+  .object(userSchema.shape)
+  .partial()
+  .refine(
+    (data) => {
+      if (data.password !== undefined && data.password !== '') {
+        return (
+          data.confirmedPassword !== undefined && data.confirmedPassword !== ''
+        );
+      }
+    },
+    { error: 'Por favor, confirme a senha', abort: true },
+  )
+  .refine(
+    (data) => {
+      if (data.password !== data.confirmedPassword) {
+        return data.password === data.confirmedPassword;
+      }
+      return true;
+    },
+    {
+      error: 'As senhas não são iguais',
+    },
+  );

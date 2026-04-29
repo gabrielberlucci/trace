@@ -7,6 +7,7 @@ import {
   userSchema,
   userLoginSchema,
   userQueryFilterSchema,
+  modifyUserSchema,
 } from './user.schema';
 
 export {
@@ -21,4 +22,5 @@ export {
   userSchema,
   userLoginSchema,
   userQueryFilterSchema,
+  modifyUserSchema,
 };
