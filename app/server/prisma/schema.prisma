@@ -126,7 +126,7 @@ model SaleItem {
 
 model TotalCount {
   id        Int    @id @default(autoincrement())
-  tableName String
+  tableName String @unique
   total     Int
 }
 
