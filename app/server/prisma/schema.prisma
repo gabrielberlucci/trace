@@ -124,6 +124,12 @@ model SaleItem {
   productId   Int
 }
 
+model TotalCount {
+  id        Int    @id @default(autoincrement())
+  tableName String
+  total     Int
+}
+
 // MAKE SERVICE MODEL
 
 enum typePerson {
