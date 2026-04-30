@@ -48,17 +48,18 @@ export const getPaginatedCustomers = async (
     ...(queryFilters.document && { document: queryFilters.document }),
   };
 
-  const {
-    totalGenerics: totalCustomers,
-    paginatedGenerics: paginatedCustomers,
-    totalPages,
-    hasPrevious,
-    hasNext,
-  } = await getPaginatedData(prisma, prisma.customer, where, queryFilters.page);
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedData(
+      prisma,
+      prisma.customer,
+      where,
+      queryFilters.page,
+      'Customer',
+    );
 
   return {
-    totalCustomers,
-    paginatedCustomers,
+    total,
+    data,
     hasPrevious,
     hasNext,
     totalPages,

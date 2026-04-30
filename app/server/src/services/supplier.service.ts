@@ -38,17 +38,18 @@ export const getPaginatedSuppliers = async (
     ...(queryFilters.active && { active: Number(queryFilters.active) }),
   };
 
-  const {
-    totalGenerics: totalSuppliers,
-    paginatedGenerics: totalPaginatedSuppliers,
-    totalPages,
-    hasPrevious,
-    hasNext,
-  } = await getPaginatedData(prisma, prisma.supplier, where, queryFilters.page);
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedData(
+      prisma,
+      prisma.supplier,
+      where,
+      queryFilters.page,
+      'Supplier',
+    );
 
   return {
-    totalSuppliers,
-    totalPaginatedSuppliers,
+    total,
+    data,
     totalPages,
     hasPrevious,
     hasNext,

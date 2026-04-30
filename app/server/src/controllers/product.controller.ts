@@ -35,19 +35,19 @@ export const modifyProductController = async (req: Request, res: Response) => {
 export const getProductController = async (_req: Request, res: Response) => {
   const query = res.locals.query;
 
-  const { totalProducts, paginatedProducts, hasPrevious, hasNext, totalPages } =
+  const { total, data, hasPrevious, hasNext, totalPages } =
     await getPaginatedProducts(query);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Produtos resgatados com sucesso',
     meta: {
-      totalProducts: totalProducts,
+      totalProducts: total,
       hasPrevious: hasPrevious,
       hasNext: hasNext,
       totalPages: totalPages,
     },
 
-    data: paginatedProducts,
+    data: data,
   });
 };

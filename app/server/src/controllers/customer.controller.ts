@@ -41,23 +41,18 @@ export const modifyCustomerController = async (req: Request, res: Response) => {
 export const getCustomerController = async (_req: Request, res: Response) => {
   const query = res.locals.query;
 
-  const {
-    totalCustomers,
-    paginatedCustomers,
-    hasPrevious,
-    hasNext,
-    totalPages,
-  } = await getPaginatedCustomers(query);
+  const { total, data, hasPrevious, hasNext, totalPages } =
+    await getPaginatedCustomers(query);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Clientes resgatados com sucesso',
     meta: {
-      totalCustomers: totalCustomers,
+      totalCustomers: total,
       hasPrevious: hasPrevious,
       hasNext: hasNext,
       totalPages: totalPages,
     },
-    data: paginatedCustomers,
+    data: data,
   });
 };

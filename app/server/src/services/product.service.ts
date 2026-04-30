@@ -34,17 +34,18 @@ export const getPaginatedProducts = async (
     }),
   };
 
-  const {
-    totalGenerics: totalProducts,
-    paginatedGenerics: paginatedProducts,
-    totalPages,
-    hasPrevious,
-    hasNext,
-  } = await getPaginatedData(prisma, prisma.product, where, queryFilters.page);
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedData(
+      prisma,
+      prisma.product,
+      where,
+      queryFilters.page,
+      'Product',
+    );
 
   return {
-    totalProducts,
-    paginatedProducts,
+    total,
+    data,
     totalPages,
     hasPrevious,
     hasNext,

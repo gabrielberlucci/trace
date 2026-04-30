@@ -42,23 +42,18 @@ export const modifySupplierController = async (req: Request, res: Response) => {
 export const getSuppliersController = async (_req: Request, res: Response) => {
   const query = res.locals.query;
 
-  const {
-    totalSuppliers,
-    totalPaginatedSuppliers,
-    totalPages,
-    hasPrevious,
-    hasNext,
-  } = await getPaginatedSuppliers(query);
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedSuppliers(query);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Fornecedores resgatados com sucesso',
     meta: {
-      totalSuppliers: totalSuppliers,
+      totalSuppliers: total,
       totalPages: totalPages,
       hasPrevious: hasPrevious,
       hasNext: hasNext,
     },
-    data: totalPaginatedSuppliers,
+    data: data,
   });
 };
