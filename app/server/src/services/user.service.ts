@@ -68,23 +68,19 @@ export const getPaginatedUsers = async (
     password: true,
   };
 
-  const {
-    totalGenerics: totalUsers,
-    paginatedGenerics: paginatedUsers,
-    totalPages,
-    hasPrevious,
-    hasNext,
-  } = await getPaginatedData(
-    prisma,
-    prisma.user,
-    where,
-    queryFilters.page,
-    omit,
-  );
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedData(
+      prisma,
+      prisma.user,
+      where,
+      queryFilters.page,
+      'User',
+      omit,
+    );
 
   return {
-    totalUsers,
-    paginatedUsers,
+    total,
+    data,
     totalPages,
     hasPrevious,
     hasNext,
