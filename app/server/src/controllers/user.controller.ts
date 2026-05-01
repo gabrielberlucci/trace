@@ -36,20 +36,20 @@ export const loginUserController = async (req: Request, res: Response) => {
 export const getUsersController = async (_req: Request, res: Response) => {
   const query = res.locals.query;
 
-  const { totalUsers, paginatedUsers, totalPages, hasPrevious, hasNext } =
+  const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedUsers(query);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Usuários resgatados com sucesso',
     meta: {
-      totalUsers: totalUsers,
+      totalUsers: total,
       totalPages: totalPages,
       hasPrevious: hasPrevious,
       hasNext: hasNext,
     },
     data: {
-      userData: paginatedUsers,
+      userData: data,
     },
   });
 };
