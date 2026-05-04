@@ -1,6 +1,7 @@
 import {
   BadRequest,
   NotFound,
+  Ok,
   Unauthorized,
   UnprocessableEntity,
 } from '@/error';
@@ -50,6 +51,13 @@ export const validateError = (
   }
 
   if (error instanceof Unauthorized) {
+    return res.status(error.statusCode).send({
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
+  if (error instanceof Ok) {
     return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
