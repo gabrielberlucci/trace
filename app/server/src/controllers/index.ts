@@ -23,6 +23,8 @@ import {
   modifyUserController,
 } from './user.controller';
 
+import { createSaleController } from './sale.controller';
+
 export {
   createCustomerController,
   createProductController,
@@ -37,4 +39,5 @@ export {
   loginUserController,
   getUsersController,
   modifyUserController,
+  createSaleController,
 };
