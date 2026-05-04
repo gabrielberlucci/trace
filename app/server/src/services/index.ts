@@ -19,6 +19,8 @@ import {
   modifyUser,
 } from './user.service';
 
+import { createSale } from './sale.service';
+
 export {
   createCustomer,
   modifyCustomer,
@@ -32,4 +34,5 @@ export {
   loginUser,
   getPaginatedUsers,
   modifyUser,
+  createSale,
 };
