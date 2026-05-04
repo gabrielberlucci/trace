@@ -12,6 +12,17 @@ export const createSale = async (saleData: SaleCart) => {
      * !TODO: add validation if customer doesn't exists
      */
 
+    const customer = await prisma.customer.findUnique({
+      where: {
+        document: saleData.document,
+      },
+    });
+
+    if (!customer)
+      throw new NotFound(
+        `O cliente com o documento ${saleData.document} não foi encontrado`,
+      );
+
     for (let i = 0; i < saleData.item.length; i++) {
       const currentItem = saleData.item[i];
       const requestBarcode = currentItem!.barcode;
@@ -93,7 +104,7 @@ export const createSale = async (saleData: SaleCart) => {
 
     const sale = await tx.sale.create({
       data: {
-        customerId: saleData.customerId,
+        customerId: customer.id,
 
         saleItem: {
           create: validatedCart,
