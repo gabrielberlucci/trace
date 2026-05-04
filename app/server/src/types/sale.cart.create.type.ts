@@ -3,7 +3,7 @@ import { type Movement } from '../../generated/prisma/client';
 
 export interface SaleCart {
   item: SaleItemCart[];
-  customerId: number;
+  document: string;
 }
 
 interface SaleItemCart {
