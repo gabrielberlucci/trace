@@ -52,7 +52,7 @@ model Supplier {
 model Product {
   id           Int             @id @default(autoincrement())
   description  String
-  barcode      String
+  barcode      String          @unique
   unity        Unity
   currentStock Float           @default(0)
   costPrice    Decimal         @db.Decimal(9, 2)
@@ -69,8 +69,8 @@ model StockMovement {
   date         DateTime @default(now())
   typeMovement Movement
 
-  products   Product   @relation(fields: [productsId], references: [id])
-  productsId Int
+  product    Product   @relation(fields: [productId], references: [id])
+  productId  Int
   saleItem   SaleItem? @relation(fields: [saleItemId], references: [id])
   saleItemId Int?
 }
