@@ -2,7 +2,7 @@ import type { DecimalJsLike } from '@prisma/client/runtime/client';
 import { type Movement } from '../../generated/prisma/client';
 
 export interface SaleCart {
-  item: SaleItemCart[];
+  items: SaleItemCart[];
   document: string;
 }
 

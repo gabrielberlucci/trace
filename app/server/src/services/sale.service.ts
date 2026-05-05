@@ -8,11 +8,7 @@ export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {
     let validatedCart: ValidatedSaleCart[] = new Array();
 
-    /**
-     * !TODO: add validation if customer doesn't exists
-     */
-
-    const customer = await prisma.customer.findUnique({
+    const customer = await tx.customer.findUnique({
       where: {
         document: saleData.document,
       },
@@ -23,8 +19,8 @@ export const createSale = async (saleData: SaleCart) => {
         `O cliente com o documento ${saleData.document} não foi encontrado`,
       );
 
-    for (let i = 0; i < saleData.item.length; i++) {
-      const currentItem = saleData.item[i];
+    for (let i = 0; i < saleData.items.length; i++) {
+      const currentItem = saleData.items[i];
       const requestBarcode = currentItem!.barcode;
       const requestQuantity = currentItem!.quantity;
 
