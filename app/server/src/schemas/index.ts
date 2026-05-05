@@ -9,6 +9,7 @@ import {
   userQueryFilterSchema,
   modifyUserSchema,
 } from './user.schema';
+import { saleCartSchema } from './sale.schema';
 
 export {
   createCustomerSchema,
@@ -23,4 +24,5 @@ export {
   userLoginSchema,
   userQueryFilterSchema,
   modifyUserSchema,
+  saleCartSchema,
 };
