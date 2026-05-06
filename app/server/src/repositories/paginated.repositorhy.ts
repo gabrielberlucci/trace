@@ -1,4 +1,3 @@
-import { omit } from 'zod/mini';
 import type { Prisma } from '../../generated/prisma/client';
 import type { PrismaPromise } from '@prisma/client/runtime/client';
 
