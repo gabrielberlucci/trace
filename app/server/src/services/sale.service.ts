@@ -158,13 +158,28 @@ export const getPaginatedSales = async (
 };
 
 export const getSale = async (id: number) => {
-  const result = await prisma.saleItem.findMany({
+  const result = await prisma.sale.findUnique({
     where: {
-      saleId: id,
+      id: id,
     },
 
     omit: {
-      costPrice: true,
+      id: true,
+      customerId: true,
+    },
+
+    include: {
+      customer: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      saleItem: {
+        omit: {
+          costPrice: true,
+        },
+      },
     },
   });
 
