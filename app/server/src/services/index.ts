@@ -19,7 +19,7 @@ import {
   modifyUser,
 } from './user.service';
 
-import { createSale, getPaginatedSales } from './sale.service';
+import { createSale, getPaginatedSales, getSale } from './sale.service';
 
 export {
   createCustomer,
@@ -36,4 +36,5 @@ export {
   modifyUser,
   createSale,
   getPaginatedSales,
+  getSale,
 };

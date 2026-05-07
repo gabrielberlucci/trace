@@ -8,11 +8,11 @@ import type {
 } from '@/types';
 import { loggerStorage } from '@/logger';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
-import type {
-  SaleWhereInput,
-  SaleWhereUniqueInput,
-} from '../../generated/prisma/models';
 
+/**
+ * !TODO: add payment tables and maybe validate integration
+ * but for now at least add cash type
+ */
 export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {
     let validatedCart: ValidatedSaleCart[] = new Array();
@@ -153,6 +153,23 @@ export const getPaginatedSales = async (
     null,
     include,
   );
+
+  return result;
+};
+
+export const getSale = async (id: number) => {
+  const result = await prisma.saleItem.findMany({
+    where: {
+      saleId: id,
+    },
+
+    omit: {
+      costPrice: true,
+    },
+  });
+
+  if (!result)
+    throw new NotFound(`Não foi possível encontrar uma venda com o id ${id}`);
 
   return result;
 };
