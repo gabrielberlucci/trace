@@ -16,6 +16,7 @@ export const getPaginatedData = async <T>(
   page: number,
   searchTable: Prisma.ModelName,
   omit?: any,
+  include?: any,
 ) => {
   const PAGE_SIZE = 50;
   const skip = (page - 1) * PAGE_SIZE;
@@ -34,6 +35,7 @@ export const getPaginatedData = async <T>(
         take: PAGE_SIZE,
         orderBy: { id: 'asc' },
         omit: omit,
+        include: include,
       }),
     ]);
 
@@ -50,6 +52,7 @@ export const getPaginatedData = async <T>(
         take: PAGE_SIZE,
         orderBy: { id: 'asc' },
         omit: omit,
+        include: include,
       }),
     ]);
 
