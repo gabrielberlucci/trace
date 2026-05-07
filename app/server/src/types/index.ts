@@ -5,6 +5,7 @@ import { type ProductQueryParamsFilters } from './product.pagination.type';
 import { type UserLogin } from './user.login.type';
 import { type UserQueryParamsFilters } from './user.pagination.type';
 import type { SaleCart, ValidatedSaleCart } from './sale.cart.create.type';
+import type { SaleQueryParamsFilters } from './sale.pagination.type';
 
 export type {
   PaginationQueryParams,
@@ -15,4 +16,5 @@ export type {
   UserQueryParamsFilters,
   SaleCart,
   ValidatedSaleCart,
+  SaleQueryParamsFilters,
 };
