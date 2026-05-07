@@ -1,8 +1,17 @@
 import { BadRequest, NotFound, UnprocessableEntity } from '@/error';
-import { type Product } from '../../generated/prisma/client';
+import { Prisma, type Product } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
-import type { SaleCart, ValidatedSaleCart } from '@/types';
+import type {
+  SaleCart,
+  SaleQueryParamsFilters,
+  ValidatedSaleCart,
+} from '@/types';
 import { loggerStorage } from '@/logger';
+import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import type {
+  SaleWhereInput,
+  SaleWhereUniqueInput,
+} from '../../generated/prisma/models';
 
 export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {
@@ -114,4 +123,36 @@ export const createSale = async (saleData: SaleCart) => {
 
     return { sale };
   });
+};
+
+export const getPaginatedSales = async (
+  queryFilters: SaleQueryParamsFilters,
+) => {
+  const where: Prisma.SaleWhereInput = {
+    ...(queryFilters.document && {
+      customer: {
+        document: queryFilters.document,
+      },
+    }),
+  };
+
+  const include: Prisma.SaleInclude = {
+    customer: {
+      select: {
+        name: true,
+      },
+    },
+  };
+
+  const result = await getPaginatedData(
+    prisma,
+    prisma.sale,
+    where,
+    queryFilters.page,
+    'Sale',
+    null,
+    include,
+  );
+
+  return result;
 };
