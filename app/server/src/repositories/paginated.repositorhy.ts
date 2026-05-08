@@ -6,9 +6,6 @@ interface PrismaDelegate<T> {
   findMany: (arg0: any) => PrismaPromise<T[]>;
 }
 
-/*
-TODO: make possible to pass PAGE_SIZE as param  
-*/
 export const getPaginatedData = async <T>(
   tx: Prisma.TransactionClient,
   model: PrismaDelegate<T>,
@@ -17,8 +14,9 @@ export const getPaginatedData = async <T>(
   searchTable: Prisma.ModelName,
   omit?: any,
   include?: any,
+  page_size?: number,
 ) => {
-  const PAGE_SIZE = 50;
+  const PAGE_SIZE = page_size || 50;
   const skip = (page - 1) * PAGE_SIZE;
   let total: number;
   let data;
