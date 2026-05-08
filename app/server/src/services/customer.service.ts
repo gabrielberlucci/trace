@@ -7,9 +7,6 @@ import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
 ) => {
-  /*
-  TODO: make this a function
-  */
   if (customerData.document.length === 11) {
     customerData.typePerson = 'PF';
   } else {
