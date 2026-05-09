@@ -136,7 +136,7 @@ model PaymentMethod {
   id          Int         @id @default(autoincrement())
   description String
   active      Boolean     @default(true)
-  fee         Decimal     @db.Decimal(9, 2)
+  fee         Decimal?    @db.Decimal(9, 2)
   type        PaymentType
   sales       Sale[]
 
