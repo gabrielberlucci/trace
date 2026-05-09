@@ -102,10 +102,12 @@ model User {
 }
 
 model Sale {
-  id         Int        @id @default(autoincrement())
-  saleItem   SaleItem[]
-  customer   Customer   @relation(fields: [customerId], references: [id])
-  customerId Int
+  id              Int           @id @default(autoincrement())
+  saleItem        SaleItem[]
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  customerId      Int
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId Int
 }
 
 model SaleItem {
@@ -128,6 +130,17 @@ model TotalCount {
   id        Int    @id @default(autoincrement())
   tableName String @unique
   total     Int
+}
+
+model PaymentMethod {
+  id          Int         @id @default(autoincrement())
+  description String
+  active      Boolean     @default(true)
+  fee         Decimal     @db.Decimal(9, 2)
+  type        PaymentType
+  sales       Sale[]
+
+  createdAt DateTime @default(now())
 }
 
 // MAKE SERVICE MODEL
@@ -154,4 +167,13 @@ enum Movement {
   SERVICO
   AJUSTE
   PERDA
+}
+
+enum PaymentType {
+  POS
+  TEF
+  PIX
+  OUTRO
+  CREDITO
+  DEBITO
 }
