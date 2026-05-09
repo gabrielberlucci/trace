@@ -1,3 +1,4 @@
+import { NotFound } from '@/error';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
@@ -9,4 +10,29 @@ export const createPaymentMethod = async (
   });
 
   return result;
+};
+
+export const modifyPaymentMethod = async (
+  paymentData: Prisma.PaymentMethodUpdateInput,
+  paymentId: number,
+) => {
+  return prisma.$transaction(async (tx) => {
+    const exists = await tx.paymentMethod.findUnique({
+      where: { id: paymentId },
+    });
+
+    if (!exists)
+      throw new NotFound(
+        `O pagamento com o id: ${paymentId} não foi encontrado`,
+      );
+
+    const modifiedPayment = await tx.paymentMethod.update({
+      where: {
+        id: paymentId,
+      },
+      data: paymentData,
+    });
+
+    return { modifiedPayment };
+  });
 };

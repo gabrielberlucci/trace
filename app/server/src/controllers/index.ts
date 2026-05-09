@@ -29,7 +29,10 @@ import {
   getSingleSaleController,
 } from './sale.controller';
 
-import { paymentCreateController } from './payment.controller';
+import {
+  paymentCreateController,
+  modifyPaymentController,
+} from './payment.controller';
 
 export {
   createCustomerController,
@@ -49,4 +52,5 @@ export {
   getSalesController,
   getSingleSaleController,
   paymentCreateController,
+  modifyPaymentController,
 };
