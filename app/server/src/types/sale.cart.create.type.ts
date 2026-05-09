@@ -4,6 +4,7 @@ import { type Movement } from '../../generated/prisma/client';
 export interface SaleCart {
   items: SaleItemCart[];
   document: string;
+  payment: number;
 }
 
 interface SaleItemCart {

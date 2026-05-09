@@ -4,6 +4,7 @@ import { commonSchema } from './common.schema';
 
 export const saleCartSchema = z.object({
   document: commonSchema.shape.document,
+  payment: z.number({ error: 'Insira um id de pagamento' }),
   items: z.array(
     z.object({
       ...productSchema.pick({ barcode: true }).shape,

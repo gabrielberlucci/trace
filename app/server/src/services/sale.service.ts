@@ -8,14 +8,11 @@ import type {
 } from '@/types';
 import { loggerStorage } from '@/logger';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { fa } from '@faker-js/faker';
 
-/**
- * !TODO: add payment tables and maybe validate integration
- * but for now at least add cash type
- */
 export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {
-    let validatedCart: ValidatedSaleCart[] = new Array();
+    let validatedCart: ValidatedSaleCart[] = [];
 
     const customer = await tx.customer.findUnique({
       where: {
@@ -28,6 +25,37 @@ export const createSale = async (saleData: SaleCart) => {
         `O cliente com o documento ${saleData.document} não foi encontrado`,
       );
 
+    /**
+     * blud is still using 0 and 1 for inactive and inactive 💔🥀
+     * TODO: refactor using boolean for active in all tables
+     */
+    if (customer.active === 0)
+      throw new BadRequest(`O cliente ${customer.document} está inativo`);
+
+    /**
+     * TODO: by now, it's acceptable only ONE type of payment
+     * make it accept one or more type of payment
+     */
+    const paymentMethod = await tx.paymentMethod.findUnique({
+      where: {
+        id: saleData.payment,
+      },
+    });
+
+    if (!paymentMethod)
+      throw new NotFound(
+        `O pagamento com o id ${saleData.payment} não foi encontrado`,
+      );
+
+    if (paymentMethod.active === false)
+      throw new BadRequest(
+        `O pagamento ${paymentMethod.description} está inativo`,
+      );
+
+    /**
+     * TODO: refactor
+     * i hate this chunk of code, it's ugly
+     */
     for (let i = 0; i < saleData.items.length; i++) {
       const currentItem = saleData.items[i];
       const requestBarcode = currentItem!.barcode;
@@ -110,6 +138,7 @@ export const createSale = async (saleData: SaleCart) => {
     const sale = await tx.sale.create({
       data: {
         customerId: customer.id,
+        paymentMethodId: paymentMethod.id,
 
         saleItem: {
           create: validatedCart,
