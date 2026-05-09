@@ -9,3 +9,5 @@ export const createPaymentMethodSchema = z.object({
     error: 'O tipo deve ser POS, TEF, PIX, CREDITO, DEBITO ou OUTRO',
   }),
 });
+
+export const modifyPaymentMethodSchema = createPaymentMethodSchema.partial();

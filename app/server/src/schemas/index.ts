@@ -10,7 +10,10 @@ import {
   modifyUserSchema,
 } from './user.schema';
 import { saleCartSchema } from './sale.schema';
-import { createPaymentMethodSchema } from './payment.schema';
+import {
+  createPaymentMethodSchema,
+  modifyPaymentMethodSchema,
+} from './payment.schema';
 
 export {
   createCustomerSchema,
@@ -27,4 +30,5 @@ export {
   modifyUserSchema,
   saleCartSchema,
   createPaymentMethodSchema,
+  modifyPaymentMethodSchema,
 };
