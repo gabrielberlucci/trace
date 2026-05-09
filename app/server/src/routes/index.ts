@@ -4,6 +4,7 @@ import { supplierRoute } from './supplier.route';
 import { productRouter } from './product.route';
 import { userRouter } from './user.route';
 import { saleRouter } from './sale.route';
+import { paymentMethodsRoutes } from './payment.methods.route';
 
 const routes: Router = Router();
 
@@ -12,5 +13,6 @@ routes.use('/api/v1/suppliers', supplierRoute);
 routes.use('/api/v1/products', productRouter);
 routes.use('/api/v1/users', userRouter);
 routes.use('/api/v1/sales', saleRouter);
+routes.use('/api/v1/payment-methods', paymentMethodsRoutes);
 
 export { routes };
