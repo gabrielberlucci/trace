@@ -4,7 +4,7 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 
 > **Status:** Em desenvolvimento ativo. O banco de dados já está modelado e as rotas core estão sendo implementadas.
 
-## Stack Tecnológica
+## Stack
 
 - **Ecosistema:** Node.js, TypeScript, Express
 - **Banco de Dados:** PostgreSQL
@@ -28,6 +28,7 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 - [x] CRUD e testes de integração das rotas de Usuarios (com Vitest/Supertest)
 - [x] Implementação do módulo de Controle de Estoque (`StockMovement`)
 - [x] Construção do fluxo transacional de Vendas
+- [x] CRUD e testes de integração das rotas de Tipos de pagamento (com Vitest/Supertest)s
 - [ ] Autenticação e Rate-Limiting
 - [ ] Autorização de usuário
 - [ ] Enviar NFS-e e NFCe para a SEFAZ
@@ -58,11 +59,11 @@ PORT= 3000
 **4. Execute as Migrations para montar o banco:**
 
 ```bash
-npx prisma migrate dev
+cd server && npx prisma migrate dev && npx generate
 ```
 
 **5. Inicie o servidor em modo de desenvolvimento:**
 
 ```bash
-cd app/server && pnpm run dev
+cd app/server && pnpm dev
 ```
