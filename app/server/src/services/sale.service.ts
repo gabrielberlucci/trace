@@ -171,6 +171,12 @@ export const getPaginatedSales = async (
         name: true,
       },
     },
+
+    paymentMethod: {
+      select: {
+        description: true,
+      },
+    },
   };
 
   const result = await getPaginatedData(
@@ -195,6 +201,7 @@ export const getSale = async (id: number) => {
     omit: {
       id: true,
       customerId: true,
+      paymentMethodId: true,
     },
 
     include: {
@@ -202,6 +209,11 @@ export const getSale = async (id: number) => {
         select: {
           name: true,
           email: true,
+        },
+      },
+      paymentMethod: {
+        select: {
+          description: true,
         },
       },
       saleItem: {
