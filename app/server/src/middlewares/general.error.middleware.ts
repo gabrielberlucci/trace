@@ -11,6 +11,9 @@ import { formatPrismaError } from '@/utils';
 import type { NextFunction, Request, Response } from 'express';
 import z, { ZodError } from 'zod';
 import { loggerStorage } from '@/logger';
+import jwt from 'jsonwebtoken';
+
+const { JsonWebTokenError } = jwt;
 
 export const validateError = (
   error: Error,
@@ -60,6 +63,14 @@ export const validateError = (
   if (error instanceof Ok) {
     return res.status(error.statusCode).send({
       errorName: error.name,
+      message: error.message,
+    });
+  }
+  //JsonWebTokenError: invalid token
+
+  if (error instanceof JsonWebTokenError) {
+    return res.status(StatusCodes.UNAUTHORIZED).send({
+      errorName: ReasonPhrases.UNAUTHORIZED,
       message: error.message,
     });
   }
