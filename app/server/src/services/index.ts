@@ -20,7 +20,11 @@ import {
 } from './user.service';
 
 import { createSale, getPaginatedSales, getSale } from './sale.service';
-import { createPaymentMethod, modifyPaymentMethod } from './payment.service';
+import {
+  createPaymentMethod,
+  modifyPaymentMethod,
+  getPaginatedPaymentMethods,
+} from './payment.methods.service';
 
 export {
   createCustomer,
@@ -40,4 +44,5 @@ export {
   getSale,
   createPaymentMethod,
   modifyPaymentMethod,
+  getPaginatedPaymentMethods,
 };

@@ -33,7 +33,7 @@ import {
   createPaymentMethodController,
   modifyPaymentMethodController,
   getPaymentMethodController,
-} from './payment.controller';
+} from './payment.methods.controller';
 
 export {
   createCustomerController,

@@ -1,6 +1,8 @@
 import { NotFound } from '@/error';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
+import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import type { PaymentMethodQueryParamsFilters } from '@/types/payment.methods.pagination';
 
 export const createPaymentMethod = async (
   paymentData: Prisma.PaymentMethodCreateInput,
@@ -35,4 +37,33 @@ export const modifyPaymentMethod = async (
 
     return { modifiedPayment };
   });
+};
+
+export const getPaginatedPaymentMethods = async (
+  queryFilters: PaymentMethodQueryParamsFilters,
+) => {
+  const where = {
+    ...(queryFilters.active && { active: queryFilters.active }),
+    ...(queryFilters.description && { description: queryFilters.description }),
+    ...(queryFilters.type && { type: queryFilters.type }),
+  };
+
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedData(
+      prisma,
+      prisma.paymentMethod,
+      where,
+      queryFilters.page,
+      'PaymentMethod',
+      null,
+      null,
+    );
+
+  return {
+    total,
+    data,
+    totalPages,
+    hasPrevious,
+    hasNext,
+  };
 };

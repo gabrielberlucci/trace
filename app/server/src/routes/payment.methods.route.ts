@@ -3,10 +3,11 @@ import {
   getPaymentMethodController,
   modifyPaymentMethodController,
 } from '@/controllers';
-import { authMiddleware, validateData } from '@/middlewares';
+import { authMiddleware, validateData, validateQuery } from '@/middlewares';
 import {
   createPaymentMethodSchema,
   modifyPaymentMethodSchema,
+  queryFilterSchema,
 } from '@/schemas';
 import { Router } from 'express';
 
@@ -26,6 +27,11 @@ paymentMethodsRoutes.patch(
   modifyPaymentMethodController,
 );
 
-paymentMethodsRoutes.get('/', authMiddleware, getPaymentMethodController);
+paymentMethodsRoutes.get(
+  '/',
+  authMiddleware,
+  validateQuery(queryFilterSchema),
+  getPaymentMethodController,
+);
 
 export { paymentMethodsRoutes };

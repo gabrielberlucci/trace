@@ -1,5 +1,9 @@
 import { BadRequest } from '@/error';
-import { createPaymentMethod, modifyPaymentMethod } from '@/services';
+import {
+  createPaymentMethod,
+  getPaginatedPaymentMethods,
+  modifyPaymentMethod,
+} from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -39,4 +43,24 @@ export const modifyPaymentMethodController = async (
 export const getPaymentMethodController = async (
   req: Request,
   res: Response,
-) => {};
+) => {
+  const query = res.locals.query;
+
+  const { total, data, totalPages, hasPrevious, hasNext } =
+    await getPaginatedPaymentMethods(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Métodos de pagamentos resgatados com sucesso',
+    data: {
+      meta: {
+        total: total,
+        totalPages: totalPages,
+        hasPrevious: hasPrevious,
+        hasNext: hasNext,
+      },
+
+      data: data,
+    },
+  });
+};
