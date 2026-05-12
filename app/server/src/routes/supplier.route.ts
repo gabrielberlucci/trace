@@ -3,7 +3,7 @@ import {
   modifySupplierController,
 } from '@/controllers';
 import { getSuppliersController } from '@/controllers';
-import { validateData, validateQuery } from '@/middlewares';
+import { authMiddleware, validateData, validateQuery } from '@/middlewares';
 import {
   createSupplierSchema,
   modifySupplierSchema,
@@ -15,17 +15,20 @@ const supplierRoute: Router = Router();
 
 supplierRoute.post(
   '/',
+  authMiddleware,
   validateData(createSupplierSchema),
   createSupplierController,
 );
 supplierRoute.patch(
   '/:id',
+  authMiddleware,
   validateData(modifySupplierSchema),
   modifySupplierController,
 );
 
 supplierRoute.get(
   '/',
+  authMiddleware,
   validateQuery(queryFilterSchema),
   getSuppliersController,
 );

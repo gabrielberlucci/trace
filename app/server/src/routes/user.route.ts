@@ -4,7 +4,7 @@ import {
   getUsersController,
   modifyUserController,
 } from '@/controllers';
-import { validateData, validateQuery } from '@/middlewares';
+import { authMiddleware, validateData, validateQuery } from '@/middlewares';
 import {
   userSchema,
   userLoginSchema,
@@ -15,9 +15,24 @@ import { Router } from 'express';
 
 const userRouter: Router = Router();
 
-userRouter.post('/register', validateData(userSchema), registerUserController);
+userRouter.post(
+  '/register',
+  authMiddleware,
+  validateData(userSchema),
+  registerUserController,
+);
 userRouter.post('/login', validateData(userLoginSchema), loginUserController);
-userRouter.get('/', validateQuery(userQueryFilterSchema), getUsersController);
-userRouter.patch('/:id', validateData(modifyUserSchema), modifyUserController);
+userRouter.get(
+  '/',
+  authMiddleware,
+  validateQuery(userQueryFilterSchema),
+  getUsersController,
+);
+userRouter.patch(
+  '/:id',
+  authMiddleware,
+  validateData(modifyUserSchema),
+  modifyUserController,
+);
 
 export { userRouter };

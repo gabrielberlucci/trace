@@ -2,7 +2,7 @@ import {
   modifyPaymentController,
   paymentCreateController,
 } from '@/controllers';
-import { validateData } from '@/middlewares';
+import { authMiddleware, validateData } from '@/middlewares';
 import {
   createPaymentMethodSchema,
   modifyPaymentMethodSchema,
@@ -13,12 +13,14 @@ const paymentMethodsRoutes: Router = Router();
 
 paymentMethodsRoutes.post(
   '/',
+  authMiddleware,
   validateData(createPaymentMethodSchema),
   paymentCreateController,
 );
 
 paymentMethodsRoutes.patch(
   '/:id',
+  authMiddleware,
   validateData(modifyPaymentMethodSchema),
   modifyPaymentController,
 );

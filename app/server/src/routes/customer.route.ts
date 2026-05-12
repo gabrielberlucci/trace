@@ -5,21 +5,28 @@ import {
   getCustomerController,
   modifyCustomerController,
 } from '@/controllers/';
-import { validateData, validateQuery } from '@/middlewares';
+import { authMiddleware, validateData, validateQuery } from '@/middlewares';
 import { queryFilterSchema } from '@/schemas';
 
 const customerRoute: Router = Router();
 
 customerRoute.post(
   '/',
+  authMiddleware,
   validateData(createCustomerSchema),
   createCustomerController,
 );
 customerRoute.patch(
   '/:id',
+  authMiddleware,
   validateData(modifyCustomerSchema),
   modifyCustomerController,
 );
-customerRoute.get('/', validateQuery(queryFilterSchema), getCustomerController);
+customerRoute.get(
+  '/',
+  authMiddleware,
+  validateQuery(queryFilterSchema),
+  getCustomerController,
+);
 
 export { customerRoute };

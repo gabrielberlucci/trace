@@ -3,7 +3,7 @@ import {
   getProductController,
   modifyProductController,
 } from '@/controllers';
-import { validateData, validateQuery } from '@/middlewares';
+import { authMiddleware, validateData, validateQuery } from '@/middlewares';
 import {
   modifyProductSchema,
   productSchema,
@@ -17,10 +17,16 @@ productRouter.post('/', validateData(productSchema), createProductController);
 
 productRouter.patch(
   '/:id',
+  authMiddleware,
   validateData(modifyProductSchema),
   modifyProductController,
 );
 
-productRouter.get('/', validateQuery(queryFilterSchema), getProductController);
+productRouter.get(
+  '/',
+  authMiddleware,
+  validateQuery(queryFilterSchema),
+  getProductController,
+);
 
 export { productRouter };
