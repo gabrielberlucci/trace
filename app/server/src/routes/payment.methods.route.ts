@@ -1,6 +1,7 @@
 import {
-  modifyPaymentController,
-  paymentCreateController,
+  createPaymentMethodController,
+  getPaymentMethodController,
+  modifyPaymentMethodController,
 } from '@/controllers';
 import { authMiddleware, validateData } from '@/middlewares';
 import {
@@ -15,14 +16,16 @@ paymentMethodsRoutes.post(
   '/',
   authMiddleware,
   validateData(createPaymentMethodSchema),
-  paymentCreateController,
+  createPaymentMethodController,
 );
 
 paymentMethodsRoutes.patch(
   '/:id',
   authMiddleware,
   validateData(modifyPaymentMethodSchema),
-  modifyPaymentController,
+  modifyPaymentMethodController,
 );
+
+paymentMethodsRoutes.get('/', authMiddleware, getPaymentMethodController);
 
 export { paymentMethodsRoutes };

@@ -3,7 +3,10 @@ import { createPaymentMethod, modifyPaymentMethod } from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-export const paymentCreateController = async (req: Request, res: Response) => {
+export const createPaymentMethodController = async (
+  req: Request,
+  res: Response,
+) => {
   const paymentData = req.body;
 
   const data = await createPaymentMethod(paymentData);
@@ -15,7 +18,10 @@ export const paymentCreateController = async (req: Request, res: Response) => {
   });
 };
 
-export const modifyPaymentController = async (req: Request, res: Response) => {
+export const modifyPaymentMethodController = async (
+  req: Request,
+  res: Response,
+) => {
   const paymentData = req.body;
   const id = Number(req.params['id']);
 
@@ -29,3 +35,8 @@ export const modifyPaymentController = async (req: Request, res: Response) => {
     data: data,
   });
 };
+
+export const getPaymentMethodController = async (
+  req: Request,
+  res: Response,
+) => {};
