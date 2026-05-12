@@ -6,6 +6,7 @@ import { type UserLogin } from './user.login.type';
 import { type UserQueryParamsFilters } from './user.pagination.type';
 import type { SaleCart, ValidatedSaleCart } from './sale.cart.create.type';
 import type { SaleQueryParamsFilters } from './sale.pagination.type';
+import type { PaymentMethodQueryParamsFilters } from './payment.methods.pagination';
 
 export type {
   PaginationQueryParams,
