@@ -29,4 +29,10 @@ export const queryFilterSchema = z.object({
       abort: true,
     })
     .optional(),
+
+  description: z
+    .string({ error: 'Insira uma descrição' })
+    .min(2, { error: 'Descriçao muito curta. Insira pelo menos 3 caracteres' })
+    .max(50, { error: 'Descriçao muito longa. Insira no máximo 50 caracteres' })
+    .optional(),
 });
