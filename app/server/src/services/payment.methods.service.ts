@@ -44,7 +44,9 @@ export const getPaginatedPaymentMethods = async (
 ) => {
   const where = {
     ...(queryFilters.active && { active: queryFilters.active }),
-    ...(queryFilters.description && { description: queryFilters.description }),
+    ...(queryFilters.description && {
+      description: { contains: queryFilters.description, mode: 'insensitive' },
+    }),
     ...(queryFilters.type && { type: queryFilters.type }),
   };
 
