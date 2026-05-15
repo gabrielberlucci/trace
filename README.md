@@ -62,7 +62,16 @@ PORT= 3000
 cd server && npx prisma migrate dev && npx generate
 ```
 
-**5. Inicie o servidor em modo de desenvolvimento:**
+**5. Execute os setups iniciais do banco:**
+
+```bash
+cd server
+npx tsx .\prisma\populate.city.ts
+npx tsx .\prisma\setup.total.table.ts
+npx tsx .\prisma\setup.trigger.ts
+```
+
+**6. Inicie o servidor em modo de desenvolvimento:**
 
 ```bash
 cd app/server && pnpm dev
