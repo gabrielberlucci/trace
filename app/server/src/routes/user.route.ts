@@ -4,7 +4,12 @@ import {
   getUsersController,
   modifyUserController,
 } from '@/controllers';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
+import {
+  authMiddleware,
+  rateLimiting,
+  validateData,
+  validateQuery,
+} from '@/middlewares';
 import {
   userSchema,
   userLoginSchema,
@@ -21,7 +26,12 @@ userRouter.post(
   validateData(userSchema),
   registerUserController,
 );
-userRouter.post('/login', validateData(userLoginSchema), loginUserController);
+userRouter.post(
+  '/login',
+  validateData(userLoginSchema),
+  rateLimiting,
+  loginUserController,
+);
 userRouter.get(
   '/',
   authMiddleware,
