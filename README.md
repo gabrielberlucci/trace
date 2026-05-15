@@ -29,7 +29,7 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 - [x] Implementação do módulo de Controle de Estoque (`StockMovement`)
 - [x] Construção do fluxo transacional de Vendas
 - [x] CRUD e testes de integração das rotas de Tipos de pagamento (com Vitest/Supertest)s
-- [ ] Autenticação e Rate-Limiting
+- [x] Autenticação e Rate-Limiting
 - [ ] Autorização de usuário
 - [ ] Enviar NFS-e e NFCe para a SEFAZ
 
