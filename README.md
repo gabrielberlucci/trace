@@ -66,9 +66,9 @@ cd server && npx prisma migrate dev && npx generate
 
 ```bash
 cd server
-npx tsx .\prisma\populate.city.ts
 npx tsx .\prisma\setup.total.table.ts
 npx tsx .\prisma\setup.trigger.ts
+npx tsx .\prisma\populate.city.ts
 ```
 
 **6. Inicie o servidor em modo de desenvolvimento:**
