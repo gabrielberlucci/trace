@@ -10,8 +10,6 @@ interface Total {
 }
 
 const setupTotalCountTable = async () => {
-  await prisma.$executeRawUnsafe(`TRUNCATE "TotalCount" CASCADE`);
-
   const tables: Table[] = await prisma.$queryRawUnsafe(
     `
     SELECT t.tablename
