@@ -34,6 +34,14 @@ export const getPaginatedProducts = async (
     }),
   };
 
+  const select: Prisma.ProductSelect = {
+    id: true,
+    description: true,
+    barcode: true,
+    currentStock: true,
+    unity: true,
+  };
+
   const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedData(
       prisma,
@@ -41,6 +49,10 @@ export const getPaginatedProducts = async (
       where,
       queryFilters.page,
       'Product',
+      null,
+      null,
+      undefined,
+      select,
     );
 
   return {

@@ -38,6 +38,14 @@ export const getPaginatedSuppliers = async (
     ...(queryFilters.active && { active: Number(queryFilters.active) }),
   };
 
+  const select: Prisma.SupplierSelect = {
+    id: true,
+    document: true,
+    typePerson: true,
+    name: true,
+    active: true,
+  };
+
   const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedData(
       prisma,
@@ -45,6 +53,10 @@ export const getPaginatedSuppliers = async (
       where,
       queryFilters.page,
       'Supplier',
+      null,
+      null,
+      undefined,
+      select,
     );
 
   return {
