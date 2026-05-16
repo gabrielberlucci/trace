@@ -15,6 +15,7 @@ export const getPaginatedData = async <T>(
   omit?: any,
   include?: any,
   page_size?: number,
+  select?: any,
 ) => {
   const PAGE_SIZE = page_size || 50;
   const skip = (page - 1) * PAGE_SIZE;
@@ -34,6 +35,7 @@ export const getPaginatedData = async <T>(
         orderBy: { id: 'asc' },
         omit: omit,
         include: include,
+        select: select,
       }),
     ]);
 
@@ -51,6 +53,7 @@ export const getPaginatedData = async <T>(
         orderBy: { id: 'asc' },
         omit: omit,
         include: include,
+        select: select,
       }),
     ]);
 
