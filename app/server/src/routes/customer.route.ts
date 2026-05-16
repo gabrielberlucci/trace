@@ -3,6 +3,7 @@ import { createCustomerSchema, modifyCustomerSchema } from '@/schemas';
 import {
   createCustomerController,
   getCustomerController,
+  getPaginatedCustomersController,
   modifyCustomerController,
 } from '@/controllers/';
 import { authMiddleware, validateData, validateQuery } from '@/middlewares';
@@ -92,7 +93,8 @@ customerRoute.get(
   '/',
   authMiddleware,
   validateQuery(queryFilterSchema),
-  getCustomerController,
+  getPaginatedCustomersController,
 );
+customerRoute.get('/:id', authMiddleware, getCustomerController);
 
 export { customerRoute };
