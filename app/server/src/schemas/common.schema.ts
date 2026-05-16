@@ -81,9 +81,13 @@ export const commonSchema = z.object({
     .transform((val) => val.replace(/\s+/g, ''))
     .optional(),
 
-  active: z.boolean({
-    error: 'Ativo deve ser true ou false',
-  }),
+  active: z
+    .stringbool({
+      truthy: ['true'],
+      falsy: ['false'],
+      error: 'Insira true ou false',
+    })
+    .optional(),
 
   cityId: z.int({ error: 'Insira uma cidade' }).optional(),
 });
