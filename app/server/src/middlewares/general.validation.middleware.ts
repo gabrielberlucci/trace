@@ -11,6 +11,6 @@ export const validateData =
 export const validateQuery =
   (schema: z.ZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
-    res.locals.query = schema.parse(req.query);
+    res.locals.query = schema.strict().parse(req.query);
     next();
   };
