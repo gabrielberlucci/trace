@@ -50,6 +50,13 @@ export const getPaginatedPaymentMethods = async (
     ...(queryFilters.type && { type: queryFilters.type }),
   };
 
+  const select: Prisma.PaymentMethodSelect = {
+    id: true,
+    description: true,
+    type: true,
+    active: true,
+  };
+
   const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedData(
       prisma,
@@ -59,6 +66,8 @@ export const getPaginatedPaymentMethods = async (
       'PaymentMethod',
       null,
       null,
+      undefined,
+      select,
     );
 
   return {
