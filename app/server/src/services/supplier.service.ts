@@ -31,11 +31,14 @@ export const getPaginatedSuppliers = async (
   queryFilters: SupplierQueryParamsFilters,
 ) => {
   const where: Prisma.SupplierWhereInput = {
-    ...(queryFilters.document && { document: queryFilters.document }),
-    ...(queryFilters.name && {
-      name: { contains: queryFilters.name, mode: 'insensitive' },
-    }),
-    ...(queryFilters.active && { active: Number(queryFilters.active) }),
+    active: queryFilters.active,
+    document: queryFilters.document,
+    name: queryFilters.name
+      ? {
+          contains: queryFilters.name,
+          mode: 'insensitive',
+        }
+      : undefined,
   };
 
   const select: Prisma.SupplierSelect = {

@@ -39,17 +39,18 @@ export const getPaginatedCustomers = async (
   queryFilters: CustomerQueryParamsFilters,
 ) => {
   const where: Prisma.CustomerWhereInput = {
-    ...(queryFilters.active && { active: Number(queryFilters.active) }),
-    ...(queryFilters.name && {
-      name: { contains: queryFilters.name, mode: 'insensitive' },
-    }),
-    ...(queryFilters.document && { document: queryFilters.document }),
+    name: queryFilters.name
+      ? { contains: queryFilters.name, mode: 'insensitive' }
+      : undefined,
+    document: queryFilters.document,
+    active: queryFilters.active,
   };
 
   const select: Prisma.CustomerSelect = {
     id: true,
     name: true,
     document: true,
+    active: true,
   };
 
   const { total, data, totalPages, hasPrevious, hasNext } =

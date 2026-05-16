@@ -28,10 +28,10 @@ export const getPaginatedProducts = async (
   queryFilters: ProductQueryParamsFilters,
 ) => {
   const where: Prisma.ProductWhereInput = {
-    ...(queryFilters.barcode && { barcode: queryFilters.barcode }),
-    ...(queryFilters.description && {
-      description: { contains: queryFilters.description, mode: 'insensitive' },
-    }),
+    barcode: queryFilters.barcode,
+    description: queryFilters.description
+      ? { contains: queryFilters.description, mode: 'insensitive' }
+      : undefined,
   };
 
   const select: Prisma.ProductSelect = {

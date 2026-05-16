@@ -42,12 +42,12 @@ export const modifyPaymentMethod = async (
 export const getPaginatedPaymentMethods = async (
   queryFilters: PaymentMethodQueryParamsFilters,
 ) => {
-  const where = {
-    ...(queryFilters.active && { active: queryFilters.active }),
-    ...(queryFilters.description && {
-      description: { contains: queryFilters.description, mode: 'insensitive' },
-    }),
-    ...(queryFilters.type && { type: queryFilters.type }),
+  const where: Prisma.PaymentMethodWhereInput = {
+    active: queryFilters.active,
+    description: queryFilters.description
+      ? { contains: queryFilters.description, mode: 'insensitive' }
+      : undefined,
+    type: queryFilters.type,
   };
 
   const select: Prisma.PaymentMethodSelect = {

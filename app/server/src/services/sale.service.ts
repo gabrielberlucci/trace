@@ -8,7 +8,6 @@ import type {
 } from '@/types';
 import { loggerStorage } from '@/logger';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
-import { fa } from '@faker-js/faker';
 
 export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {
@@ -25,11 +24,7 @@ export const createSale = async (saleData: SaleCart) => {
         `O cliente com o documento ${saleData.document} não foi encontrado`,
       );
 
-    /**
-     * blud is still using 0 and 1 for inactive and inactive 💔🥀
-     * TODO: refactor using boolean for active in all tables
-     */
-    if (customer.active === 0)
+    if (customer.active === false)
       throw new BadRequest(`O cliente ${customer.document} está inativo`);
 
     /**
@@ -158,11 +153,9 @@ export const getPaginatedSales = async (
   queryFilters: SaleQueryParamsFilters,
 ) => {
   const where: Prisma.SaleWhereInput = {
-    ...(queryFilters.document && {
-      customer: {
-        document: queryFilters.document,
-      },
-    }),
+    customer: queryFilters.document
+      ? { document: queryFilters.document }
+      : undefined,
   };
 
   const include: Prisma.SaleInclude = {

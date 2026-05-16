@@ -61,7 +61,8 @@ export const getPaginatedUsers = async (
   queryFilters: UserQueryParamsFilters,
 ) => {
   const where: Prisma.UserWhereInput = {
-    ...(queryFilters.username && { username: queryFilters.username }),
+    active: queryFilters.active,
+    username: queryFilters.username,
   };
 
   const select: Prisma.UserSelect = {
