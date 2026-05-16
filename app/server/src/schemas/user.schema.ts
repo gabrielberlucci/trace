@@ -56,6 +56,8 @@ export const modifyUserSchema = z
   .partial()
   .refine(
     (data) => {
+      if (data.password === undefined || data.password === '') return true;
+
       if (data.password !== undefined && data.password !== '') {
         return (
           data.confirmedPassword !== undefined && data.confirmedPassword !== ''
