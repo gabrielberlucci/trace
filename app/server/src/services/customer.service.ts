@@ -3,6 +3,7 @@ import { Prisma } from '../../generated/prisma/client';
 import { loggerStorage } from '@/logger/storage';
 import type { CustomerQueryParamsFilters } from '@/types';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { NotFound } from '@/error';
 
 export const createCustomer = async (
   customerData: Prisma.CustomerCreateInput,
@@ -45,6 +46,12 @@ export const getPaginatedCustomers = async (
     ...(queryFilters.document && { document: queryFilters.document }),
   };
 
+  const select: Prisma.CustomerSelect = {
+    id: true,
+    name: true,
+    document: true,
+  };
+
   const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedData(
       prisma,
@@ -52,6 +59,10 @@ export const getPaginatedCustomers = async (
       where,
       queryFilters.page,
       'Customer',
+      null,
+      null,
+      undefined,
+      select,
     );
 
   return {
@@ -61,4 +72,19 @@ export const getPaginatedCustomers = async (
     hasNext,
     totalPages,
   };
+};
+
+export const getCustomer = async (customerId: number) => {
+  const data = await prisma.customer.findUnique({
+    where: {
+      id: customerId,
+    },
+  });
+
+  if (!data)
+    throw new NotFound(
+      `Não foi possível encontrar o cliente com o id ${customerId}`,
+    );
+
+  return data;
 };
