@@ -1,7 +1,8 @@
-import { UnprocessableEntity } from '@/error/index';
+import { BadRequest, UnprocessableEntity } from '@/error/index';
 import { loggerStorage } from '@/logger/storage';
 import {
   createCustomer,
+  getCustomer,
   getPaginatedCustomers,
   modifyCustomer,
 } from '@/services/customer.service';
@@ -38,7 +39,10 @@ export const modifyCustomerController = async (req: Request, res: Response) => {
   });
 };
 
-export const getCustomerController = async (_req: Request, res: Response) => {
+export const getPaginatedCustomersController = async (
+  _req: Request,
+  res: Response,
+) => {
   const query = res.locals.query;
 
   const { total, data, hasPrevious, hasNext, totalPages } =
@@ -53,6 +57,20 @@ export const getCustomerController = async (_req: Request, res: Response) => {
       hasNext: hasNext,
       totalPages: totalPages,
     },
+    data: data,
+  });
+};
+
+export const getCustomerController = async (req: Request, res: Response) => {
+  const id = Number(req.params['id']);
+
+  if (Number.isNaN(id)) throw new BadRequest('Id inválido');
+
+  const data = await getCustomer(id);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Cliente resgatado com sucesso',
     data: data,
   });
 };

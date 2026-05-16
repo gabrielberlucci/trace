@@ -1,7 +1,8 @@
 import {
   createCustomerController,
-  getCustomerController,
+  getPaginatedCustomersController,
   modifyCustomerController,
+  getCustomerController,
 } from './customer.controller';
 
 import {
@@ -39,7 +40,7 @@ export {
   createCustomerController,
   createProductController,
   createSupplierController,
-  getCustomerController,
+  getPaginatedCustomersController,
   getProductController,
   modifyCustomerController,
   modifyProductController,
@@ -55,4 +56,5 @@ export {
   createPaymentMethodController,
   modifyPaymentMethodController,
   getPaymentMethodController,
+  getCustomerController,
 };
