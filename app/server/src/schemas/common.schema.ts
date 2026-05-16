@@ -1,5 +1,6 @@
 import { z } from '@/config/zod.config';
 import { validateCnpj, validateCpf } from '@/utils';
+import { typePerson } from '../../generated/prisma/client';
 
 /*
  * Initial common schema
@@ -20,7 +21,7 @@ export const commonSchema = z.object({
     ),
 
   typePerson: z
-    .enum(['PJ', 'PF'], { error: 'O tipo de pessoa deve ser PJ ou PF' })
+    .enum(typePerson, { error: 'O tipo de pessoa deve ser PJ ou PF' })
     .transform((val) => val!.replace(/\s+/g, ''))
     .optional(),
 
@@ -80,11 +81,9 @@ export const commonSchema = z.object({
     .transform((val) => val.replace(/\s+/g, ''))
     .optional(),
 
-  active: z
-    .union([z.literal(0), z.literal(1)], {
-      error: 'Ativo deve ser 0 ou 1',
-    })
-    .optional(),
+  active: z.boolean({
+    error: 'Ativo deve ser true ou false',
+  }),
 
   cityId: z.int({ error: 'Insira uma cidade' }).optional(),
 });

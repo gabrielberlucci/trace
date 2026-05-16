@@ -6,11 +6,9 @@ export const queryFilterSchema = z.object({
     .positive({ error: 'Insira um número positivo' })
     .default(1),
 
-  active: z
-    .enum(['0', '1'], {
-      error: 'Ativo deve ser 0 ou 1',
-    })
-    .optional(),
+  active: z.boolean({
+    error: 'Ativo deve ser true ou false',
+  }),
 
   name: z
     .string({ error: 'Insira um nome' })
