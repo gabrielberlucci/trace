@@ -1,4 +1,5 @@
 import { z } from '@/config/zod.config';
+import { error } from 'node:console';
 
 export const queryFilterSchema = z.object({
   page: z.coerce
@@ -6,9 +7,13 @@ export const queryFilterSchema = z.object({
     .positive({ error: 'Insira um número positivo' })
     .default(1),
 
-  active: z.boolean({
-    error: 'Ativo deve ser true ou false',
-  }),
+  active: z
+    .stringbool({
+      truthy: ['true'],
+      falsy: ['false'],
+      error: 'Insira true ou false',
+    })
+    .optional(),
 
   name: z
     .string({ error: 'Insira um nome' })
