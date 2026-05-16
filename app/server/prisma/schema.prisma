@@ -25,7 +25,7 @@ model Customer {
   complement    String?
   email         String?    @unique
   ie            String?    @unique
-  active        Int        @default(1)
+  active        Boolean    @default(true)
   city          City?      @relation(fields: [cityId], references: [id])
   cityId        Int?
   sale          Sale[]
@@ -43,7 +43,7 @@ model Supplier {
   complement    String?
   email         String?    @unique
   ie            String?    @unique
-  active        Int        @default(1)
+  active        Boolean    @default(true)
   city          City?      @relation(fields: [cityId], references: [id])
   cityId        Int?
   products      Product[]
@@ -96,6 +96,7 @@ model User {
   email         String?   @unique
   password      String
   username      String    @unique
+  active        Boolean   @default(true)
   role          Role
   city          City?     @relation(fields: [cityId], references: [id])
   cityId        Int?
