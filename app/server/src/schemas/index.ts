@@ -14,6 +14,7 @@ import {
   createPaymentMethodSchema,
   modifyPaymentMethodSchema,
 } from './payment.schema';
+import { reqParamSchema } from './req.param.schema';
 
 export {
   createCustomerSchema,
@@ -31,4 +32,5 @@ export {
   saleCartSchema,
   createPaymentMethodSchema,
   modifyPaymentMethodSchema,
+  reqParamSchema,
 };
