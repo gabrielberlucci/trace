@@ -121,3 +121,16 @@ export const modifyUser = async (
 
   return result;
 };
+
+export const getUser = async (userId: number) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!result)
+    throw new NotFound(`Usuário com o ID ${userId} não foi encontrado`);
+
+  return result;
+};

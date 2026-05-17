@@ -8,15 +8,22 @@ import {
   createProduct,
   modifyProduct,
   getPaginatedProducts,
+  getProduct,
 } from './product.service';
 
-import { createSupplier, modifySupplier } from './supplier.service';
+import {
+  createSupplier,
+  modifySupplier,
+  getPaginatedSuppliers,
+  getSupplier,
+} from './supplier.service';
 
 import {
   createUser,
   loginUser,
   getPaginatedUsers,
   modifyUser,
+  getUser,
 } from './user.service';
 
 import { createSale, getPaginatedSales, getSale } from './sale.service';
@@ -24,6 +31,7 @@ import {
   createPaymentMethod,
   modifyPaymentMethod,
   getPaginatedPaymentMethods,
+  getPaymentMethod,
 } from './payment.methods.service';
 
 export {
@@ -45,4 +53,9 @@ export {
   createPaymentMethod,
   modifyPaymentMethod,
   getPaginatedPaymentMethods,
+  getPaymentMethod,
+  getProduct,
+  getPaginatedSuppliers,
+  getSupplier,
+  getUser,
 };

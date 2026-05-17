@@ -2,6 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import type { SupplierQueryParamsFilters } from '@/types';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { NotFound } from '@/error';
 
 export const createSupplier = async (
   supplierData: Prisma.SupplierCreateInput,
@@ -69,4 +70,19 @@ export const getPaginatedSuppliers = async (
     hasPrevious,
     hasNext,
   };
+};
+
+export const getSupplier = async (supplierId: number) => {
+  const result = await prisma.supplier.findUnique({
+    where: {
+      id: supplierId,
+    },
+  });
+
+  if (!result)
+    throw new NotFound(
+      `O fornecedor com o ID ${supplierId} não foi encontrado`,
+    );
+
+  return result;
 };

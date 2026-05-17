@@ -2,6 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 import type { ProductQueryParamsFilters } from '@/types';
+import { NotFound } from '@/error';
 
 export const createProduct = async (productData: Prisma.ProductCreateInput) => {
   const product = await prisma.product.create({ data: productData });
@@ -62,4 +63,15 @@ export const getPaginatedProducts = async (
     hasPrevious,
     hasNext,
   };
+};
+
+export const getProduct = async (productId: number) => {
+  const result = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+
+  if (!result)
+    throw new NotFound(`O produto com o ID ${productId} não foi encontrado`);
+
+  return result;
 };

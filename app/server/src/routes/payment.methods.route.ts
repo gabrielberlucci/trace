@@ -3,12 +3,19 @@ import {
   getPaymentMethodController,
   modifyPaymentMethodController,
 } from '@/controllers';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
+import {
+  authMiddleware,
+  validateData,
+  validateParam,
+  validateQuery,
+} from '@/middlewares';
 import {
   createPaymentMethodSchema,
   modifyPaymentMethodSchema,
   queryFilterSchema,
+  reqParamSchema,
 } from '@/schemas';
+import { getPaginatedPaymentMethods } from '@/services';
 import { Router } from 'express';
 
 /**
@@ -93,6 +100,13 @@ paymentMethodsRoutes.get(
   '/',
   authMiddleware,
   validateQuery(queryFilterSchema),
+  getPaginatedPaymentMethods,
+);
+
+paymentMethodsRoutes.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
   getPaymentMethodController,
 );
 

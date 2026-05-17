@@ -61,10 +61,8 @@ export const getPaginatedCustomersController = async (
   });
 };
 
-export const getCustomerController = async (req: Request, res: Response) => {
-  const id = Number(req.params['id']);
-
-  if (Number.isNaN(id)) throw new BadRequest('Id inválido');
+export const getCustomerController = async (_req: Request, res: Response) => {
+  const id = res.locals.params.id;
 
   const data = await getCustomer(id);
 

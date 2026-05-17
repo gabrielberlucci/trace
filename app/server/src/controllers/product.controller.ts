@@ -1,5 +1,10 @@
 import { BadRequest } from '@/error';
-import { createProduct, getPaginatedProducts, modifyProduct } from '@/services';
+import {
+  createProduct,
+  getPaginatedProducts,
+  modifyProduct,
+  getProduct,
+} from '@/services';
 import { type Request, type Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -32,7 +37,10 @@ export const modifyProductController = async (req: Request, res: Response) => {
   });
 };
 
-export const getProductController = async (_req: Request, res: Response) => {
+export const getPaginatedProductsController = async (
+  _req: Request,
+  res: Response,
+) => {
   const query = res.locals.query;
 
   const { total, data, hasPrevious, hasNext, totalPages } =
@@ -48,6 +56,18 @@ export const getProductController = async (_req: Request, res: Response) => {
       totalPages: totalPages,
     },
 
+    data: data,
+  });
+};
+
+export const getProductController = async (_req: Request, res: Response) => {
+  const id = res.locals.params.id;
+
+  const data = await getProduct(id);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Produto resgatado com sucesso',
     data: data,
   });
 };

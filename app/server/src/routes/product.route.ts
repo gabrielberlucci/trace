@@ -1,13 +1,20 @@
 import {
   createProductController,
+  getPaginatedProductsController,
   getProductController,
   modifyProductController,
 } from '@/controllers';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
+import {
+  authMiddleware,
+  validateData,
+  validateParam,
+  validateQuery,
+} from '@/middlewares';
 import {
   modifyProductSchema,
   productSchema,
   queryFilterSchema,
+  reqParamSchema,
 } from '@/schemas';
 import { Router } from 'express';
 
@@ -91,6 +98,13 @@ productRouter.get(
   '/',
   authMiddleware,
   validateQuery(queryFilterSchema),
+  getPaginatedProductsController,
+);
+
+productRouter.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
   getProductController,
 );
 

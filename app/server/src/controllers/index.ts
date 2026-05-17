@@ -8,20 +8,23 @@ import {
 import {
   createSupplierController,
   modifySupplierController,
-  getSuppliersController,
+  getPaginatedSuppliersController,
+  getSupplierController,
 } from './supplier.controller';
 
 import {
   createProductController,
-  getProductController,
+  getPaginatedProductsController,
   modifyProductController,
+  getProductController,
 } from './product.controller';
 
 import {
   registerUserController,
   loginUserController,
-  getUsersController,
+  getPaginatedUsersController,
   modifyUserController,
+  getUserController,
 } from './user.controller';
 
 import {
@@ -33,6 +36,7 @@ import {
 import {
   createPaymentMethodController,
   modifyPaymentMethodController,
+  getPaginatedPaymentMethodsController,
   getPaymentMethodController,
 } from './payment.methods.controller';
 
@@ -41,20 +45,24 @@ export {
   createProductController,
   createSupplierController,
   getPaginatedCustomersController,
-  getProductController,
+  getPaginatedProductsController,
   modifyCustomerController,
   modifyProductController,
   modifySupplierController,
-  getSuppliersController,
   registerUserController,
   loginUserController,
-  getUsersController,
   modifyUserController,
   createSaleController,
   getSalesController,
   getSingleSaleController,
   createPaymentMethodController,
   modifyPaymentMethodController,
-  getPaymentMethodController,
+  getPaginatedPaymentMethodsController,
   getCustomerController,
+  getPaymentMethodController,
+  getProductController,
+  getPaginatedSuppliersController,
+  getSupplierController,
+  getPaginatedUsersController,
+  getUserController,
 };

@@ -1,12 +1,21 @@
 import { Router } from 'express';
-import { createCustomerSchema, modifyCustomerSchema } from '@/schemas';
+import {
+  createCustomerSchema,
+  modifyCustomerSchema,
+  reqParamSchema,
+} from '@/schemas';
 import {
   createCustomerController,
   getCustomerController,
   getPaginatedCustomersController,
   modifyCustomerController,
 } from '@/controllers/';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
+import {
+  authMiddleware,
+  validateData,
+  validateParam,
+  validateQuery,
+} from '@/middlewares';
 import { queryFilterSchema } from '@/schemas';
 
 /**
@@ -95,6 +104,11 @@ customerRoute.get(
   validateQuery(queryFilterSchema),
   getPaginatedCustomersController,
 );
-customerRoute.get('/:id', authMiddleware, getCustomerController);
+customerRoute.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  getCustomerController,
+);
 
 export { customerRoute };

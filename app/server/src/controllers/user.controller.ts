@@ -2,6 +2,7 @@ import { BadRequest } from '@/error';
 import {
   createUser,
   getPaginatedUsers,
+  getUser,
   loginUser,
   modifyUser,
 } from '@/services';
@@ -33,7 +34,10 @@ export const loginUserController = async (req: Request, res: Response) => {
   });
 };
 
-export const getUsersController = async (_req: Request, res: Response) => {
+export const getPaginatedUsersController = async (
+  _req: Request,
+  res: Response,
+) => {
   const query = res.locals.query;
 
   const { total, data, totalPages, hasPrevious, hasNext } =
@@ -69,5 +73,17 @@ export const modifyUserController = async (req: Request, res: Response) => {
     status: ReasonPhrases.OK,
     message: 'Usuário alterado com sucesso',
     data: user,
+  });
+};
+
+export const getUserController = async (req: Request, res: Response) => {
+  const id = res.locals.params.id;
+
+  const data = await getUser(id);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Usuário resgatado com sucesso',
+    data: data,
   });
 };

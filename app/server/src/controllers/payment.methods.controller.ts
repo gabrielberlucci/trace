@@ -2,6 +2,7 @@ import { BadRequest } from '@/error';
 import {
   createPaymentMethod,
   getPaginatedPaymentMethods,
+  getPaymentMethod,
   modifyPaymentMethod,
 } from '@/services';
 import type { Request, Response } from 'express';
@@ -40,7 +41,7 @@ export const modifyPaymentMethodController = async (
   });
 };
 
-export const getPaymentMethodController = async (
+export const getPaginatedPaymentMethodsController = async (
   req: Request,
   res: Response,
 ) => {
@@ -62,5 +63,20 @@ export const getPaymentMethodController = async (
 
       data: data,
     },
+  });
+};
+
+export const getPaymentMethodController = async (
+  _req: Request,
+  res: Response,
+) => {
+  const id = res.locals.params.id;
+
+  const data = await getPaymentMethod(id);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Pagamento resgatado com sucesso',
+    data: data,
   });
 };

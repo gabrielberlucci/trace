@@ -1,13 +1,15 @@
 import {
   loginUserController,
   registerUserController,
-  getUsersController,
   modifyUserController,
+  getPaginatedUsersController,
+  getUserController,
 } from '@/controllers';
 import {
   authMiddleware,
   rateLimiting,
   validateData,
+  validateParam,
   validateQuery,
 } from '@/middlewares';
 import {
@@ -15,6 +17,7 @@ import {
   userLoginSchema,
   userQueryFilterSchema,
   modifyUserSchema,
+  reqParamSchema,
 } from '@/schemas';
 import { Router } from 'express';
 
@@ -118,13 +121,19 @@ userRouter.get(
   '/',
   authMiddleware,
   validateQuery(userQueryFilterSchema),
-  getUsersController,
+  getPaginatedUsersController,
 );
 userRouter.patch(
   '/:id',
   authMiddleware,
   validateData(modifyUserSchema),
   modifyUserController,
+);
+userRouter.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  getUserController,
 );
 
 export { userRouter };

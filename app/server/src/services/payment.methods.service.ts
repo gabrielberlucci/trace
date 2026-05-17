@@ -78,3 +78,16 @@ export const getPaginatedPaymentMethods = async (
     hasNext,
   };
 };
+
+export const getPaymentMethod = async (paymentId: number) => {
+  const result = await prisma.paymentMethod.findUnique({
+    where: {
+      id: paymentId,
+    },
+  });
+
+  if (!result)
+    throw new NotFound(`Pagamento com o ID ${paymentId} não foi encontrado`);
+
+  return result;
+};

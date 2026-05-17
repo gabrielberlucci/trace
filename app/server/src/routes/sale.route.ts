@@ -3,8 +3,13 @@ import {
   getSalesController,
   getSingleSaleController,
 } from '@/controllers';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
-import { queryFilterSchema, saleCartSchema } from '@/schemas';
+import {
+  authMiddleware,
+  validateData,
+  validateParam,
+  validateQuery,
+} from '@/middlewares';
+import { queryFilterSchema, reqParamSchema, saleCartSchema } from '@/schemas';
 import { Router } from 'express';
 
 /**
@@ -79,6 +84,11 @@ saleRouter.get(
   validateQuery(queryFilterSchema),
   getSalesController,
 );
-saleRouter.get('/:id', authMiddleware, getSingleSaleController);
+saleRouter.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  getSingleSaleController,
+);
 
 export { saleRouter };

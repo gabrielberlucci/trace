@@ -1,13 +1,20 @@
 import {
   createSupplierController,
+  getPaginatedSuppliersController,
+  getSupplierController,
   modifySupplierController,
 } from '@/controllers';
-import { getSuppliersController } from '@/controllers';
-import { authMiddleware, validateData, validateQuery } from '@/middlewares';
+import {
+  authMiddleware,
+  validateData,
+  validateParam,
+  validateQuery,
+} from '@/middlewares';
 import {
   createSupplierSchema,
   modifySupplierSchema,
   queryFilterSchema,
+  reqParamSchema,
 } from '@/schemas';
 import { Router } from 'express';
 
@@ -95,7 +102,14 @@ supplierRoute.get(
   '/',
   authMiddleware,
   validateQuery(queryFilterSchema),
-  getSuppliersController,
+  getPaginatedSuppliersController,
+);
+
+supplierRoute.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  getSupplierController,
 );
 
 export { supplierRoute };

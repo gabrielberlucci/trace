@@ -34,18 +34,10 @@ export const getSalesController = async (req: Request, res: Response) => {
   });
 };
 
-export const getSingleSaleController = async (req: Request, res: Response) => {
-  const id = req.params['id'];
-  const validatedId = Number(id);
+export const getSingleSaleController = async (_req: Request, res: Response) => {
+  const id = res.locals.params.id;
 
-  /**
-   * TODO: maybe it's a good thing to make a middleware to validate params schema
-   * i believe my life would be easier xD
-   */
-  if (Number.isNaN(validatedId))
-    throw new BadRequest(`O id ${id} é inválido. Use um número`);
-
-  const data = await getSale(validatedId);
+  const data = await getSale(id);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
