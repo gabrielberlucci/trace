@@ -22,15 +22,9 @@ export const createCustomerController = async (req: Request, res: Response) => {
 
 export const modifyCustomerController = async (req: Request, res: Response) => {
   const customerData = req.body;
-  const customerId = req.params['id'];
-  const convertedId = Number(customerId);
+  const id = res.locals.params.id;
 
-  if (Number.isNaN(convertedId)) {
-    throw new UnprocessableEntity(
-      `O cliente com o ID ${customerId} não está correto`,
-    );
-  }
-  const modifiedCustomer = await modifyCustomer(customerData, convertedId);
+  const modifiedCustomer = await modifyCustomer(customerData, id);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,

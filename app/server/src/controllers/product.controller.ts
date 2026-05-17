@@ -21,15 +21,10 @@ export const createProductController = async (req: Request, res: Response) => {
 };
 
 export const modifyProductController = async (req: Request, res: Response) => {
-  const productId = req.params['id'];
-  const convertedId = Number(productId);
+  const id = res.locals.params.id;
   const productData = req.body;
 
-  if (Number.isNaN(convertedId)) {
-    throw new BadRequest(`O produto com o ID ${productId} é inválido`);
-  }
-
-  const modifiedProduct = await modifyProduct(convertedId, productData);
+  const modifiedProduct = await modifyProduct(id, productData);
 
   res.status(StatusCodes.OK).send({
     message: 'Produto modificado com sucesso',

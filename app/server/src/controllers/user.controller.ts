@@ -59,15 +59,12 @@ export const getPaginatedUsersController = async (
 };
 
 export const modifyUserController = async (req: Request, res: Response) => {
-  const userId = req.params['id'];
-  const convertedId = Number(userId);
+  const id = res.locals.params.id;
   const userData = req.body;
 
   delete userData.confirmedPassword;
 
-  if (Number.isNaN(convertedId)) throw new BadRequest('ID do usuário inválido');
-
-  const user = await modifyUser(convertedId, userData);
+  const user = await modifyUser(id, userData);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,

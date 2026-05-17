@@ -28,9 +28,7 @@ export const modifyPaymentMethodController = async (
   res: Response,
 ) => {
   const paymentData = req.body;
-  const id = Number(req.params['id']);
-
-  if (Number.isNaN(id)) throw new BadRequest('Id inválido');
+  const id = res.locals.params.id;
 
   const data = await modifyPaymentMethod(paymentData, id);
 

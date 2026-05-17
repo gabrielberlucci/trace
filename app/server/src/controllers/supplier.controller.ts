@@ -21,17 +21,10 @@ export const createSupplierController = async (req: Request, res: Response) => {
 };
 
 export const modifySupplierController = async (req: Request, res: Response) => {
-  const supplierId = req.params['id'];
-  const convertedId = Number(supplierId);
+  const id = res.locals.params.id;
   const supplierData = req.body;
 
-  if (Number.isNaN(convertedId)) {
-    throw new BadRequest(
-      `O fornecedor com o ID ${supplierId} não está correto`,
-    );
-  }
-
-  const modifiedSupplier = await modifySupplier(convertedId, supplierData);
+  const modifiedSupplier = await modifySupplier(id, supplierData);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
