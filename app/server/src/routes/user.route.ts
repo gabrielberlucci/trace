@@ -127,6 +127,7 @@ userRouter.patch(
   '/:id',
   authMiddleware,
   validateData(modifyUserSchema),
+  validateParam(reqParamSchema),
   modifyUserController,
 );
 userRouter.get(

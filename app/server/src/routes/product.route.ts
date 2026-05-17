@@ -91,6 +91,7 @@ productRouter.patch(
   '/:id',
   authMiddleware,
   validateData(modifyProductSchema),
+  validateParam(reqParamSchema),
   modifyProductController,
 );
 

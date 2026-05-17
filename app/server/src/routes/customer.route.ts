@@ -96,6 +96,7 @@ customerRoute.patch(
   '/:id',
   authMiddleware,
   validateData(modifyCustomerSchema),
+  validateParam(reqParamSchema),
   modifyCustomerController,
 );
 customerRoute.get(

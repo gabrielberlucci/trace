@@ -93,6 +93,7 @@ paymentMethodsRoutes.patch(
   '/:id',
   authMiddleware,
   validateData(modifyPaymentMethodSchema),
+  validateParam(reqParamSchema),
   modifyPaymentMethodController,
 );
 

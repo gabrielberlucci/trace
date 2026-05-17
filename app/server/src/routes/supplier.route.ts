@@ -95,6 +95,7 @@ supplierRoute.patch(
   '/:id',
   authMiddleware,
   validateData(modifySupplierSchema),
+  validateParam(reqParamSchema),
   modifySupplierController,
 );
 
