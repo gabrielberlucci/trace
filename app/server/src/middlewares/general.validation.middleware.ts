@@ -14,3 +14,10 @@ export const validateQuery =
     res.locals.query = schema.strict().parse(req.query);
     next();
   };
+
+export const validateParam =
+  (schema: z.ZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    res.locals.params = schema.strict().parse(req.params);
+    next();
+  };
