@@ -18,4 +18,5 @@ export type {
   SaleCart,
   ValidatedSaleCart,
   SaleQueryParamsFilters,
+  PaymentMethodQueryParamsFilters,
 };

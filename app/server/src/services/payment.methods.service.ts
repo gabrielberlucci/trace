@@ -2,7 +2,7 @@ import { NotFound } from '@/error';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
-import type { PaymentMethodQueryParamsFilters } from '@/types/payment.methods.pagination';
+import type { PaymentMethodQueryParamsFilters } from '@/types';
 
 export const createPaymentMethod = async (
   paymentData: Prisma.PaymentMethodCreateInput,
