@@ -1,7 +1,7 @@
 import { commonSchema } from './common.schema';
 import { z } from '@/config/zod.config';
 import { queryFilterSchema } from './query.schema';
-import { abort } from 'node:process';
+import { RoleType } from '../../generated/prisma/client';
 
 export const userSchema = commonSchema
   .omit({
@@ -29,7 +29,7 @@ export const userSchema = commonSchema
         error: 'Senha muito Longa. Deve conter no máximo 20 caracteres',
       }),
 
-    role: z.enum(['ADMIN', 'CAIXA']),
+    role: z.enum(RoleType),
 
     username: z
       .string({ error: 'Insira um username' })
