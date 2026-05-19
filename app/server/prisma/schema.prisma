@@ -97,9 +97,10 @@ model User {
   password      String
   username      String    @unique
   active        Boolean   @default(true)
-  role          Role
+  role          Role      @relation(fields: [roleId], references: [id])
   city          City?     @relation(fields: [cityId], references: [id])
   cityId        Int?
+  roleId        Int
 }
 
 model Sale {
@@ -144,6 +145,29 @@ model PaymentMethod {
   createdAt DateTime @default(now())
 }
 
+model Role {
+  id         Int              @id @default(autoincrement())
+  name       String
+  user       User[]
+  permission RolePermission[]
+}
+
+model Permission {
+  id   Int              @id @default(autoincrement())
+  name String
+  role RolePermission[]
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+
+  @@unique([roleId, permissionId])
+}
+
 // MAKE SERVICE MODEL
 
 enum typePerson {
@@ -156,11 +180,6 @@ enum Unity {
   CM
   MT
   MM
-}
-
-enum Role {
-  ADMIN
-  CAIXA
 }
 
 enum Movement {
@@ -177,4 +196,9 @@ enum PaymentType {
   OUTRO
   CREDITO
   DEBITO
+}
+
+enum RoleType {
+  ADMIN
+  CAIXA
 }
