@@ -29,7 +29,7 @@ export const userSchema = commonSchema
         error: 'Senha muito Longa. Deve conter no máximo 20 caracteres',
       }),
 
-    role: z.enum(RoleType),
+    roleId: z.int({ error: 'Insira um cargo para o usuário' }),
 
     username: z
       .string({ error: 'Insira um username' })
