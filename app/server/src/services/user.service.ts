@@ -2,7 +2,7 @@ import type { UserLogin, UserQueryParamsFilters } from '@/types';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import jwt from 'jsonwebtoken';
-import { NotFound, Unauthorized } from '@/error';
+import { Forbidden, NotFound, Unauthorized } from '@/error';
 import 'dotenv/config';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 import { hashPassword, verifyPassword } from '@/utils';
@@ -12,6 +12,7 @@ export const createUser = async (
   userData: Prisma.UserCreateInput,
   roleId: number,
   cityId: number,
+  currentUserId: number,
 ) => {
   userData.password = await hashPassword(userData.password);
 
@@ -19,6 +20,11 @@ export const createUser = async (
     const role = await tx.role.findUnique({
       where: {
         id: roleId,
+      },
+
+      select: {
+        id: true,
+        level: true,
       },
     });
 
@@ -29,11 +35,36 @@ export const createUser = async (
       where: {
         id: cityId,
       },
+
+      select: {
+        id: true,
+      },
     });
 
     if (!city)
       throw new NotFound(
         `Não foi possível encontrar a cidade com o ID ${cityId}`,
+      );
+
+    const currentUser = await tx.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+
+      select: {
+        role: {
+          select: {
+            level: true,
+          },
+        },
+      },
+    });
+
+    if (!currentUser) throw new Forbidden(`Usuário loggado não encontrado`);
+
+    if (currentUser.role.level > role.level)
+      throw new Forbidden(
+        `Usuário sem permissões suficiente para criar um usuário com essa função`,
       );
 
     const user = await tx.user.create({
