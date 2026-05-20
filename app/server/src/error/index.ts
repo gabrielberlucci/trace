@@ -4,6 +4,7 @@ import { UniqueConstraint } from './UniqueConstraint';
 import { UnprocessableEntity } from './UnprocessableEntity';
 import { Unauthorized } from './Unauthorized';
 import { Ok } from './Ok';
+import { Forbidden } from './Forbidden';
 
 export {
   BadRequest,
@@ -12,4 +13,5 @@ export {
   UnprocessableEntity,
   Unauthorized,
   Ok,
+  Forbidden,
 };
