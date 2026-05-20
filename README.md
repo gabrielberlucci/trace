@@ -69,6 +69,7 @@ cd server
 npx tsx .\prisma\setup.total.table.ts
 npx tsx .\prisma\setup.trigger.ts
 npx tsx .\prisma\populate.city.ts
+npx tsx .\prisma\create.roles.ts
 ```
 
 **6. Inicie o servidor em modo de desenvolvimento:**
