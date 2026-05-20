@@ -14,7 +14,10 @@ export const registerUserController = async (req: Request, res: Response) => {
 
   delete userData.confirmedPassword;
 
-  const user = await createUser(userData);
+  const roleId = userData.roleId;
+  const cityId = userData.cityId;
+
+  const user = await createUser(userData, roleId, cityId);
 
   res.status(StatusCodes.CREATED).send({
     status: ReasonPhrases.CREATED,
