@@ -1,5 +1,6 @@
 import type { DecimalJsLike } from '@prisma/client/runtime/client';
 import { type Movement } from '../../generated/prisma/client';
+import type { PaginationQueryParams } from './common.pagination.type';
 
 export interface SaleCart {
   items: SaleItemCart[];
@@ -34,4 +35,8 @@ export interface ValidatedSaleCart {
       productId: number;
     };
   };
+}
+
+export interface SaleQueryParamsFilters extends PaginationQueryParams {
+  document: string;
 }
