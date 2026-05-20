@@ -1,5 +1,6 @@
 import {
   BadRequest,
+  Forbidden,
   NotFound,
   Ok,
   Unauthorized,
@@ -61,6 +62,13 @@ export const validateError = (
   }
 
   if (error instanceof Ok) {
+    return res.status(error.statusCode).send({
+      errorName: error.name,
+      message: error.message,
+    });
+  }
+
+  if (error instanceof Forbidden) {
     return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
