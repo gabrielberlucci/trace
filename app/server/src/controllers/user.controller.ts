@@ -12,12 +12,17 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 export const registerUserController = async (req: Request, res: Response) => {
   const userData = req.body;
 
+  /**
+   * TODO: refactor this obj, to not delete and only
+   * pick up the necessary data
+   */
   delete userData.confirmedPassword;
 
   const roleId = userData.roleId;
   const cityId = userData.cityId;
+  const currentUserId = res.locals.user.id;
 
-  const user = await createUser(userData, roleId, cityId);
+  const user = await createUser(userData, roleId, cityId, currentUserId);
 
   res.status(StatusCodes.CREATED).send({
     status: ReasonPhrases.CREATED,
