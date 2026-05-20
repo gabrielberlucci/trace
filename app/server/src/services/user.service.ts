@@ -1,24 +1,50 @@
 import type { UserLogin, UserQueryParamsFilters } from '@/types';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { NotFound, Unauthorized } from '@/error';
 import 'dotenv/config';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 import { hashPassword, verifyPassword } from '@/utils';
+import { loggerStorage } from '@/logger';
 
-export const createUser = async (userData: Prisma.UserCreateInput) => {
+export const createUser = async (
+  userData: Prisma.UserCreateInput,
+  roleId: number,
+  cityId: number,
+) => {
   userData.password = await hashPassword(userData.password);
 
-  const user = await prisma.user.create({
-    data: userData,
-    omit: {
-      password: true,
-    },
-  });
+  return await prisma.$transaction(async (tx) => {
+    const role = await tx.role.findUnique({
+      where: {
+        id: roleId,
+      },
+    });
 
-  return user;
+    if (!role)
+      throw new NotFound(`Não foi encontrado o cargo com o ID ${roleId}`);
+
+    const city = await tx.city.findUnique({
+      where: {
+        id: cityId,
+      },
+    });
+
+    if (!city)
+      throw new NotFound(
+        `Não foi possível encontrar a cidade com o ID ${cityId}`,
+      );
+
+    const user = await tx.user.create({
+      data: userData,
+      omit: {
+        password: true,
+      },
+    });
+
+    return user;
+  });
 };
 
 export const loginUser = async (userData: UserLogin) => {
@@ -37,8 +63,6 @@ export const loginUser = async (userData: UserLogin) => {
 
   const payload = {
     id: result.id,
-    username: result.username,
-    role: result.role,
   };
 
   const validatedPassword = await verifyPassword(
