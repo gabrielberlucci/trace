@@ -1,0 +1,11 @@
+[
+  {
+    "name": "create:user"
+  },
+  {
+    "name": "modify:user"
+  },
+  {
+    "name": "view:user"
+  }
+]
