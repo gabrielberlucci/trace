@@ -1,4 +1,4 @@
-export const Permissions = {
+export const UserPermissions = {
   CREATE_USER: 'create:user',
   MODIFY_USER: 'modify:user',
   VIEW_USER: 'view:user',

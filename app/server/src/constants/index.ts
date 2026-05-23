@@ -1,3 +1,3 @@
-import { Permissions } from './permissions';
+import { UserPermissions } from './permissions';
 
-export { Permissions };
+export { UserPermissions };
