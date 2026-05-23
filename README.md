@@ -30,7 +30,7 @@ Sistema de Gestão Empresarial (ERP) focado no fluxo operacional de varejo. O ob
 - [x] Construção do fluxo transacional de Vendas
 - [x] CRUD e testes de integração das rotas de Tipos de pagamento (com Vitest/Supertest)s
 - [x] Autenticação e Rate-Limiting
-- [ ] Autorização de usuário
+- [x] Autorização de usuário (Inicial)
 - [ ] Enviar NFS-e e NFCe para a SEFAZ
 
 ## Como rodar o projeto localmente
@@ -53,7 +53,11 @@ Crie um arquivo `.env` na raiz do projeto com as credenciais do seu PostgreSQL:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/db_name?schema=public"
-PORT= 3000
+PORT = 3000
+JWT_SECRET = 'supersecret'
+NODE_ENV = "development"
+BASE_URL = 'localhost:3000'
+LOG_LEVEL = 'debug'
 ```
 
 **4. Execute as Migrations para montar o banco:**
@@ -70,6 +74,8 @@ npx tsx .\prisma\setup.total.table.ts
 npx tsx .\prisma\setup.trigger.ts
 npx tsx .\prisma\populate.city.ts
 npx tsx .\prisma\create.roles.ts
+npx tsx .\prisma\populate.permissions.ts
+npx tsx .\prisma\populate.role.permissions.ts
 ```
 
 **6. Inicie o servidor em modo de desenvolvimento:**
