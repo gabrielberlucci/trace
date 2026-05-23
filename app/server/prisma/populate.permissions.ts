@@ -1,9 +1,15 @@
 import { prisma } from '../lib/prisma';
 import permissions from './permissions.json' with { type: 'json' };
 
+/**
+ * this could be better planned, but admin has all permissions
+ * so we will only inherit from it
+ */
 const populatePermissions = async () => {
   await prisma.permission.createMany({
-    data: permissions,
+    data: permissions.admin.map((permission) => ({
+      name: permission,
+    })),
     skipDuplicates: true,
   });
 };
