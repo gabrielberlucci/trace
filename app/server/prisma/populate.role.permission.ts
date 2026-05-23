@@ -1,46 +1,42 @@
 import { prisma } from '../lib/prisma';
 import permissions from './permissions.json' with { type: 'json' };
 
-const adminPerms = permissions.map((m) => m.name);
-
 const populateRolePermission = async () => {
   return await prisma.$transaction(async (tx) => {
-    const role = await tx.role.findUnique({
-      where: {
-        name: 'admin',
-      },
+    const roleNames = Object.keys(permissions);
+    const permissionNames = Object.values(permissions).flat();
+
+    const roles = await tx.role.findMany({
+      where: { name: { in: roleNames } },
+      select: { id: true, name: true },
     });
 
-    if (!role) {
-      console.log('An error occurred while populating role permissions');
-      return;
-    }
-
-    const permissions = await tx.permission.findMany({
-      where: {
-        name: {
-          in: adminPerms,
-        },
-      },
-
-      select: {
-        id: true,
-      },
+    const allPermissions = await tx.permission.findMany({
+      where: { name: { in: permissionNames } },
+      select: { id: true, name: true },
     });
 
-    if (permissions.length === 0) {
-      console.log('An error occurred while populating role permissions');
-      return;
-    }
+    const roleMap = new Map(roles.map((r) => [r.name, r.id]));
+    const permissionMap = new Map(allPermissions.map((p) => [p.name, p.id]));
 
-    await tx.rolePermission.createMany({
-      data: permissions.map((permission) => ({
-        roleId: role.id,
-        permissionId: permission.id,
-      })),
-      skipDuplicates: true,
-    });
+    const data = Object.entries(permissions).flatMap(
+      ([roleName, permNames]) => {
+        const roleId = roleMap.get(roleName);
+        if (!roleId) throw new Error(`Role "${roleName}" not found`);
+
+        return permNames.map((permName) => {
+          const permissionId = permissionMap.get(permName);
+          if (!permissionId)
+            throw new Error(`Permission "${permName}" not found`);
+          return { roleId, permissionId };
+        });
+      },
+    );
+
+    await tx.rolePermission.createMany({ data, skipDuplicates: true });
   });
 };
 
-populateRolePermission();
+populateRolePermission()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
