@@ -33,4 +33,6 @@ const setupTrigger = async () => {
   );
 };
 
-setupTrigger();
+setupTrigger()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

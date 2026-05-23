@@ -10,4 +10,6 @@ const populateCity = async () => {
   });
 };
 
-populateCity();
+populateCity()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

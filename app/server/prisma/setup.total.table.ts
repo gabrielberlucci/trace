@@ -44,4 +44,6 @@ const setupTotalCountTable = async () => {
   });
 };
 
-setupTotalCountTable();
+setupTotalCountTable()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

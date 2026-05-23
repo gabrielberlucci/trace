@@ -35,4 +35,6 @@ const seed = async () => {
   });
 };
 
-seed();
+seed()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

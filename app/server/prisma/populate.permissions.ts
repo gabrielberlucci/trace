@@ -14,4 +14,6 @@ const populatePermissions = async () => {
   });
 };
 
-await populatePermissions();
+await populatePermissions()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

@@ -14,4 +14,6 @@ const createRole = async () => {
   });
 };
 
-createRole();
+createRole()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

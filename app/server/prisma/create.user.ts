@@ -25,4 +25,6 @@ const createUser = async () => {
   rl.close();
 };
 
-createUser();
+createUser()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
