@@ -10,6 +10,7 @@ import {
   rateLimiting,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import {
@@ -20,6 +21,7 @@ import {
   reqParamSchema,
 } from '@/schemas';
 import { Router } from 'express';
+import { UserPermissions } from '@/constants';
 
 /**
  * @swagger
@@ -108,6 +110,7 @@ const userRouter: Router = Router();
 userRouter.post(
   '/register',
   authMiddleware,
+  validatePermission(UserPermissions.CREATE_USER),
   validateData(userSchema),
   registerUserController,
 );
@@ -120,12 +123,14 @@ userRouter.post(
 userRouter.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_USER),
   validateQuery(userQueryFilterSchema),
   getPaginatedUsersController,
 );
 userRouter.patch(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.MODIFY_USER),
   validateData(modifyUserSchema),
   validateParam(reqParamSchema),
   modifyUserController,
@@ -133,6 +138,7 @@ userRouter.patch(
 userRouter.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_USER),
   validateParam(reqParamSchema),
   getUserController,
 );

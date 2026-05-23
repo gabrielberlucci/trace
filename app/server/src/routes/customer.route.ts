@@ -14,9 +14,11 @@ import {
   authMiddleware,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import { queryFilterSchema } from '@/schemas';
+import { UserPermissions } from '@/constants';
 
 /**
  * @swagger
@@ -90,11 +92,13 @@ customerRoute.post(
   '/',
   authMiddleware,
   validateData(createCustomerSchema),
+  validatePermission(UserPermissions.CREATE_CUSTOMER),
   createCustomerController,
 );
 customerRoute.patch(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.MODIFY_CUSTOMER),
   validateData(modifyCustomerSchema),
   validateParam(reqParamSchema),
   modifyCustomerController,
@@ -102,12 +106,14 @@ customerRoute.patch(
 customerRoute.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_CUSTOMER),
   validateQuery(queryFilterSchema),
   getPaginatedCustomersController,
 );
 customerRoute.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_CUSTOMER),
   validateParam(reqParamSchema),
   getCustomerController,
 );

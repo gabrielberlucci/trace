@@ -1,3 +1,4 @@
+import { UserPermissions } from '@/constants';
 import {
   createSaleController,
   getSalesController,
@@ -7,6 +8,7 @@ import {
   authMiddleware,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import { queryFilterSchema, reqParamSchema, saleCartSchema } from '@/schemas';
@@ -75,18 +77,21 @@ const saleRouter: Router = Router();
 saleRouter.post(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.CREATE_SALE),
   validateData(saleCartSchema),
   createSaleController,
 );
 saleRouter.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_SALE),
   validateQuery(queryFilterSchema),
   getSalesController,
 );
 saleRouter.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_SALE),
   validateParam(reqParamSchema),
   getSingleSaleController,
 );

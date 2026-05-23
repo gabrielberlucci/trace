@@ -1,3 +1,4 @@
+import { UserPermissions } from '@/constants';
 import {
   createProductController,
   getPaginatedProductsController,
@@ -8,6 +9,7 @@ import {
   authMiddleware,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import {
@@ -85,11 +87,18 @@ import { Router } from 'express';
  */
 const productRouter: Router = Router();
 
-productRouter.post('/', validateData(productSchema), createProductController);
+productRouter.post(
+  '/',
+  authMiddleware,
+  validatePermission(UserPermissions.CREATE_PRODUCT),
+  validateData(productSchema),
+  createProductController,
+);
 
 productRouter.patch(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.MODIFY_PRODUCT),
   validateData(modifyProductSchema),
   validateParam(reqParamSchema),
   modifyProductController,
@@ -98,6 +107,7 @@ productRouter.patch(
 productRouter.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_PRODUCT),
   validateQuery(queryFilterSchema),
   getPaginatedProductsController,
 );
@@ -105,6 +115,7 @@ productRouter.get(
 productRouter.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_PRODUCT),
   validateParam(reqParamSchema),
   getProductController,
 );

@@ -1,3 +1,4 @@
+import { UserPermissions } from '@/constants';
 import {
   createPaymentMethodController,
   getPaymentMethodController,
@@ -7,6 +8,7 @@ import {
   authMiddleware,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import {
@@ -85,6 +87,7 @@ const paymentMethodsRoutes: Router = Router();
 paymentMethodsRoutes.post(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.CREATE_PAYMENT_METHOD),
   validateData(createPaymentMethodSchema),
   createPaymentMethodController,
 );
@@ -92,6 +95,7 @@ paymentMethodsRoutes.post(
 paymentMethodsRoutes.patch(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.MODIFY_PAYMENT_METHOD),
   validateData(modifyPaymentMethodSchema),
   validateParam(reqParamSchema),
   modifyPaymentMethodController,
@@ -100,6 +104,7 @@ paymentMethodsRoutes.patch(
 paymentMethodsRoutes.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_PAYMENT_METHOD),
   validateQuery(queryFilterSchema),
   getPaginatedPaymentMethods,
 );
@@ -107,6 +112,7 @@ paymentMethodsRoutes.get(
 paymentMethodsRoutes.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_PAYMENT_METHOD),
   validateParam(reqParamSchema),
   getPaymentMethodController,
 );

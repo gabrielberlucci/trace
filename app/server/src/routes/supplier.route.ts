@@ -8,6 +8,7 @@ import {
   authMiddleware,
   validateData,
   validateParam,
+  validatePermission,
   validateQuery,
 } from '@/middlewares';
 import {
@@ -17,6 +18,7 @@ import {
   reqParamSchema,
 } from '@/schemas';
 import { Router } from 'express';
+import { UserPermissions } from '@/constants';
 
 /**
  * @swagger
@@ -88,12 +90,14 @@ const supplierRoute: Router = Router();
 supplierRoute.post(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.CREATE_SUPPLIER),
   validateData(createSupplierSchema),
   createSupplierController,
 );
 supplierRoute.patch(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.MODIFY_SUPPLIER),
   validateData(modifySupplierSchema),
   validateParam(reqParamSchema),
   modifySupplierController,
@@ -102,6 +106,7 @@ supplierRoute.patch(
 supplierRoute.get(
   '/',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_SUPPLIER),
   validateQuery(queryFilterSchema),
   getPaginatedSuppliersController,
 );
@@ -109,6 +114,7 @@ supplierRoute.get(
 supplierRoute.get(
   '/:id',
   authMiddleware,
+  validatePermission(UserPermissions.VIEW_SUPPLIER),
   validateParam(reqParamSchema),
   getSupplierController,
 );
