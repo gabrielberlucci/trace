@@ -1,11 +1,48 @@
-[
-  {
-    "name": "create:user"
-  },
-  {
-    "name": "modify:user"
-  },
-  {
-    "name": "view:user"
-  }
-]
+{
+  "admin": [
+    "create:user",
+    "modify:user",
+    "view:user",
+    "create:supplier",
+    "modify:supplier",
+    "view:supplier",
+    "create:payment-method",
+    "modify:payment-method",
+    "view:payment-method",
+    "create:product",
+    "modify:product",
+    "view:product",
+    "create:sale",
+    "view:sale",
+    "create:customer",
+    "modify:customer",
+    "view:customer"
+  ],
+  "gerente": [
+    "create:user",
+    "modify:user",
+    "view:user",
+    "create:supplier",
+    "modify:supplier",
+    "view:supplier",
+    "view:payment-method",
+    "view:product",
+    "create:sale",
+    "view:sale",
+    "create:customer",
+    "modify:customer",
+    "view:customer"
+  ],
+
+  "vendedor": [
+    "view:user",
+    "view:supplier",
+    "view:payment-method",
+    "view:product",
+    "create:sale",
+    "view:sale",
+    "create:customer",
+    "modify:customer",
+    "view:customer"
+  ]
+}
