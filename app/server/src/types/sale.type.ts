@@ -6,6 +6,7 @@ export interface SaleCart {
   items: SaleItemCart[];
   document: string;
   payment: number;
+  cashier: number;
 }
 
 interface SaleItemCart {
