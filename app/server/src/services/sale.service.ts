@@ -17,6 +17,11 @@ export const createSale = async (saleData: SaleCart) => {
       where: {
         document: saleData.document,
       },
+
+      select: {
+        id: true,
+        active: true,
+      },
     });
 
     if (!customer)
@@ -25,7 +30,23 @@ export const createSale = async (saleData: SaleCart) => {
       );
 
     if (customer.active === false)
-      throw new BadRequest(`O cliente ${customer.document} está inativo`);
+      throw new BadRequest(`O cliente ${saleData.document} está inativo`);
+
+    const cashier = await tx.user.findUnique({
+      where: {
+        id: saleData.cashier,
+      },
+
+      select: {
+        id: true,
+        active: true,
+      },
+    });
+
+    if (!cashier)
+      throw new NotFound(
+        `Vendedor com o ID ${saleData.cashier} não foi encontrado`,
+      );
 
     /**
      * TODO: by now, it's acceptable only ONE type of payment
@@ -34,6 +55,12 @@ export const createSale = async (saleData: SaleCart) => {
     const paymentMethod = await tx.paymentMethod.findUnique({
       where: {
         id: saleData.payment,
+      },
+
+      select: {
+        id: true,
+        active: true,
+        description: true,
       },
     });
 
@@ -134,6 +161,7 @@ export const createSale = async (saleData: SaleCart) => {
       data: {
         customerId: customer.id,
         paymentMethodId: paymentMethod.id,
+        userId: cashier.id,
 
         saleItem: {
           create: validatedCart,
