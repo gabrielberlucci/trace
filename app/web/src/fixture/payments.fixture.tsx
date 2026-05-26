@@ -7,24 +7,49 @@ import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/ui/button';
 import { Bell, Plus } from 'lucide-react';
 
-export type Customer = {
+export type PaymentMethod = {
   id: string;
   name: string;
+  provider: string;
+  type: string;
   status: 'Ativo' | 'Inativo';
 };
 
-const data: Customer[] = [
-  { id: 'cus_3k9xj1p', name: 'Gabriel Berlucci', status: 'Ativo' },
-  { id: 'cus_8s0ml4c', name: 'Tech Solutions Inc.', status: 'Ativo' },
-  { id: 'cus_1p2nx8d', name: 'João Silva', status: 'Inativo' },
-  { id: 'cus_5v9k2rt', name: 'Maria Oliveira', status: 'Ativo' },
-  { id: 'cus_9h4bc7m', name: 'Acme Corp', status: 'Inativo' },
+const data: PaymentMethod[] = [
+  {
+    id: 'pay_cc_01',
+    name: 'Credit Card',
+    provider: 'Stripe',
+    type: 'Cartão de Crédito',
+    status: 'Ativo',
+  },
+  {
+    id: 'pay_pix_02',
+    name: 'PIX',
+    provider: 'Banco Central',
+    type: 'Transferência Instantânea',
+    status: 'Ativo',
+  },
+  {
+    id: 'pay_bol_03',
+    name: 'Boleto Bancário',
+    provider: 'Pagar.me',
+    type: 'Boleto',
+    status: 'Inativo',
+  },
+  {
+    id: 'pay_cash_04',
+    name: 'Cash',
+    provider: 'In-person Settlement',
+    type: 'Dinheiro Físico',
+    status: 'Ativo',
+  },
 ];
 
-const columns: ColumnDef<Customer>[] = [
+const columns: ColumnDef<PaymentMethod>[] = [
   {
     accessorKey: 'id',
-    header: 'ID do Cliente',
+    header: 'ID',
     cell: ({ row }) => (
       <span className="text-sm font-medium text-muted-foreground">
         {row.getValue('id')}
@@ -33,10 +58,28 @@ const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Nome',
+    header: 'Método',
     cell: ({ row }) => (
       <span className="text-sm font-medium text-foreground">
         {row.getValue('name')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'provider',
+    header: 'Provedor / Integração',
+    cell: ({ row }) => (
+      <span className="text-sm text-foreground/80">
+        {row.getValue('provider')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'type',
+    header: 'Tipo',
+    cell: ({ row }) => (
+      <span className="text-sm text-muted-foreground">
+        {row.getValue('type')}
       </span>
     ),
   },
@@ -59,7 +102,7 @@ const columns: ColumnDef<Customer>[] = [
   },
 ];
 
-const CustomerFixture = () => {
+const PaymentsFixture = () => {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <SidebarProvider>
@@ -90,14 +133,14 @@ const CustomerFixture = () => {
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                  Clientes
+                  Payment Methods
                 </h1>
                 <p className="text-muted-foreground">
-                  Gerencie e cadastre seus clientes.
+                  Manage and configure available gateways for transactions.
                 </p>
               </div>
               <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Plus className="h-4 w-4" /> Novo Cliente
+                <Plus className="h-4 w-4" /> Novo Método
               </Button>
             </div>
 
@@ -105,8 +148,8 @@ const CustomerFixture = () => {
               <DataTable
                 columns={columns}
                 data={data}
-                searchPlaceholder="Buscar clientes..."
-                exportFileName="clientes.csv"
+                searchPlaceholder="Buscar métodos de pagamento..."
+                exportFileName="pagamentos.csv"
                 filterColumn="status"
               />
             </div>
@@ -117,4 +160,4 @@ const CustomerFixture = () => {
   );
 };
 
-export default CustomerFixture;
+export default PaymentsFixture;
