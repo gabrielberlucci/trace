@@ -1,6 +1,3 @@
-import type { ReactNode } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
-
 interface UserSideBarInfoProps {
   name: string;
   email: string;
