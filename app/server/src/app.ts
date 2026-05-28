@@ -7,14 +7,14 @@ import { logger } from '@/logger/pino.logger';
 import { pinoHttp } from 'pino-http';
 import { logsMiddleware } from '@/middlewares';
 import swaggerJSDoc from 'swagger-jsdoc';
-import { swaggerConfigOptions } from './config';
+import { corsOptions, swaggerConfigOptions } from './config';
 import SwaggerUI from 'swagger-ui-express';
 
 const app: Express = express();
 
 const swaggerSpec = swaggerJSDoc(swaggerConfigOptions);
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(pinoHttp({ logger }));
