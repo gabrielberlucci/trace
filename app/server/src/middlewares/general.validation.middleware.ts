@@ -46,11 +46,21 @@ export const validatePermission =
       select: {
         id: true,
         role: true,
+        active: true,
       },
     });
 
     if (!userHasAccess)
       throw new Forbidden(`Usuário sem permissão para realizar essa ação`);
+
+    /**
+     * this is the start of something that i will implement later
+     * because i want to be possible to revoke tokens
+     *
+     * revoke tokens will be used to log-out and to be able to revoke if something
+     * go wrong
+     */
+    if (userHasAccess.active === false) throw new Forbidden(`Usuário inativo`);
 
     next();
   };
