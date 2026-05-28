@@ -1,3 +1,4 @@
 import { swaggerConfigOptions } from './swagger.config';
+import { corsOptions } from './cors';
 
-export { swaggerConfigOptions };
+export { swaggerConfigOptions, corsOptions };
