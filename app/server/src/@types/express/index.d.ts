@@ -12,5 +12,6 @@ namespace NodeJS {
     LOG_LEVEL: string;
     AXIOM_DATASET: string;
     AXIOM_TOKEN: string;
+    FRONT_END_ORIGIN: string;
   }
 }
