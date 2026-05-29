@@ -1,0 +1,128 @@
+import React from 'react';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Mail, Lock, EyeOff, ArrowRight } from 'lucide-react';
+import bgImage from '@/assets/login-bg.png';
+
+const LoginPage = () => {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="min-h-screen w-full flex flex-col lg:flex-row relative bg-background">
+        
+        {/* Imagem de Fundo (Atrás do form no mobile, lado ESQUERDO no desktop) */}
+        <div className="absolute inset-0 lg:relative lg:block lg:flex-1 overflow-hidden z-0">
+          <div className="absolute inset-0 bg-violet-900/30 mix-blend-multiply z-10" />
+          <div className="absolute inset-0 bg-background/80 lg:hidden z-10 backdrop-blur-md" /> {/* Darken overlay for mobile */}
+          <img 
+            src={bgImage} 
+            alt="Trace ERP Abstract Background" 
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          
+          {/* Overlay Content (Only visible on Desktop) */}
+          <div className="hidden lg:flex absolute inset-0 z-20 flex-col justify-end p-16 xl:p-24 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+            <div className="max-w-xl">
+              <h2 className="text-4xl font-bold text-white mb-4 leading-tight">
+                Gestão inteligente para os negócios do futuro.
+              </h2>
+              <p className="text-indigo-200 text-lg leading-relaxed mb-8">
+                Toda a sua operação centralizada em um ambiente de alta performance. Tenha controle absoluto sobre o seu inventário, vendas e financeiro.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="flex -space-x-4">
+                  <div className="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-800" />
+                  <div className="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-700" />
+                  <div className="w-10 h-10 rounded-full border-2 border-zinc-900 bg-zinc-600" />
+                </div>
+                <div className="text-sm font-medium text-zinc-300">
+                  <span className="text-white font-bold">+2.000</span> empresas utilizam o Trace
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Lado Direito - Formulário */}
+        <div className="flex-1 lg:flex-none lg:w-[480px] xl:w-[540px] flex flex-col justify-center items-center px-8 sm:px-12 relative z-10 bg-background/50 lg:bg-background backdrop-blur-md lg:backdrop-blur-none border-l border-border/50 shadow-2xl">
+          
+          <div className="w-full max-w-[340px] flex flex-col">
+            {/* Logo / Título */}
+            <div className="mb-10 mt-12 lg:mt-0 text-center lg:text-left">
+              <div className="w-12 h-12 bg-violet-600 rounded-xl mb-6 mx-auto lg:mx-0 flex items-center justify-center shadow-lg shadow-violet-600/20">
+                <span className="text-white font-black text-xl tracking-tighter">TR</span>
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">Bem-vindo de volta</h1>
+              <p className="text-sm text-muted-foreground">Insira suas credenciais para acessar o Trace.</p>
+            </div>
+
+            {/* Formulário */}
+            <div className="space-y-5 w-full">
+              <div className="space-y-2.5">
+                <Label htmlFor="email" className="text-sm font-semibold text-foreground">Email de Acesso</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="seu.nome@empresa.com.br" 
+                    className="h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm" 
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-sm font-semibold text-foreground">Senha</Label>
+                  <a href="#" className="text-[13px] font-medium text-violet-600 hover:text-violet-500 transition-colors">
+                    Esqueceu a senha?
+                  </a>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                    <Lock className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    placeholder="••••••••" 
+                    className="h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm" 
+                  />
+                  <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
+                    <EyeOff className="h-4 w-4" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 py-1">
+                <Checkbox id="remember" className="h-4 w-4 rounded-md border-2" />
+                <Label htmlFor="remember" className="text-[13px] font-medium cursor-pointer text-foreground lg:text-muted-foreground">
+                  Lembrar de mim por 30 dias
+                </Label>
+              </div>
+
+              <Button className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg shadow-md shadow-violet-600/20 flex items-center justify-between px-5 mt-2 transition-all hover:translate-x-1">
+                <span>Entrar na Plataforma</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              
+            </div>
+
+            {/* Footer do formulário */}
+            <div className="mt-12 lg:mt-16 pt-6 pb-8 lg:pb-0 text-[13px] text-center lg:text-left text-foreground/70 lg:text-muted-foreground">
+              <p>© {new Date().getFullYear()} Trace ERP. Todos os direitos reservados.</p>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+    </ThemeProvider>
+  );
+};
+
+export default LoginPage;
