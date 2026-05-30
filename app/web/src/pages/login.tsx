@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Mail, Lock, EyeOff, ArrowRight } from 'lucide-react';
 import bgImage from '@/assets/login-bg.png';
+import { TraceLogo } from '@/components/trace-logo';
 
 const LoginPage = () => {
   return (
@@ -40,10 +41,12 @@ const LoginPage = () => {
           <div className="w-full max-w-85 flex flex-col">
             {/* Logo / Título */}
             <div className="mb-10 mt-12 lg:mt-0 text-center lg:text-left">
-              <div className="w-12 h-12 bg-violet-600 rounded-xl mb-6 mx-auto lg:mx-0 flex items-center justify-center shadow-lg shadow-violet-600/20">
-                <span className="text-white font-black text-xl tracking-tighter">
+              <div className="w-12 h-12 bg-white rounded-xl mb-6 mx-auto lg:mx-0 flex items-center justify-center shadow-lg shadow-violet-600/20">
+                {/* <span className="text-white font-black text-xl tracking-tighter">
                   TR
-                </span>
+                </span> */}
+
+                <TraceLogo />
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">
                 Bem-vindo de volta
