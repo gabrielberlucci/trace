@@ -7,6 +7,7 @@ import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Plus, MoreVertical } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 export type User = {
   id: string;
@@ -163,7 +164,9 @@ const UsersPage = () => {
                 </p>
               </div>
               <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Plus className="h-4 w-4" /> Adicionar Usuário
+                <Link to="/user-create" className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Adicionar Usuário
+                </Link>
               </Button>
             </div>
 

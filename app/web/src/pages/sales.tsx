@@ -14,6 +14,7 @@ import {
   QrCode,
   Filter,
 } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 export type Sale = {
   id: string;
@@ -179,7 +180,9 @@ const SalesPage = () => {
                 </p>
               </div>
               <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Plus className="h-4 w-4" /> Nova Venda
+                <Link to="/sale-create" className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Nova Venda
+                </Link>
               </Button>
             </div>
 

@@ -14,6 +14,7 @@ import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Plus, MoreVertical, Filter, Mail, Phone } from 'lucide-react';
 import { AppHeader } from '@/components/app-header';
+import { Link } from '@tanstack/react-router';
 
 export type Supplier = {
   company: string;
@@ -196,7 +197,9 @@ const SuppliersPage = () => {
                 </p>
               </div>
               <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Plus className="h-4 w-4" /> Adicionar Fornecedor
+                <Link to="/supplier-create" className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Adicionar Fornecedor
+                </Link>
               </Button>
             </div>
 

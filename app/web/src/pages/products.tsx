@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { AppHeader } from '@/components/app-header';
+import { Link } from '@tanstack/react-router';
 
 const products = [
   {
@@ -107,7 +108,12 @@ const ProductsPage = () => {
                   <Upload className="h-4 w-4" /> Exportar
                 </Button>
                 <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                  <Plus className="h-4 w-4" /> Adicionar Produto
+                  <Link
+                    to="/product-create"
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="h-4 w-4" /> Adicionar Produto
+                  </Link>
                 </Button>
               </div>
             </div>
