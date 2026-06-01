@@ -1,11 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { DataTable } from '@/components/ui/data-table';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { AppHeader } from '@/components/app-header';
 import { Link } from '@tanstack/react-router';
 
 export type Customer = {
@@ -62,13 +58,7 @@ const columns: ColumnDef<Customer>[] = [
 
 const CustomerPage = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full flex flex-col min-h-screen bg-[#F8F9FB] dark:bg-muted/40">
-          <AppHeader />
-
-          <main className="flex-1 p-8 space-y-6 mx-auto w-full">
+    <>
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -94,10 +84,7 @@ const CustomerPage = () => {
                 filterColumn="status"
               />
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

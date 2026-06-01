@@ -1,7 +1,3 @@
-import { ThemeProvider } from '@/components/theme-provider';
-import { AppHeader } from '@/components/app-header';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -74,12 +70,7 @@ const topProducts = [
 
 const DashboardPage = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="flex w-full flex-col bg-muted/20">
-          <AppHeader />
-          <main className="flex-1 overflow-auto p-8">
+    <>
             <div className="max-w-7xl mx-auto space-y-8">
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -406,10 +397,7 @@ const DashboardPage = () => {
                 </CardContent>
               </Card>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

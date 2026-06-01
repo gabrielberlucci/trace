@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +8,7 @@ import { TraceLogo } from '@/components/trace-logo';
 
 const LoginPage = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <>
       <div className="min-h-screen w-full flex flex-col lg:flex-row relative bg-background">
         {/* Imagem de Fundo (Atrás do form no mobile, lado ESQUERDO no desktop) */}
         <div className="absolute inset-0 lg:relative lg:block lg:flex-1 overflow-hidden z-0">
@@ -141,7 +140,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </ThemeProvider>
+    </>
   );
 };
 

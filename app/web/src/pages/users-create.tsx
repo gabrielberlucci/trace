@@ -1,7 +1,3 @@
-import { AppHeader } from '@/components/app-header';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,13 +26,7 @@ import {
 
 const UsersCreatePage = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full flex flex-col min-h-screen bg-[#F8F9FB] dark:bg-muted/40">
-          <AppHeader />
-
-          <main className="flex-1 p-8 mx-auto w-full max-w-7xl">
+    <>
             {/* Breadcrumb & Header */}
             <div className="mb-10">
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
@@ -380,10 +370,7 @@ const UsersCreatePage = () => {
                 </div>
               </div>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

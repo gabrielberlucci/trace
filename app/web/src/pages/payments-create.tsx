@@ -1,8 +1,4 @@
 import React from 'react';
-import { AppHeader } from '@/components/app-header';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,13 +24,7 @@ import {
 
 const PaymentsCreatePage = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full flex flex-col min-h-screen bg-[#F8F9FB] dark:bg-muted/40">
-          <AppHeader />
-
-          <main className="flex-1 p-8 mx-auto w-full max-w-7xl">
+    <>
             {/* Header */}
             <div className="mb-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -311,10 +301,7 @@ const PaymentsCreatePage = () => {
                 </Card>
               </div>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

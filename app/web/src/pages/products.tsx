@@ -1,6 +1,3 @@
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import {
   Plus,
@@ -12,7 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { AppHeader } from '@/components/app-header';
 import { Link } from '@tanstack/react-router';
 
 const products = [
@@ -84,13 +80,7 @@ const getStatusBadge = (status: string) => {
 
 const ProductsPage = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full flex flex-col min-h-screen bg-[#F8F9FB] dark:bg-muted/40">
-          <AppHeader />
-
-          <main className="flex-1 p-8 space-y-6 mx-auto w-full">
+    <>
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -264,10 +254,7 @@ const ProductsPage = () => {
                 </Button>
               </div>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

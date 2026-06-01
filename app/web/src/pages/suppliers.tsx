@@ -1,6 +1,3 @@
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,7 +10,6 @@ import {
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Plus, MoreVertical, Filter, Mail, Phone } from 'lucide-react';
-import { AppHeader } from '@/components/app-header';
 import { Link } from '@tanstack/react-router';
 
 export type Supplier = {
@@ -179,13 +175,7 @@ const SuppliersPage = () => {
   );
 
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full flex flex-col min-h-screen bg-[#F8F9FB] dark:bg-muted/40">
-          <AppHeader />
-
-          <main className="flex-1 p-8 space-y-6 mx-auto w-full">
+    <>
             <div className="flex items-start justify-between mb-8">
               <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -211,10 +201,7 @@ const SuppliersPage = () => {
                 toolbarActions={toolbarActions}
               />
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 

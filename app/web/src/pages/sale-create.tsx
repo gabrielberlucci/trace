@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import { ThemeProvider } from '@/components/theme-provider';
-import { AppHeader } from '@/components/app-header';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -107,12 +103,7 @@ const SalesCreatePage = () => {
   const total = subtotal + tax;
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="flex w-full flex-col bg-muted/20 min-h-screen">
-          <AppHeader />
-          <main className="flex-1 overflow-auto p-4 lg:p-8">
+    <>
             <div className="max-w-350 mx-auto h-full flex flex-col">
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
@@ -520,10 +511,7 @@ const SalesCreatePage = () => {
                 </div>
               </div>
             </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+          </>
   );
 };
 
