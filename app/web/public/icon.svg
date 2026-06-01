@@ -1,0 +1,44 @@
+<svg
+    viewBox="0 0 100 100"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <defs>
+        <linearGradient
+            id="violet-gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+        >
+            <stop offset="0%" stop-color="#a78bfa" />
+            <stop offset="50%" stop-color="#7c3aed" />
+            <stop offset="100%" stop-color="#4c1d95" />
+        </linearGradient>
+    </defs>
+
+    <!-- Conexões traseiras abstratas -->
+    <path
+        d="M 20 70 L 35 50 M 80 70 L 65 50 M 35 50 L 65 50"
+        stroke="url(#violet-gradient)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.4"
+    />
+
+    <!-- Estrutura Principal do T abstrato -->
+    <path
+        d="M 15 30 L 85 30 L 65 50 L 50 50 L 50 85"
+        stroke="url(#violet-gradient)"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+
+    <!-- Nós de dados (bolinhas) -->
+    <circle cx="15" cy="30" r="7" fill="#a78bfa" />
+    <circle cx="85" cy="30" r="7" fill="#a78bfa" />
+    <circle cx="50" cy="50" r="6" fill="#7c3aed" />
+    <circle cx="50" cy="85" r="8" fill="#4c1d95" />
+</svg>
