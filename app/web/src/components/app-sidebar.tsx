@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Link, useRouterState } from '@tanstack/react-router';
+import type { FileRoutesByFullPath } from '@/routeTree.gen';
 
 import {
   Collapsible,
@@ -27,15 +29,48 @@ import {
   Package,
   UserCog,
   Database,
+  LayoutDashboard,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { UserSideBar } from './ui/user-info';
 import { Separator } from './ui/separator';
 import { TraceLogo } from './trace-logo';
 
+type ValidPath = keyof FileRoutesByFullPath;
+
+type NavSubItem = {
+  title: string;
+  url: ValidPath;
+  icon?: React.ElementType;
+};
+
+type NavGroup = {
+  title: string;
+  url: string;
+  icon?: React.ElementType;
+  items: NavSubItem[];
+};
+
 // This is sample data.
-const data = {
+const data: { navMain: NavGroup[] } = {
   navMain: [
+    {
+      title: 'Menu Principal',
+      url: '#',
+      icon: Database,
+      items: [
+        {
+          title: 'Dashboard',
+          url: '/dashboard',
+          icon: LayoutDashboard,
+        },
+        {
+          title: 'Vendas / PDV',
+          url: '/sale-create',
+          icon: ShoppingCart,
+        },
+      ],
+    },
     {
       title: 'Cadastros',
       url: '#',
@@ -43,33 +78,27 @@ const data = {
       items: [
         {
           title: 'Cliente',
-          url: '#',
-          isActive: true,
+          url: '/customer',
           icon: Users,
         },
         {
-          title: 'Vendas',
-          url: '#',
-          icon: ShoppingCart,
-        },
-        {
           title: 'Fornecedor',
-          url: '#',
+          url: '/supplier',
           icon: Truck,
         },
         {
-          title: 'Pagamentos',
-          url: '#',
-          icon: CreditCard,
-        },
-        {
           title: 'Produtos',
-          url: '#',
+          url: '/product',
           icon: Package,
         },
         {
+          title: 'Pagamentos',
+          url: '/payment',
+          icon: CreditCard,
+        },
+        {
           title: 'Usuários',
-          url: '#',
+          url: '/user',
           icon: UserCog,
         },
       ],
@@ -78,14 +107,21 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+
   return (
     <Sidebar {...props}>
       <SidebarHeader className="py-5 px-4">
         <div className="flex items-center gap-3">
           <TraceLogo className="h-9 w-9" />
           <div className="flex flex-col">
-            <span className="font-bold text-xl leading-none tracking-tight text-violet-600 dark:text-violet-400">Trace</span>
-            <span className="text-[9px] uppercase font-bold tracking-wider text-muted-foreground mt-1">Management System</span>
+            <span className="font-bold text-xl leading-none tracking-tight text-violet-600 dark:text-violet-400">
+              Trace
+            </span>
+            <span className="text-[9px] uppercase font-bold tracking-wider text-muted-foreground mt-1">
+              Sistema ERP
+            </span>
           </div>
         </div>
       </SidebarHeader>
@@ -114,11 +150,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenu>
                     {item.items.map((subItem) => (
                       <SidebarMenuItem key={subItem.title}>
-                        <SidebarMenuButton asChild isActive={subItem.isActive}>
-                          <a href={subItem.url}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={currentPath === subItem.url}
+                        >
+                          <Link to={subItem.url}>
                             {subItem.icon && <subItem.icon />}
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
