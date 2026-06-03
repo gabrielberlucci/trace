@@ -90,7 +90,7 @@ export const loginUser = async (userData: UserLogin) => {
    * lead hackers to keep trying usernames and passwords but,
    * this route will eventually have a rate-limit, so idk if it is a big problem
    */
-  if (!result) throw new Unauthorized('Username ou senha inválidos');
+  if (!result) throw new Unauthorized('Usuário ou senha inválidos');
 
   const payload = {
     id: result.id,
@@ -109,7 +109,7 @@ export const loginUser = async (userData: UserLogin) => {
     return token;
   }
 
-  throw new Unauthorized('Username ou senha inválidos');
+  throw new Unauthorized('Usuário ou senha inválidos');
 };
 
 export const getPaginatedUsers = async (
