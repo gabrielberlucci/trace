@@ -5,8 +5,59 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Mail, Lock, EyeOff, ArrowRight } from 'lucide-react';
 import bgImage from '@/assets/login-bg.png';
 import { TraceLogo } from '@/components/trace-logo';
+import { loginUser } from '@/api/users/login';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import axios from 'axios';
+import type { ApiErrorResponse } from '@/types';
 
 const LoginPage = () => {
+  const [userLoginData, setUserLoginData] = useState({
+    username: '',
+    password: '',
+  });
+
+  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
+
+  const [statusError, setStatusError] = useState('');
+
+  function updateUserData(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setUserLoginData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: loginUser,
+
+    onSuccess: () => {
+      setFormErrors({});
+
+      navigate({ to: '/dashboard' });
+    },
+
+    onError: (error: Error) => {
+      if (axios.isAxiosError<ApiErrorResponse>(error)) {
+        const errorData = error.response?.data;
+
+        if (errorData) {
+          if ('message' in errorData) {
+            // console.error(errorData.message);
+            setStatusError(errorData.message);
+          }
+          if ('fieldErrors' in errorData) {
+            // console.error(errorData.fieldErrors);
+            setFormErrors(errorData.fieldErrors);
+          }
+        }
+      } else {
+        console.error('Error: ', error);
+      }
+    },
+  });
+
   return (
     <>
       <div className="min-h-screen w-full flex flex-col lg:flex-row relative bg-background">
@@ -64,16 +115,26 @@ const LoginPage = () => {
                 >
                   Usuário de acesso
                 </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="Usuário"
+                      className={`h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm ${formErrors.username ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      onChange={updateUserData}
+                      value={userLoginData.username}
+                      name="username"
+                    />
                   </div>
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="Usuário"
-                    className="h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm"
-                  />
+                  {formErrors.username && (
+                    <span className="text-xs font-medium text-red-500 mt-1.5 block">
+                      {formErrors.username[0]}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -85,9 +146,6 @@ const LoginPage = () => {
                   >
                     Senha
                   </Label>
-                  {/**
-                   * TODO: implement later
-                   */}
                   <a
                     href="#"
                     className="text-[13px] font-medium text-violet-600 hover:text-violet-500 transition-colors"
@@ -95,19 +153,29 @@ const LoginPage = () => {
                     Esqueceu a senha?
                   </a>
                 </div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
-                    <Lock className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                      <Lock className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      className={`h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm ${formErrors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                      onChange={updateUserData}
+                      value={userLoginData.password}
+                      name="password"
+                    />
+                    <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
+                      <EyeOff className="h-4 w-4" />
+                    </div>
                   </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    className="h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm"
-                  />
-                  <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
-                    <EyeOff className="h-4 w-4" />
-                  </div>
+                  {formErrors.password && (
+                    <span className="text-xs font-medium text-red-500 mt-1.5 block">
+                      {formErrors.password[0]}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -124,11 +192,31 @@ const LoginPage = () => {
                 </Label>
               </div>
 
-              <Button className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg shadow-md shadow-violet-600/20 flex items-center justify-between px-5 mt-2 transition-all hover:translate-x-1">
-                <span>Entrar na Plataforma</span>
+              <Button
+                disabled={mutation.isPending}
+                onClick={() => {
+                  mutation.mutate(userLoginData);
+                }}
+                className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg shadow-md shadow-violet-600/20 flex items-center justify-between px-5 mt-2 transition-all hover:translate-x-1 disabled:opacity-70 disabled:hover:translate-x-0"
+              >
+                {mutation.isPending ? (
+                  <span>Entrando...</span>
+                ) : (
+                  <span>Entrar na Plataforma</span>
+                )}
+
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
+
+            {/* Erro Geral (Status Error) */}
+            {statusError && (
+              <div className="mt-6 p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
+                <span className="text-sm font-semibold text-red-600 dark:text-red-400">
+                  {statusError}
+                </span>
+              </div>
+            )}
 
             {/* Footer do formulário */}
             <div className="mt-12 lg:mt-16 pt-6 pb-8 lg:pb-0 text-[13px] text-center lg:text-left text-foreground/70 lg:text-muted-foreground">
