@@ -36,10 +36,17 @@ export const loginUserController = async (req: Request, res: Response) => {
 
   const loggedUser = await loginUser(userData);
 
-  res.cookie('access_token', loggedUser).status(StatusCodes.OK).send({
-    status: ReasonPhrases.OK,
-    message: 'Login feito com sucesso',
-  });
+  res
+    .cookie('access_token', loggedUser, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+    })
+    .status(StatusCodes.OK)
+    .send({
+      status: ReasonPhrases.OK,
+      message: 'Login feito com sucesso',
+    });
 };
 
 export const getPaginatedUsersController = async (
