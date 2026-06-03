@@ -1,13 +1,6 @@
-import type { UserLoginPayload, UserLoginToken } from '@/types';
-import axios from 'axios';
+import type { UserLoginPayload } from '@/types';
+import { apiClient } from '../api.client';
 
-export const loginUser = async (
-  data: UserLoginPayload,
-): Promise<UserLoginToken> => {
-  const response = await axios.post<UserLoginToken>(
-    `${import.meta.env.VITE_BASE_URL}/users/login`,
-    data,
-  );
-
-  return response.data;
+export const loginUser = async (data: UserLoginPayload): Promise<void> => {
+  await apiClient.post('/users/login', data);
 };
