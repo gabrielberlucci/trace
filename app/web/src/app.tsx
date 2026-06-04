@@ -1,12 +1,15 @@
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAuth, AuthProvider } from './context/auth.context';
 
 const queryClient = new QueryClient();
+
 const router = createRouter({
   routeTree,
   context: {
     queryClient,
+    auth: undefined!, // injected below
   },
 });
 
@@ -16,10 +19,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
