@@ -1,9 +1,11 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { ThemeProvider } from '@/components/theme-provider';
 import { QueryClient } from '@tanstack/react-query';
+import type { AuthContextType } from '@/context/auth.context';
 
 interface RouterContext {
   queryClient: QueryClient;
+  auth: AuthContextType;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -12,7 +14,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootComponent() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Outlet />
     </ThemeProvider>
   );
