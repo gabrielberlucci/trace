@@ -23,3 +23,19 @@ interface ErrorMessage {
 }
 
 export type ApiErrorResponse = ErrorMessage | ZodErrorResponse;
+
+/**
+ * types used for /me endpoint
+ */
+
+export interface UserMeResponse {
+  id: number;
+  username: string;
+  name: string;
+}
+
+export interface MeApiResponse {
+  status: string;
+  message: string;
+  data: UserMeResponse;
+}
