@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import type { FileRoutesByFullPath } from '@/routeTree.gen';
+import { useQuery } from '@tanstack/react-query';
+import { getMe } from '@/api/users/me';
 
 import {
   Collapsible,
@@ -109,6 +111,7 @@ const data: { navMain: NavGroup[] } = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
 
   return (
     <Sidebar {...props}>
@@ -176,9 +179,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="flex gap-4 items-center">
           <Avatar>
             <AvatarImage src="https://png.pngtree.com/png-clipart/20190516/original/pngtree-users-vector-icon-png-image_3725294.jpg" />
-            <AvatarFallback>USER</AvatarFallback>
+            <AvatarFallback>
+              {user?.username?.substring(0, 2).toUpperCase() || 'US'}
+            </AvatarFallback>
           </Avatar>
-          <UserSideBar name="Admin" email="admin@gmail.com" />
+          <UserSideBar name={user?.name || 'Carregando...'} email="" />
         </div>
       </SidebarFooter>
     </Sidebar>
