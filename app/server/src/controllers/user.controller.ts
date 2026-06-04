@@ -1,6 +1,7 @@
 import { BadRequest } from '@/error';
 import {
   createUser,
+  getMe,
   getPaginatedUsers,
   getUser,
   loginUser,
@@ -96,6 +97,20 @@ export const getUserController = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Usuário resgatado com sucesso',
+    data: data,
+  });
+};
+
+export const meController = async (req: Request, res: Response) => {
+  const userId = res.locals.user.id;
+
+  console.log(userId);
+
+  const data = await getMe(userId);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Usuário autenticado',
     data: data,
   });
 };

@@ -25,6 +25,7 @@ import {
   getPaginatedUsersController,
   modifyUserController,
   getUserController,
+  meController,
 } from './user.controller';
 
 import {
@@ -65,4 +66,5 @@ export {
   getSupplierController,
   getPaginatedUsersController,
   getUserController,
+  meController,
 };
