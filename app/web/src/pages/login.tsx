@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import axios from 'axios';
+import { useAuth } from '@/context/auth.context';
 import type { ApiErrorResponse } from '@/types';
 
 const LoginPage = () => {
@@ -27,12 +28,14 @@ const LoginPage = () => {
     setUserLoginData((prev) => ({ ...prev, [name]: value }));
   }
 
+  const auth = useAuth();
   const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: loginUser,
 
     onSuccess: () => {
+      auth.login();
       setFormErrors({});
 
       navigate({ to: '/dashboard' });
