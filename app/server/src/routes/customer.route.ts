@@ -114,7 +114,6 @@ customerRoute.get(
   '/:id',
   authMiddleware,
   validatePermission(UserPermissions.VIEW_CUSTOMER),
-  validateParam(reqParamSchema),
   getCustomerController,
 );
 

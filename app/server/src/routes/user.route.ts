@@ -4,6 +4,7 @@ import {
   modifyUserController,
   getPaginatedUsersController,
   getUserController,
+  meController,
 } from '@/controllers';
 import {
   authMiddleware,
@@ -120,6 +121,9 @@ userRouter.post(
   rateLimiting,
   loginUserController,
 );
+
+userRouter.get('/me', authMiddleware, meController);
+
 userRouter.get(
   '/',
   authMiddleware,
