@@ -24,6 +24,7 @@ import {
   getPaginatedUsers,
   modifyUser,
   getUser,
+  getMe,
 } from './user.service';
 
 import { createSale, getPaginatedSales, getSale } from './sale.service';
@@ -58,4 +59,5 @@ export {
   getPaginatedSuppliers,
   getSupplier,
   getUser,
+  getMe,
 };

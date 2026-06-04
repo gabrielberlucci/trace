@@ -189,3 +189,19 @@ export const getUser = async (userId: number) => {
 
   return result;
 };
+
+export const getMe = async (userId: number) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+
+    select: {
+      id: true,
+      username: true,
+      name: true,
+    },
+  });
+
+  return result;
+};
