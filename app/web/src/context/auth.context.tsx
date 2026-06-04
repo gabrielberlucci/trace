@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -15,6 +16,7 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('is_logged_in') === 'true';
   });
@@ -27,11 +29,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem('is_logged_in');
     setIsAuthenticated(false);
+    queryClient.removeQueries({ queryKey: ['me'] });
 
     if (window.location.pathname !== '/login') {
       window.location.href = '/login';
     }
-  }, []);
+  }, [queryClient]);
 
   useEffect(() => {
     const handleStorageChange = () => {

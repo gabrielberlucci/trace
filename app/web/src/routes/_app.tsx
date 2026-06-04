@@ -2,10 +2,23 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { AppHeader } from '@/components/app-header';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { getMe } from '@/api/users/me';
 
 export const Route = createFileRoute('/_app')({
-  beforeLoad: ({ context }) => {
+  beforeLoad: async ({ context }) => {
     if (!context.auth.isAuthenticated) {
+      throw redirect({ to: '/login' });
+    }
+
+    try {
+      await context.queryClient.fetchQuery({
+        queryKey: ['me'],
+        queryFn: getMe,
+        staleTime: 5 * 60 * 1000,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      context.auth.logout();
       throw redirect({ to: '/login' });
     }
   },
