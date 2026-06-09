@@ -61,7 +61,7 @@ const CustomerPage = () => {
   const navigate = useNavigate();
   const toastShownRef = useRef(false);
 
-  const { isPending, isFetching, error, data } = useQuery({
+  const { isFetching, error, data } = useQuery({
     queryKey: ['customers', page],
     queryFn: () => getCustomers(page),
     placeholderData: keepPreviousData,
@@ -114,13 +114,13 @@ const CustomerPage = () => {
           disabled={i === page}
           className={`w-9 ${
             i === page
-              ? "bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default"
-              : ""
+              ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
+              : ''
           }`}
           onClick={() => navigate({ to: '/customer', search: { page: i } })}
         >
           {i}
-        </Button>
+        </Button>,
       );
     }
 
