@@ -6,6 +6,8 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getCustomers } from '@/api';
 import type { PaginatedCustomerData } from '@/types/customer-type';
+import { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 const columns: ColumnDef<PaginatedCustomerData>[] = [
   {
@@ -57,12 +59,20 @@ const columns: ColumnDef<PaginatedCustomerData>[] = [
 const CustomerPage = () => {
   const { page } = useSearch({ from: '/_app/customer' });
   const navigate = useNavigate();
+  const toastShownRef = useRef(false);
 
-  const { isFetching, error, data } = useQuery({
+  const { isPending, isFetching, error, data } = useQuery({
     queryKey: ['customers', page],
     queryFn: () => getCustomers(page),
     placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (data?.message && !toastShownRef.current) {
+      toast.success(data.message);
+      toastShownRef.current = true;
+    }
+  }, [data]);
 
   if (error) {
     console.error('Error fetching customers:', error);
