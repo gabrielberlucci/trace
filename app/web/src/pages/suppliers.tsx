@@ -9,62 +9,145 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Plus, MoreVertical, Filter } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Plus, Filter, Loader2 } from 'lucide-react';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getSuppliers } from '@/api';
 import type { PaginatedSuppliersData } from '@/types';
+import { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
   {
-    accessorKey: 'name',
-    header: 'Nome',
-    cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="font-semibold text-sm text-foreground">
-          {row.original.name}
-        </span>
-        <span className="text-xs text-muted-foreground mt-0.5 font-mono">
-          ID: {row.original.id}
-        </span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'cnpj',
-    header: 'CNPJ',
+    accessorKey: 'id',
+    header: 'id',
     cell: ({ row }) => (
       <span className="text-sm font-medium text-muted-foreground tracking-wide">
-        {row.getValue('cnpj')}
+        {row.getValue('id')}
       </span>
     ),
   },
 
   {
-    id: 'actions',
-    header: 'Ações',
-    cell: () => (
-      <div className="text-right">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </Button>
-      </div>
+    accessorKey: 'typePerson',
+    header: 'tipo',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+        {row.getValue('typePerson')}
+      </span>
     ),
+  },
+
+  {
+    accessorKey: 'document',
+    header: 'cnpj',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+        {row.getValue('document')}
+      </span>
+    ),
+  },
+
+  {
+    accessorKey: 'name',
+    header: 'nome',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+        {row.getValue('name')}
+      </span>
+    ),
+  },
+
+  {
+    accessorKey: 'active',
+    header: 'ativo',
+    cell: ({ row }) => {
+      const active = row.getValue('active') as boolean;
+      return (
+        <div className="flex items-center gap-2 text-sm font-medium tracking-wide">
+          <div
+            className={`w-2 h-2 rounded-full ${
+              active ? 'bg-green-500' : 'bg-red-500'
+            }`}
+          />
+          {active ? 'Ativo' : 'Inativo'}
+        </div>
+      );
+    },
   },
 ];
 
 const SuppliersPage = () => {
+  const { page } = useSearch({ from: '/_app/supplier' });
+  const navigate = useNavigate();
+  const toastShownRef = useRef(false);
+
   const { isFetching, error, data } = useQuery({
-    queryKey: ['suppliers'],
-    queryFn: () => getSuppliers(),
+    queryKey: ['suppliers', page],
+    queryFn: () => getSuppliers(page),
     placeholderData: keepPreviousData,
   });
 
-  console.log(data);
+  useEffect(() => {
+    if (data?.message && !toastShownRef.current) {
+      toast.success(data.message);
+      toastShownRef.current = true;
+    }
+  }, [data]);
+
+  if (error) {
+    console.error('Error fetching suppliers:', error);
+  }
+
+  const handlePreviousPage = () => {
+    if (data?.meta.hasPrevious) {
+      navigate({ to: '/supplier', search: { page: page - 1 } });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data?.meta.hasNext) {
+      navigate({ to: '/supplier', search: { page: page + 1 } });
+    }
+  };
+
+  const totalPages = data?.meta?.totalPages || Math.ceil((data?.meta?.totalSuppliers || 0) / 50) || 1;
+
+  const renderPageNumbers = () => {
+    if (!data?.meta) return null;
+    const pages = [];
+
+    let startPage = Math.max(1, page - 2);
+    let endPage = Math.min(totalPages, page + 2);
+
+    if (page <= 3) {
+      endPage = Math.min(5, totalPages);
+    }
+    if (page >= totalPages - 2) {
+      startPage = Math.max(1, totalPages - 4);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant="outline"
+          size="sm"
+          disabled={i === page}
+          className={`w-9 ${
+            i === page
+              ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
+              : ''
+          }`}
+          onClick={() => navigate({ to: '/supplier', search: { page: i } })}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    return <div className="flex items-center gap-1 mx-2">{pages}</div>;
+  };
 
   const toolbarActions = (
     <>
@@ -101,8 +184,11 @@ const SuppliersPage = () => {
     <>
       <div className="flex items-start justify-between mb-8">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             Fornecedores
+            {isFetching && (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            )}
           </h1>
           <p className="text-muted-foreground">
             Gerencie os fornecedores de produtos e serviços do sistema Trace.
@@ -121,7 +207,39 @@ const SuppliersPage = () => {
           data={data?.data || []}
           searchPlaceholder="Buscar fornecedores..."
           toolbarActions={toolbarActions}
+          showPagination={false}
         />
+
+        {/* Paginação Servidor/URL */}
+        {data && data.meta && (
+          <div className="flex items-center justify-between mt-4 px-2">
+            <div className="text-sm text-muted-foreground">
+              Mostrando página {page} de {totalPages} (
+              {data.meta.totalSuppliers} fornecedores no total)
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={!data.meta.hasPrevious}
+              >
+                Anterior
+              </Button>
+
+              {renderPageNumbers()}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!data.meta.hasNext}
+              >
+                Próxima
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
