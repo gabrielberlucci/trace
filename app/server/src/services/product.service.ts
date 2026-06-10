@@ -41,6 +41,7 @@ export const getPaginatedProducts = async (
     barcode: true,
     currentStock: true,
     unity: true,
+    salePrice: true,
   };
 
   const { total, data, totalPages, hasPrevious, hasNext } =
