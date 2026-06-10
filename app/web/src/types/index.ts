@@ -12,6 +12,12 @@ import type {
   PaginatedCustomerData,
 } from './customer-type';
 
+import type {
+  PaginatedSuppliers,
+  PaginatedSuppliersMeta,
+  PaginatedSuppliersData,
+} from './supplier-type';
+
 export type {
   UserLoginPayload,
   UserLoginToken,
@@ -21,4 +27,7 @@ export type {
   PaginatedCustomers,
   PaginatedCustomerMeta,
   PaginatedCustomerData,
+  PaginatedSuppliers,
+  PaginatedSuppliersMeta,
+  PaginatedSuppliersData,
 };
