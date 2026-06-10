@@ -14,7 +14,7 @@ const columns: ColumnDef<PaginatedCustomerData>[] = [
     accessorKey: 'id',
     header: 'ID do Cliente',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground">
+      <span className="text-sm font-semibold text-foreground">
         {row.getValue('id')}
       </span>
     ),

@@ -22,16 +22,16 @@ const productsColumns: ColumnDef<PaginatedProductsData>[] = [
     accessorKey: 'id',
     header: 'id',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-semibold text-foreground tracking-wide">
         {row.getValue('id')}
       </span>
     ),
   },
   {
     accessorKey: 'barcode',
-    header: 'código de barras',
+    header: 'código (sku)',
     cell: ({ row }) => (
-      <span className="text-xs font-mono text-muted-foreground tracking-wide">
+      <span className="text-sm font-medium text-foreground tracking-wide">
         {row.getValue('barcode')}
       </span>
     ),
@@ -49,37 +49,41 @@ const productsColumns: ColumnDef<PaginatedProductsData>[] = [
     accessorKey: 'unity',
     header: 'unidade',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-medium text-foreground tracking-wide">
         {row.getValue('unity')}
       </span>
     ),
   },
   {
     accessorKey: 'currentStock',
-    header: 'estoque',
+    header: () => <div className="text-right">estoque</div>,
     cell: ({ row }) => {
       const stock = row.getValue('currentStock') as number;
       const unity = row.getValue('unity') as string;
       return (
-        <span
-          className={`text-sm font-semibold tracking-wide ${
-            stock <= 0 ? 'text-red-500' : 'text-foreground'
-          }`}
-        >
-          {stock} {unity}
-        </span>
+        <div className="text-right">
+          <span
+            className={`text-sm font-semibold tracking-wide tabular-nums ${
+              stock <= 0 ? 'text-red-500' : 'text-foreground'
+            }`}
+          >
+            {stock} {unity}
+          </span>
+        </div>
       );
     },
   },
   {
     accessorKey: 'salePrice',
-    header: 'preço',
+    header: () => <div className="text-right">preço</div>,
     cell: ({ row }) => {
       const price = row.getValue('salePrice') as number;
       return (
-        <span className="text-sm font-bold tracking-wide">
-          R$ {price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-        </span>
+        <div className="text-right">
+          <span className="text-sm font-bold tracking-wide tabular-nums">
+            R$ {price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </span>
+        </div>
       );
     },
   },

@@ -22,7 +22,7 @@ const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
     accessorKey: 'id',
     header: 'id',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-semibold text-foreground tracking-wide">
         {row.getValue('id')}
       </span>
     ),
@@ -32,7 +32,7 @@ const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
     accessorKey: 'typePerson',
     header: 'tipo',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-medium text-foreground tracking-wide">
         {row.getValue('typePerson')}
       </span>
     ),
@@ -42,7 +42,7 @@ const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
     accessorKey: 'document',
     header: 'cnpj',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-medium text-foreground tracking-wide">
         {row.getValue('document')}
       </span>
     ),
@@ -52,7 +52,7 @@ const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
     accessorKey: 'name',
     header: 'nome',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground tracking-wide">
+      <span className="text-sm font-medium text-foreground tracking-wide">
         {row.getValue('name')}
       </span>
     ),
