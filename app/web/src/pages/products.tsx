@@ -14,7 +14,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getProducts } from '@/api/products/get-product';
 import type { PaginatedProductsData } from '@/types/product-type';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const productsColumns: ColumnDef<PaginatedProductsData>[] = [
@@ -90,13 +90,31 @@ const productsColumns: ColumnDef<PaginatedProductsData>[] = [
 ];
 
 const ProductsPage = () => {
-  const { page } = useSearch({ from: '/_app/product' });
+  const { page, q, active } = useSearch({ from: '/_app/product' });
   const navigate = useNavigate();
   const toastShownRef = useRef(false);
+  const [localSearch, setLocalSearch] = useState(q ?? '');
+  const [localActive, setLocalActive] = useState(active ?? '');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== (q ?? '') || localActive !== (active ?? '')) {
+        navigate({
+          to: '/product',
+          search: {
+            page: 1,
+            q: localSearch || undefined,
+            active: localActive || undefined,
+          },
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, localActive, navigate, q, active]);
 
   const { isFetching, error, data } = useQuery({
-    queryKey: ['products', page],
-    queryFn: () => getProducts(page),
+    queryKey: ['products', page, q, active],
+    queryFn: () => getProducts(page, q, active),
     placeholderData: keepPreviousData,
   });
 
@@ -113,13 +131,13 @@ const ProductsPage = () => {
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
-      navigate({ to: '/product', search: { page: page - 1 } });
+      navigate({ to: '/product', search: { page: page - 1, q, active } });
     }
   };
 
   const handleNextPage = () => {
     if (data?.meta.hasNext) {
-      navigate({ to: '/product', search: { page: page + 1 } });
+      navigate({ to: '/product', search: { page: page + 1, q, active } });
     }
   };
 
@@ -154,7 +172,7 @@ const ProductsPage = () => {
               ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
               : ''
           }`}
-          onClick={() => navigate({ to: '/product', search: { page: i } })}
+          onClick={() => navigate({ to: '/product', search: { page: i, q, active } })}
         >
           {i}
         </Button>,
@@ -217,9 +235,14 @@ const ProductsPage = () => {
         <DataTable
           columns={productsColumns}
           data={data?.data || []}
-          searchPlaceholder="Buscar produtos..."
+          searchPlaceholder="Buscar por descrição ou código..."
           toolbarActions={toolbarActions}
+          filterColumn="active"
           showPagination={false}
+          searchValue={localSearch}
+          onSearchChange={setLocalSearch}
+          activeFilterValue={localActive}
+          onActiveFilterChange={setLocalActive}
         />
 
         {/* Paginação Servidor/URL */}
