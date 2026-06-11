@@ -4,6 +4,7 @@ import type { PaginatedCustomers } from '@/types/customer-type';
 export const getCustomers = async (
   page: number = 1,
   search?: string,
+  active?: string,
 ): Promise<PaginatedCustomers> => {
   let url = `/customers?page=${page}`;
 
@@ -14,6 +15,12 @@ export const getCustomers = async (
     } else if (search.trim().length >= 2) {
       url += `&name=${encodeURIComponent(search.trim())}`;
     }
+  }
+
+  if (active === 'Ativo') {
+    url += '&active=true';
+  } else if (active === 'Inativo') {
+    url += '&active=false';
   }
 
   const response = await apiClient.get<PaginatedCustomers>(url);
