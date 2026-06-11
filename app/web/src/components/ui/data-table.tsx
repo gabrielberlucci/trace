@@ -33,6 +33,10 @@ interface DataTableProps<TData, TValue> {
   filterColumn?: string
   toolbarActions?: React.ReactNode
   showPagination?: boolean
+  searchValue?: string
+  onSearchChange?: (value: string) => void
+  activeFilterValue?: string
+  onActiveFilterChange?: (value: string) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -43,6 +47,10 @@ export function DataTable<TData, TValue>({
   filterColumn,
   toolbarActions,
   showPagination = true,
+  searchValue,
+  onSearchChange,
+  activeFilterValue,
+  onActiveFilterChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -96,22 +104,35 @@ export function DataTable<TData, TValue>({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               placeholder={searchPlaceholder}
-              value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              value={searchValue !== undefined ? searchValue : (globalFilter ?? "")}
+              onChange={(event) => {
+                if (onSearchChange) {
+                  onSearchChange(event.target.value)
+                } else {
+                  setGlobalFilter(event.target.value)
+                }
+              }}
               className="pl-9 h-10 border-zinc-200 dark:border-zinc-800"
             />
           </div>
           
           <div className="flex items-center gap-2">
-            {filterColumn && table.getColumn(filterColumn) && (
+            {filterColumn && (table.getColumn(filterColumn) || onActiveFilterChange) && (
               <Button variant="outline" size="sm" onClick={() => {
-                const currentFilter = table.getColumn(filterColumn)?.getFilterValue() as string
-                if (!currentFilter) table.getColumn(filterColumn)?.setFilterValue("Ativo")
-                else if (currentFilter === "Ativo") table.getColumn(filterColumn)?.setFilterValue("Inativo")
-                else table.getColumn(filterColumn)?.setFilterValue("")
+                if (onActiveFilterChange) {
+                  const currentFilter = activeFilterValue;
+                  if (!currentFilter) onActiveFilterChange("Ativo");
+                  else if (currentFilter === "Ativo") onActiveFilterChange("Inativo");
+                  else onActiveFilterChange("");
+                } else {
+                  const currentFilter = table.getColumn(filterColumn)?.getFilterValue() as string
+                  if (!currentFilter) table.getColumn(filterColumn)?.setFilterValue("Ativo")
+                  else if (currentFilter === "Ativo") table.getColumn(filterColumn)?.setFilterValue("Inativo")
+                  else table.getColumn(filterColumn)?.setFilterValue("")
+                }
               }}>
                 <Funnel className="mr-2 h-4 w-4" /> 
-                Status: {table.getColumn(filterColumn)?.getFilterValue() as string || "Todos"}
+                Status: {onActiveFilterChange ? (activeFilterValue || "Todos") : (table.getColumn(filterColumn)?.getFilterValue() as string || "Todos")}
               </Button>
             )}
 
