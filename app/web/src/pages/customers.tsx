@@ -5,8 +5,8 @@ import { Plus, Loader2 } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getCustomers } from '@/api';
-import type { PaginatedCustomerData } from '@/types/customer-type';
-import { useEffect, useRef } from 'react';
+import type { PaginatedCustomerData } from '@/types';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const columns: ColumnDef<PaginatedCustomerData>[] = [
@@ -57,13 +57,31 @@ const columns: ColumnDef<PaginatedCustomerData>[] = [
 ];
 
 const CustomerPage = () => {
-  const { page } = useSearch({ from: '/_app/customer' });
+  const { page, q, active } = useSearch({ from: '/_app/customer' });
   const navigate = useNavigate();
   const toastShownRef = useRef(false);
+  const [localSearch, setLocalSearch] = useState(q ?? '');
+  const [localActive, setLocalActive] = useState(active ?? '');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== (q ?? '') || localActive !== (active ?? '')) {
+        navigate({
+          to: '/customer',
+          search: {
+            page: 1,
+            q: localSearch || undefined,
+            active: localActive || undefined,
+          },
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, localActive, navigate, q, active]);
 
   const { isFetching, error, data } = useQuery({
-    queryKey: ['customers', page],
-    queryFn: () => getCustomers(page),
+    queryKey: ['customers', page, q, active],
+    queryFn: () => getCustomers(page, q, active),
     placeholderData: keepPreviousData,
   });
 
@@ -80,13 +98,13 @@ const CustomerPage = () => {
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
-      navigate({ to: '/customer', search: { page: page - 1 } });
+      navigate({ to: '/customer', search: { page: page - 1, q, active } });
     }
   };
 
   const handleNextPage = () => {
     if (data?.meta.hasNext) {
-      navigate({ to: '/customer', search: { page: page + 1 } });
+      navigate({ to: '/customer', search: { page: page + 1, q, active } });
     }
   };
 
@@ -117,7 +135,7 @@ const CustomerPage = () => {
               ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
               : ''
           }`}
-          onClick={() => navigate({ to: '/customer', search: { page: i } })}
+          onClick={() => navigate({ to: '/customer', search: { page: i, q, active } })}
         >
           {i}
         </Button>,
@@ -152,10 +170,14 @@ const CustomerPage = () => {
         <DataTable
           columns={columns}
           data={data?.data || []}
-          searchPlaceholder="Buscar clientes por nome..."
+          searchPlaceholder="Buscar por nome ou documento..."
           exportFileName="clientes.csv"
-          filterColumn="name"
+          filterColumn="active"
           showPagination={false}
+          searchValue={localSearch}
+          onSearchChange={setLocalSearch}
+          activeFilterValue={localActive}
+          onActiveFilterChange={setLocalActive}
         />
 
         {data && data.meta && (

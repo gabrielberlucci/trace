@@ -14,7 +14,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getSuppliers } from '@/api';
 import type { PaginatedSuppliersData } from '@/types';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
@@ -78,13 +78,31 @@ const suppliersColumns: ColumnDef<PaginatedSuppliersData>[] = [
 ];
 
 const SuppliersPage = () => {
-  const { page } = useSearch({ from: '/_app/supplier' });
+  const { page, q, active } = useSearch({ from: '/_app/supplier' });
   const navigate = useNavigate();
   const toastShownRef = useRef(false);
+  const [localSearch, setLocalSearch] = useState(q ?? '');
+  const [localActive, setLocalActive] = useState(active ?? '');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== (q ?? '') || localActive !== (active ?? '')) {
+        navigate({
+          to: '/supplier',
+          search: {
+            page: 1,
+            q: localSearch || undefined,
+            active: localActive || undefined,
+          },
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, localActive, navigate, q, active]);
 
   const { isFetching, error, data } = useQuery({
-    queryKey: ['suppliers', page],
-    queryFn: () => getSuppliers(page),
+    queryKey: ['suppliers', page, q, active],
+    queryFn: () => getSuppliers(page, q, active),
     placeholderData: keepPreviousData,
   });
 
@@ -101,17 +119,20 @@ const SuppliersPage = () => {
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
-      navigate({ to: '/supplier', search: { page: page - 1 } });
+      navigate({ to: '/supplier', search: { page: page - 1, q, active } });
     }
   };
 
   const handleNextPage = () => {
     if (data?.meta.hasNext) {
-      navigate({ to: '/supplier', search: { page: page + 1 } });
+      navigate({ to: '/supplier', search: { page: page + 1, q, active } });
     }
   };
 
-  const totalPages = data?.meta?.totalPages || Math.ceil((data?.meta?.totalSuppliers || 0) / 50) || 1;
+  const totalPages =
+    data?.meta?.totalPages ||
+    Math.ceil((data?.meta?.totalSuppliers || 0) / 50) ||
+    1;
 
   const renderPageNumbers = () => {
     if (!data?.meta) return null;
@@ -139,10 +160,12 @@ const SuppliersPage = () => {
               ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
               : ''
           }`}
-          onClick={() => navigate({ to: '/supplier', search: { page: i } })}
+          onClick={() =>
+            navigate({ to: '/supplier', search: { page: i, q, active } })
+          }
         >
           {i}
-        </Button>
+        </Button>,
       );
     }
 
@@ -205,9 +228,14 @@ const SuppliersPage = () => {
         <DataTable
           columns={suppliersColumns}
           data={data?.data || []}
-          searchPlaceholder="Buscar fornecedores..."
+          searchPlaceholder="Buscar por nome ou documento..."
           toolbarActions={toolbarActions}
+          filterColumn="active"
           showPagination={false}
+          searchValue={localSearch}
+          onSearchChange={setLocalSearch}
+          activeFilterValue={localActive}
+          onActiveFilterChange={setLocalActive}
         />
 
         {/* Paginação Servidor/URL */}
