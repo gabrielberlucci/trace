@@ -12,6 +12,8 @@ import type {
   UserRoleLevel,
 } from './user.type';
 
+import type { SupplierQueryParamsFilters } from './supplier.type';
+
 export type {
   CustomerQueryParamsFilters,
   PaymentMethodQueryParamsFilters,
@@ -22,4 +24,5 @@ export type {
   UserQueryParamsFilters,
   UserLogin,
   UserRoleLevel,
+  SupplierQueryParamsFilters,
 };
