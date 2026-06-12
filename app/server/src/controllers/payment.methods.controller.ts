@@ -51,16 +51,13 @@ export const getPaginatedPaymentMethodsController = async (
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Métodos de pagamentos resgatados com sucesso',
-    data: {
-      meta: {
-        total: total,
-        totalPages: totalPages,
-        hasPrevious: hasPrevious,
-        hasNext: hasNext,
-      },
-
-      data: data,
+    meta: {
+      total: total,
+      totalPages: totalPages,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
     },
+    data: data,
   });
 };
 
