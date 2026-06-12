@@ -3,6 +3,7 @@ import {
   createPaymentMethodController,
   getPaymentMethodController,
   modifyPaymentMethodController,
+  getPaginatedPaymentMethodsController,
 } from '@/controllers';
 import {
   authMiddleware,
@@ -17,7 +18,6 @@ import {
   queryFilterSchema,
   reqParamSchema,
 } from '@/schemas';
-import { getPaginatedPaymentMethods } from '@/services';
 import { Router } from 'express';
 
 /**
@@ -106,7 +106,7 @@ paymentMethodsRoutes.get(
   authMiddleware,
   validatePermission(UserPermissions.VIEW_PAYMENT_METHOD),
   validateQuery(queryFilterSchema),
-  getPaginatedPaymentMethods,
+  getPaginatedPaymentMethodsController,
 );
 
 paymentMethodsRoutes.get(
