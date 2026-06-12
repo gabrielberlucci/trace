@@ -24,6 +24,12 @@ import type {
   PaginatedProductsData,
 } from './product-type';
 
+import type {
+  PaginatedPaymentMethods,
+  PaginatedPaymentMethodsMeta,
+  PaginatedPaymentMethodsData,
+} from './payment-methods';
+
 export type {
   UserLoginPayload,
   UserLoginToken,
@@ -39,4 +45,7 @@ export type {
   PaginatedProducts,
   PaginatedProductsMeta,
   PaginatedProductsData,
+  PaginatedPaymentMethods,
+  PaginatedPaymentMethodsMeta,
+  PaginatedPaymentMethodsData,
 };
