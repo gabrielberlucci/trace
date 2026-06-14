@@ -4,6 +4,9 @@ import type {
   ApiErrorResponse,
   MeApiResponse,
   UserMeResponse,
+  PaginatedUsers,
+  PaginatedUsersMeta,
+  PaginatedUsersData,
 } from './user.type';
 
 import type {
@@ -48,4 +51,7 @@ export type {
   PaginatedPaymentMethods,
   PaginatedPaymentMethodsMeta,
   PaginatedPaymentMethodsData,
+  PaginatedUsers,
+  PaginatedUsersMeta,
+  PaginatedUsersData,
 };

@@ -39,3 +39,25 @@ export interface MeApiResponse {
   message: string;
   data: UserMeResponse;
 }
+
+export interface PaginatedUsers {
+  status: string;
+  message: string;
+  meta: PaginatedUsersMeta;
+}
+
+export interface PaginatedUsersMeta {
+  totalUsers: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+export interface PaginatedUsersData {
+  id: number;
+  name: string;
+
+  role: {
+    name: string;
+  };
+}
