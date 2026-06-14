@@ -1,11 +1,11 @@
-import type { PaginatedUsersData } from '@/types';
+import type { PaginatedUsers } from '@/types';
 import { apiClient } from '../api.client';
 
 export const getUsers = async (
   page: number = 1,
   search?: string,
   active?: string,
-): Promise<PaginatedUsersData> => {
+): Promise<PaginatedUsers> => {
   let url = `/users?page=${page}`;
 
   if (search && search.trim()) {
@@ -20,7 +20,7 @@ export const getUsers = async (
     url += `&active=true`;
   }
 
-  const result = await apiClient.get<PaginatedUsersData>(url);
+  const result = await apiClient.get<PaginatedUsers>(url);
 
   return result.data;
 };
