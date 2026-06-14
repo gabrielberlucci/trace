@@ -2,11 +2,13 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth, AuthProvider } from './context/auth.context';
+import { NotFound } from './components/not-found';
 
 const queryClient = new QueryClient();
 
 const router = createRouter({
   routeTree,
+  defaultNotFoundComponent: NotFound,
   context: {
     queryClient,
     auth: undefined!, // injected below
