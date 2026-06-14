@@ -235,7 +235,6 @@ const ProductsPage = () => {
           data={data?.data || []}
           searchPlaceholder="Buscar por descrição ou código..."
           toolbarActions={toolbarActions}
-          filterColumn="active"
           showPagination={false}
           searchValue={localSearch}
           onSearchChange={setLocalSearch}
