@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, MoreVertical } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 export type User = {
@@ -64,6 +64,15 @@ const usersData: User[] = [
 
 const usersColumns: ColumnDef<User>[] = [
   {
+    accessorKey: 'id',
+    header: 'id',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground/80">
+        {row.getValue('id')}
+      </span>
+    ),
+  },
+  {
     accessorKey: 'user',
     header: 'Usuário',
     cell: ({ row }) => {
@@ -90,24 +99,7 @@ const usersColumns: ColumnDef<User>[] = [
       );
     },
   },
-  {
-    accessorKey: 'role',
-    header: 'Cargo',
-    cell: ({ row }) => (
-      <span className="text-sm font-medium text-foreground/80">
-        {row.getValue('role')}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'department',
-    header: 'Departamento',
-    cell: ({ row }) => (
-      <span className="inline-flex items-center px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-800">
-        {row.getValue('department')}
-      </span>
-    ),
-  },
+
   {
     accessorKey: 'status',
     header: 'Status',
@@ -125,51 +117,37 @@ const usersColumns: ColumnDef<User>[] = [
       );
     },
   },
-  {
-    id: 'actions',
-    cell: () => (
-      <div className="text-right">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </Button>
-      </div>
-    ),
-  },
 ];
 
 const UsersPage = () => {
   return (
     <>
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                  Usuários
-                </h1>
-                <p className="text-muted-foreground">
-                  Gerencie o acesso e as permissões da sua equipe no sistema.
-                </p>
-              </div>
-              <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Link to="/user-create" className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" /> Adicionar Usuário
-                </Link>
-              </Button>
-            </div>
+      <div className="flex items-start justify-between">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Usuários
+          </h1>
+          <p className="text-muted-foreground">
+            Gerencie o acesso e as permissões da sua equipe no sistema.
+          </p>
+        </div>
+        <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
+          <Link to="/user-create" className="flex items-center gap-2">
+            <Plus className="h-4 w-4" /> Adicionar Usuário
+          </Link>
+        </Button>
+      </div>
 
-            <div className="mt-6">
-              <DataTable
-                columns={usersColumns}
-                data={usersData}
-                searchPlaceholder="Buscar por nome ou e-mail..."
-                exportFileName="usuarios.csv"
-                filterColumn="status"
-              />
-            </div>
-          </>
+      <div className="mt-6">
+        <DataTable
+          columns={usersColumns}
+          data={usersData}
+          searchPlaceholder="Buscar por nome ou e-mail..."
+          exportFileName="usuarios.csv"
+          filterColumn="status"
+        />
+      </div>
+    </>
   );
 };
 
