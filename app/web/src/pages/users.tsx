@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, Loader2, Edit } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getUsers } from '@/api';
@@ -66,6 +66,22 @@ const usersColumns: ColumnDef<UserItem>[] = [
         </div>
       );
     },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <Link to="/user/$id" params={{ id: row.getValue('id') as string }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+        </Link>
+      </div>
+    ),
   },
 ];
 

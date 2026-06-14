@@ -9,6 +9,7 @@ import {
   Banknote,
   QrCode,
   Filter,
+  Edit,
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
@@ -113,15 +114,17 @@ const salesColumns: ColumnDef<Sale>[] = [
   },
   {
     id: 'actions',
-    cell: () => (
-      <div className="text-right">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </Button>
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <Link to="/sale/$id" params={{ id: row.getValue('id') as string }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+        </Link>
       </div>
     ),
   },
