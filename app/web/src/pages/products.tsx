@@ -90,31 +90,29 @@ const productsColumns: ColumnDef<PaginatedProductsData>[] = [
 ];
 
 const ProductsPage = () => {
-  const { page, q, active } = useSearch({ from: '/_app/product' });
+  const { page, q } = useSearch({ from: '/_app/product' });
   const navigate = useNavigate();
   const toastShownRef = useRef(false);
   const [localSearch, setLocalSearch] = useState(q ?? '');
-  const [localActive, setLocalActive] = useState(active ?? '');
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (localSearch !== (q ?? '') || localActive !== (active ?? '')) {
+      if (localSearch !== (q ?? '')) {
         navigate({
           to: '/product',
           search: {
             page: 1,
             q: localSearch || undefined,
-            active: localActive || undefined,
           },
         });
       }
     }, 500);
     return () => clearTimeout(handler);
-  }, [localSearch, localActive, navigate, q, active]);
+  }, [localSearch, navigate, q]);
 
   const { isFetching, error, data } = useQuery({
-    queryKey: ['products', page, q, active],
-    queryFn: () => getProducts(page, q, active),
+    queryKey: ['products', page, q],
+    queryFn: () => getProducts(page, q),
     placeholderData: keepPreviousData,
   });
 
@@ -131,13 +129,13 @@ const ProductsPage = () => {
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
-      navigate({ to: '/product', search: { page: page - 1, q, active } });
+      navigate({ to: '/product', search: { page: page - 1, q } });
     }
   };
 
   const handleNextPage = () => {
     if (data?.meta.hasNext) {
-      navigate({ to: '/product', search: { page: page + 1, q, active } });
+      navigate({ to: '/product', search: { page: page + 1, q } });
     }
   };
 
@@ -172,7 +170,7 @@ const ProductsPage = () => {
               ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
               : ''
           }`}
-          onClick={() => navigate({ to: '/product', search: { page: i, q, active } })}
+          onClick={() => navigate({ to: '/product', search: { page: i, q } })}
         >
           {i}
         </Button>,
@@ -241,8 +239,6 @@ const ProductsPage = () => {
           showPagination={false}
           searchValue={localSearch}
           onSearchChange={setLocalSearch}
-          activeFilterValue={localActive}
-          onActiveFilterChange={setLocalActive}
         />
 
         {/* Paginação Servidor/URL */}
