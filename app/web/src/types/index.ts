@@ -7,6 +7,7 @@ import type {
   PaginatedUsers,
   PaginatedUsersMeta,
   PaginatedUsersData,
+  UserItem,
 } from './user.type';
 
 import type {
@@ -54,4 +55,5 @@ export type {
   PaginatedUsers,
   PaginatedUsersMeta,
   PaginatedUsersData,
+  UserItem,
 };

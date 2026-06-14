@@ -44,6 +44,7 @@ export interface PaginatedUsers {
   status: string;
   message: string;
   meta: PaginatedUsersMeta;
+  data: PaginatedUsersData;
 }
 
 export interface PaginatedUsersMeta {
@@ -53,11 +54,15 @@ export interface PaginatedUsersMeta {
   hasNext: boolean;
 }
 
-export interface PaginatedUsersData {
+export interface UserItem {
   id: number;
   name: string;
-
+  active: boolean;
   role: {
     name: string;
   };
+}
+
+export interface PaginatedUsersData {
+  userData: UserItem[];
 }
