@@ -1,68 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Plus, Loader2 } from 'lucide-react';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { getUsers } from '@/api';
+import { useState, useEffect } from 'react';
+import type { UserItem } from '@/types';
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  department: string;
-  status: 'Ativo' | 'Inativo';
-  avatar?: string;
-};
-
-const usersData: User[] = [
-  {
-    id: 'usr_01',
-    name: 'Gabriel Berlucci',
-    email: 'gabriel@trace.com',
-    role: 'Administrador',
-    department: 'Diretoria',
-    status: 'Ativo',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-  },
-  {
-    id: 'usr_02',
-    name: 'Aline Oliveira',
-    email: 'aline@trace.com',
-    role: 'Gerente',
-    department: 'Vendas',
-    status: 'Ativo',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
-  },
-  {
-    id: 'usr_03',
-    name: 'Carlos Santos',
-    email: 'carlos@trace.com',
-    role: 'Operador',
-    department: 'Logística',
-    status: 'Ativo',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704f',
-  },
-  {
-    id: 'usr_04',
-    name: 'Fernanda Lima',
-    email: 'fernanda@trace.com',
-    role: 'Analista',
-    department: 'Financeiro',
-    status: 'Inativo',
-  },
-  {
-    id: 'usr_05',
-    name: 'Rafael Costa',
-    email: 'rafael@trace.com',
-    role: 'Suporte',
-    department: 'TI',
-    status: 'Ativo',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704b',
-  },
-];
-
-const usersColumns: ColumnDef<User>[] = [
+const usersColumns: ColumnDef<UserItem>[] = [
   {
     accessorKey: 'id',
     header: 'id',
@@ -73,27 +19,15 @@ const usersColumns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: 'user',
+    accessorKey: 'name',
     header: 'Usuário',
     cell: ({ row }) => {
-      const user = row.original;
       return (
         <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src={user.avatar} />
-            <AvatarFallback className="bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400 font-semibold text-xs">
-              {user.name
-                .split(' ')
-                .map((n) => n[0])
-                .join('')
-                .substring(0, 2)}
-            </AvatarFallback>
-          </Avatar>
           <div className="flex flex-col">
             <span className="font-semibold text-sm text-foreground">
-              {user.name}
+              {row.getValue('name')}
             </span>
-            <span className="text-xs text-muted-foreground">{user.email}</span>
           </div>
         </div>
       );
@@ -101,18 +35,34 @@ const usersColumns: ColumnDef<User>[] = [
   },
 
   {
-    accessorKey: 'status',
+    accessorKey: 'role',
+    header: 'cargo',
+    cell: ({ row }) => {
+      const role = row.getValue('role') as { name: string };
+      return (
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm text-foreground capitalize">
+              {role?.name || 'N/A'}
+            </span>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'active',
     header: 'Status',
     cell: ({ row }) => {
-      const status = row.getValue('status') as string;
+      const active = row.getValue('active') as boolean;
       return (
         <div className="flex items-center gap-2 text-sm font-medium">
           <div
             className={`w-2 h-2 rounded-full ${
-              status === 'Ativo' ? 'bg-green-500' : 'bg-red-500'
+              active ? 'bg-green-500' : 'bg-red-500'
             }`}
           />
-          {status}
+          {active ? 'Ativo' : 'Inativo'}
         </div>
       );
     },
@@ -120,12 +70,97 @@ const usersColumns: ColumnDef<User>[] = [
 ];
 
 const UsersPage = () => {
+  const { page = 1, q, active } = useSearch({ from: '/_app/user' });
+  const navigate = useNavigate();
+  const [localSearch, setLocalSearch] = useState(q ?? '');
+  const [localActive, setLocalActive] = useState(active ?? '');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== (q ?? '') || localActive !== (active ?? '')) {
+        navigate({
+          to: '/user',
+          search: {
+            page: 1,
+            q: localSearch || undefined,
+            active: localActive || undefined,
+          },
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, localActive, navigate, q, active]);
+
+  const { isFetching, error, data } = useQuery({
+    queryKey: ['users', page, q, active],
+    queryFn: () => getUsers(page, q, active),
+    placeholderData: keepPreviousData,
+  });
+
+  if (error) {
+    console.error('Error fetching users:', error);
+  }
+
+  const handlePreviousPage = () => {
+    if (data?.meta?.hasPrevious) {
+      navigate({ to: '/user', search: { page: page - 1, q, active } });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data?.meta?.hasNext) {
+      navigate({ to: '/user', search: { page: page + 1, q, active } });
+    }
+  };
+
+  const renderPageNumbers = () => {
+    if (!data?.meta) return null;
+    const { totalPages } = data.meta;
+    const pages = [];
+
+    let startPage = Math.max(1, page - 2);
+    let endPage = Math.min(totalPages, page + 2);
+
+    if (page <= 3) {
+      endPage = Math.min(5, totalPages);
+    }
+    if (page >= totalPages - 2) {
+      startPage = Math.max(1, totalPages - 4);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant="outline"
+          size="sm"
+          disabled={i === page}
+          className={`w-9 ${
+            i === page
+              ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
+              : ''
+          }`}
+          onClick={() =>
+            navigate({ to: '/user', search: { page: i, q, active } })
+          }
+        >
+          {i}
+        </Button>,
+      );
+    }
+
+    return <div className="flex items-center gap-1 mx-2">{pages}</div>;
+  };
+
   return (
     <>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             Usuários
+            {isFetching && (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            )}
           </h1>
           <p className="text-muted-foreground">
             Gerencie o acesso e as permissões da sua equipe no sistema.
@@ -141,11 +176,46 @@ const UsersPage = () => {
       <div className="mt-6">
         <DataTable
           columns={usersColumns}
-          data={usersData}
+          data={data?.data?.userData || []}
           searchPlaceholder="Buscar por nome ou e-mail..."
           exportFileName="usuarios.csv"
-          filterColumn="status"
+          filterColumn="active"
+          showPagination={false}
+          searchValue={localSearch}
+          onSearchChange={setLocalSearch}
+          activeFilterValue={localActive}
+          onActiveFilterChange={setLocalActive}
         />
+
+        {data && data.meta && (
+          <div className="flex items-center justify-between mt-4 px-2">
+            <div className="text-sm text-muted-foreground">
+              Mostrando página {page} de {data.meta.totalPages} (
+              {data.meta.totalUsers} usuários no total)
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={!data.meta.hasPrevious}
+              >
+                Anterior
+              </Button>
+
+              {renderPageNumbers()}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!data.meta.hasNext}
+              >
+                Próxima
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
