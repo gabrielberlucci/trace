@@ -123,6 +123,7 @@ export const getPaginatedUsers = async (
   const select: Prisma.UserSelect = {
     id: true,
     name: true,
+    active: true,
     role: {
       select: {
         name: true,
