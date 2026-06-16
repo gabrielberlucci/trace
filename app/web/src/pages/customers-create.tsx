@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Calendar, Mail, Phone, Save } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 const CustomersCreatePage = () => {
   return (
@@ -40,8 +41,11 @@ const CustomersCreatePage = () => {
               variant="outline"
               className="font-semibold shadow-sm px-6 h-11 rounded-lg"
             >
-              Cancelar
+              <Link to="/customer" search={{ q: undefined, page: 1 }}>
+                Cancelar
+              </Link>
             </Button>
+
             <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2">
               <Save className="h-4 w-4" /> Salvar Cliente
             </Button>
