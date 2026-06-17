@@ -61,6 +61,11 @@ const LoginPage = () => {
     },
   });
 
+  const onSubmit = (e: React.SubmitEvent) => {
+    e.preventDefault();
+    mutation.mutate(userLoginData);
+  };
+
   return (
     <>
       <div className="min-h-screen w-full flex flex-col lg:flex-row relative bg-background">
@@ -110,107 +115,107 @@ const LoginPage = () => {
             </div>
 
             {/* Formulário */}
-            <div className="space-y-5 w-full">
-              <div className="space-y-2.5">
-                <Label
-                  htmlFor="username"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  Usuário de acesso
-                </Label>
-                <div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="Usuário"
-                      className={`h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm ${formErrors.username ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      onChange={updateUserData}
-                      value={userLoginData.username}
-                      name="username"
-                    />
-                  </div>
-                  {formErrors.username && (
-                    <span className="text-xs font-medium text-red-500 mt-1.5 block">
-                      {formErrors.username[0]}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
+            <form onSubmit={onSubmit}>
+              <div className="space-y-5 w-full">
+                <div className="space-y-2.5">
                   <Label
-                    htmlFor="password"
+                    htmlFor="username"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Senha
+                    Usuário de acesso
                   </Label>
-                  <a
-                    href="#"
-                    className="text-[13px] font-medium text-violet-600 hover:text-violet-500 transition-colors"
-                  >
-                    Esqueceu a senha?
-                  </a>
-                </div>
-                <div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
-                      <Lock className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                        <Mail className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <Input
+                        id="username"
+                        type="text"
+                        placeholder="Usuário"
+                        className={`h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm ${formErrors.username ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        onChange={updateUserData}
+                        value={userLoginData.username}
+                        name="username"
+                      />
                     </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      className={`h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm ${formErrors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                      onChange={updateUserData}
-                      value={userLoginData.password}
-                      name="password"
-                    />
-                    <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
-                      <EyeOff className="h-4 w-4" />
-                    </div>
+                    {formErrors.username && (
+                      <span className="text-xs font-medium text-red-500 mt-1.5 block">
+                        {formErrors.username[0]}
+                      </span>
+                    )}
                   </div>
-                  {formErrors.password && (
-                    <span className="text-xs font-medium text-red-500 mt-1.5 block">
-                      {formErrors.password[0]}
-                    </span>
-                  )}
                 </div>
-              </div>
 
-              <div className="flex items-center gap-2.5 py-1">
-                <Checkbox
-                  id="remember"
-                  className="h-4 w-4 rounded-md border-2"
-                />
-                <Label
-                  htmlFor="remember"
-                  className="text-[13px] font-medium cursor-pointer text-foreground lg:text-muted-foreground"
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <Label
+                      htmlFor="password"
+                      className="text-sm font-semibold text-foreground"
+                    >
+                      Senha
+                    </Label>
+                    <a
+                      href="#"
+                      className="text-[13px] font-medium text-violet-600 hover:text-violet-500 transition-colors"
+                    >
+                      Esqueceu a senha?
+                    </a>
+                  </div>
+                  <div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center pointer-events-none">
+                        <Lock className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        className={`h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm ${formErrors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        onChange={updateUserData}
+                        value={userLoginData.password}
+                        name="password"
+                      />
+                      <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
+                        <EyeOff className="h-4 w-4" />
+                      </div>
+                    </div>
+                    {formErrors.password && (
+                      <span className="text-xs font-medium text-red-500 mt-1.5 block">
+                        {formErrors.password[0]}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 py-1">
+                  <Checkbox
+                    id="remember"
+                    className="h-4 w-4 rounded-md border-2"
+                  />
+                  <Label
+                    htmlFor="remember"
+                    className="text-[13px] font-medium cursor-pointer text-foreground lg:text-muted-foreground"
+                  >
+                    Lembrar de mim por 30 dias
+                  </Label>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={mutation.isPending}
+                  className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg shadow-md shadow-violet-600/20 flex items-center justify-between px-5 mt-2 transition-all hover:translate-x-1 disabled:opacity-70 disabled:hover:translate-x-0"
                 >
-                  Lembrar de mim por 30 dias
-                </Label>
+                  {mutation.isPending ? (
+                    <span>Entrando...</span>
+                  ) : (
+                    <span>Entrar na Plataforma</span>
+                  )}
+
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </div>
-
-              <Button
-                disabled={mutation.isPending}
-                onClick={() => {
-                  mutation.mutate(userLoginData);
-                }}
-                className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-lg shadow-md shadow-violet-600/20 flex items-center justify-between px-5 mt-2 transition-all hover:translate-x-1 disabled:opacity-70 disabled:hover:translate-x-0"
-              >
-                {mutation.isPending ? (
-                  <span>Entrando...</span>
-                ) : (
-                  <span>Entrar na Plataforma</span>
-                )}
-
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            </form>
 
             {/* Erro Geral (Status Error) */}
             {statusError && (
