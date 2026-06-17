@@ -12,6 +12,7 @@
     "cosmos-export": "cosmos-export"
   },
   "dependencies": {
+    "@app/shared": "workspace:*",
     "@fontsource-variable/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.100.14",
