@@ -6,7 +6,7 @@ import { ModeToggle } from '@/components/mode-toggle';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Bell, Plus, MoreVertical } from 'lucide-react';
 

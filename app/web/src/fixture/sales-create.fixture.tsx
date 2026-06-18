@@ -519,4 +519,4 @@ const SalesCreateFixture = () => {
   );
 };
 
-export default SalesCreatePage;
+export default SalesCreateFixture;

@@ -11,22 +11,21 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import axios from 'axios';
 import { useAuth } from '@/context/auth.context';
-import type { ApiErrorResponse } from '@/types';
-
+import type { ApiErrorResponse, UserLoginPayload } from '@/types';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userLoginSchema } from '@app/shared';
 const LoginPage = () => {
-  const [userLoginData, setUserLoginData] = useState({
-    username: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<UserLoginPayload>({
+    resolver: zodResolver(userLoginSchema),
   });
 
-  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
-
   const [statusError, setStatusError] = useState('');
-
-  function updateUserData(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setUserLoginData((prev) => ({ ...prev, [name]: value }));
-  }
 
   const auth = useAuth();
   const navigate = useNavigate();
@@ -36,7 +35,6 @@ const LoginPage = () => {
 
     onSuccess: () => {
       auth.login();
-      setFormErrors({});
 
       navigate({ to: '/dashboard' });
     },
@@ -47,12 +45,19 @@ const LoginPage = () => {
 
         if (errorData) {
           if ('message' in errorData) {
-            // console.error(errorData.message);
             setStatusError(errorData.message);
           }
-          if ('fieldErrors' in errorData) {
-            // console.error(errorData.fieldErrors);
-            setFormErrors(errorData.fieldErrors);
+          if ('fieldErrors' in errorData && errorData.fieldErrors) {
+            Object.entries(errorData.fieldErrors).forEach(
+              ([field, messages]) => {
+                if (messages && messages.length > 0) {
+                  setError(field as keyof UserLoginPayload, {
+                    type: 'server',
+                    message: messages[0],
+                  });
+                }
+              },
+            );
           }
         }
       } else {
@@ -61,9 +66,9 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-    mutation.mutate(userLoginData);
+  const onSubmit: SubmitHandler<UserLoginPayload> = (data) => {
+    setStatusError('');
+    mutation.mutate(data);
   };
 
   return (
@@ -115,7 +120,7 @@ const LoginPage = () => {
             </div>
 
             {/* Formulário */}
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-5 w-full">
                 <div className="space-y-2.5">
                   <Label
@@ -133,15 +138,13 @@ const LoginPage = () => {
                         id="username"
                         type="text"
                         placeholder="Usuário"
-                        className={`h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm ${formErrors.username ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        onChange={updateUserData}
-                        value={userLoginData.username}
-                        name="username"
+                        className={`h-10 pl-10 pr-4 bg-background lg:bg-card/50 text-sm ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        {...register('username')}
                       />
                     </div>
-                    {formErrors.username && (
+                    {errors.username && (
                       <span className="text-xs font-medium text-red-500 mt-1.5 block">
-                        {formErrors.username[0]}
+                        {errors.username.message}
                       </span>
                     )}
                   </div>
@@ -171,18 +174,16 @@ const LoginPage = () => {
                         id="password"
                         type="password"
                         placeholder="••••••••"
-                        className={`h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm ${formErrors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                        onChange={updateUserData}
-                        value={userLoginData.password}
-                        name="password"
+                        className={`h-10 pl-10 pr-10 bg-background lg:bg-card/50 text-sm ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                        {...register('password')}
                       />
                       <div className="absolute inset-y-0 right-0 w-10 flex items-center justify-center cursor-pointer hover:text-foreground text-muted-foreground transition-colors">
                         <EyeOff className="h-4 w-4" />
                       </div>
                     </div>
-                    {formErrors.password && (
+                    {errors.password && (
                       <span className="text-xs font-medium text-red-500 mt-1.5 block">
-                        {formErrors.password[0]}
+                        {errors.password.message}
                       </span>
                     )}
                   </div>
