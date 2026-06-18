@@ -1,4 +1,4 @@
-import { validateCnpj } from '@/utils';
+import { validateCnpj } from '@app/shared';
 import { describe, it, expect } from 'vitest';
 
 describe('Check if CNPJ is valid or not', () => {

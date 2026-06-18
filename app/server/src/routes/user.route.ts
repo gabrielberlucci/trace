@@ -22,7 +22,7 @@ import {
   reqParamSchema,
 } from '@app/shared';
 import { Router } from 'express';
-import { UserPermissions } from '@app/shared';
+import { UserPermissions } from '@app/shared/index';
 
 /**
  * @swagger

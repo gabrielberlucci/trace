@@ -1,4 +1,4 @@
-import { validateCpf } from '@/utils';
+import { validateCpf } from '@app/shared';
 import { describe, it, expect } from 'vitest';
 
 describe('Check if CPF is valid or not', () => {
