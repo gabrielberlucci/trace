@@ -1,7 +1,6 @@
 import { commonSchema } from './common.schema';
-import { z } from '@/config/zod.config';
+import { z } from './config/index';
 import { queryFilterSchema } from './query.schema';
-import { RoleType } from '../../generated/prisma/client';
 
 export const userSchema = commonSchema
   .omit({
@@ -37,9 +36,13 @@ export const userSchema = commonSchema
       .min(3, { error: 'Username muito curto. Use no minimo 3 caracteres' })
       .max(8, { error: 'Username muito longo. Use no maximo 8 caracteres' }),
   })
-  .refine((data) => data.password === data.confirmedPassword, {
-    error: 'As senhas não são iguais',
-  });
+  .refine(
+    (data: { password: string; confirmedPassword: string }) =>
+      data.password === data.confirmedPassword,
+    {
+      error: 'As senhas não são iguais',
+    },
+  );
 
 export const userLoginSchema = z.object(userSchema.shape).pick({
   username: true,

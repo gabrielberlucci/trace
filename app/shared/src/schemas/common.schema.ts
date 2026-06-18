@@ -1,6 +1,6 @@
-import { z } from '@/config/zod.config';
-import { validateCnpj, validateCpf } from '@/utils';
-import { typePerson } from '../../generated/prisma/client';
+import { z } from './config/index';
+import { validateCnpj, validateCpf } from '../utils';
+import { typePerson } from '../constants/enums';
 
 /*
  * Initial common schema
@@ -21,7 +21,7 @@ export const commonSchema = z.object({
     ),
 
   typePerson: z
-    .enum(typePerson, { error: 'O tipo de pessoa deve ser PJ ou PF' })
+    .nativeEnum(typePerson, { error: 'O tipo de pessoa deve ser PJ ou PF' })
     .transform((val) => val!.replace(/\s+/g, ''))
     .optional(),
 

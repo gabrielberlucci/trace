@@ -1,4 +1,4 @@
-import { z } from '@/config/zod.config';
+import { z } from './config';
 import { productSchema } from './product.schema';
 import { commonSchema } from './common.schema';
 

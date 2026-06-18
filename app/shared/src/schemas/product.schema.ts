@@ -1,5 +1,5 @@
-import { z } from '@/config/zod.config';
-import { Unity } from '../../generated/prisma/client';
+import { z } from './config';
+import { Unity } from '../constants/enums';
 
 export const productSchema = z.object({
   description: z
@@ -20,7 +20,7 @@ export const productSchema = z.object({
         }),
     ),
 
-  unity: z.enum(Unity, {
+  unity: z.nativeEnum(Unity, {
     error: 'Unidades de medida devem ser UN, CM, MT ou MM',
   }),
 

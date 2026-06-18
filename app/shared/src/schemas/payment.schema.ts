@@ -1,5 +1,5 @@
-import { z } from '@/config/zod.config';
-import { PaymentType } from '../../generated/prisma/client';
+import { z } from './config';
+import { PaymentType } from '../constants/enums';
 
 export const createPaymentMethodSchema = z.object({
   description: z.string({ error: 'Insira uma descrição' }),
@@ -11,7 +11,7 @@ export const createPaymentMethodSchema = z.object({
     })
     .optional(),
   fee: z.float64({ error: 'Insira uma taxa' }).optional(),
-  type: z.enum(PaymentType, {
+  type: z.nativeEnum(PaymentType, {
     error: 'O tipo deve ser POS, TEF, PIX, CREDITO, DEBITO ou OUTRO',
   }),
 });

@@ -1,5 +1,5 @@
-import { commonSchema } from '@/schemas/common.schema';
-import { z } from '@/config/zod.config';
+import { commonSchema } from './common.schema';
+import { z } from './config/index';
 
 export const createCustomerSchema = commonSchema.extend({
   birthdate: z.coerce

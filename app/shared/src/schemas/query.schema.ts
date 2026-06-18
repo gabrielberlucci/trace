@@ -1,4 +1,4 @@
-import { z } from '@/config/zod.config';
+import { z } from './config';
 
 export const queryFilterSchema = z.object({
   page: z.coerce
