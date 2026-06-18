@@ -16,9 +16,9 @@ import {
   modifySupplierSchema,
   queryFilterSchema,
   reqParamSchema,
-} from '@/schemas';
+} from '@app/shared';
 import { Router } from 'express';
-import { UserPermissions } from '@/constants';
+import { UserPermissions } from '@app/shared';
 
 /**
  * @swagger

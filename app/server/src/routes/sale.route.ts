@@ -1,4 +1,4 @@
-import { UserPermissions } from '@/constants';
+import { UserPermissions } from '@app/shared';
 import {
   createSaleController,
   getSalesController,
@@ -11,7 +11,7 @@ import {
   validatePermission,
   validateQuery,
 } from '@/middlewares';
-import { queryFilterSchema, reqParamSchema, saleCartSchema } from '@/schemas';
+import { queryFilterSchema, reqParamSchema, saleCartSchema } from '@app/shared';
 import { Router } from 'express';
 
 /**

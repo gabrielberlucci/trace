@@ -3,7 +3,8 @@ import {
   createCustomerSchema,
   modifyCustomerSchema,
   reqParamSchema,
-} from '@/schemas';
+  queryFilterSchema,
+} from '@app/shared';
 import {
   createCustomerController,
   getCustomerController,
@@ -17,8 +18,7 @@ import {
   validatePermission,
   validateQuery,
 } from '@/middlewares';
-import { queryFilterSchema } from '@/schemas';
-import { UserPermissions } from '@/constants';
+import { UserPermissions } from '@app/shared';
 
 /**
  * @swagger

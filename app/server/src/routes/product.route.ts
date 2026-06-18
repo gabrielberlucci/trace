@@ -1,4 +1,4 @@
-import { UserPermissions } from '@/constants';
+import { UserPermissions } from '@app/shared';
 import {
   createProductController,
   getPaginatedProductsController,
@@ -17,7 +17,7 @@ import {
   productSchema,
   queryFilterSchema,
   reqParamSchema,
-} from '@/schemas';
+} from '@app/shared';
 import { Router } from 'express';
 
 /**
