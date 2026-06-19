@@ -22,7 +22,7 @@ export const validateError = (
   res: Response,
   _next: NextFunction,
 ) => {
-  // console.log(error);
+  console.log(`Erro name: `, error.name);
   if (error instanceof ZodError) {
     const flattenError = z.flattenError(error);
 
@@ -97,6 +97,14 @@ export const validateError = (
         message: `Não foi possível encontrar o ${formatPrismaError(error)}`,
       });
     }
+  }
+
+  // THIS IS STRANGE
+  if (error instanceof SyntaxError) {
+    return res.status(StatusCodes.BAD_REQUEST).send({
+      errorMessage: ReasonPhrases.BAD_REQUEST,
+      message: 'Provavelmente o erro aconteceu por conta do objeto do JSON',
+    });
   }
   console.error(error);
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
