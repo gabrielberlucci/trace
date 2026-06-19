@@ -9,13 +9,69 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Calendar, Mail, Phone, Save } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Mail, Phone, Save, CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createCustomerSchema } from '@app/shared';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import type { CreateCustomerData } from '@/types/customer-type';
+import { createCustomer } from '@/api';
+
+type CustomerFormInput = z.input<typeof createCustomerSchema>;
+type CustomerFormOutput = z.output<typeof createCustomerSchema>;
 
 const CustomersCreatePage = () => {
+  const navigate = useNavigate();
+
+  const form = useForm<CustomerFormInput, unknown, CustomerFormOutput>({
+    resolver: zodResolver(createCustomerSchema),
+    defaultValues: {
+      typePerson: 'PJ',
+    },
+  });
+
+  const onSubmit = async (data: CustomerFormOutput) => {
+    try {
+      const payload: CreateCustomerData = {
+        document: data.document,
+        typePerson: data.typePerson || 'PJ',
+        name: data.name,
+        birthdate: data.birthdate as Date,
+        phone: data.phone,
+        address: data.address,
+        zipcode: data.zipcode,
+        addressNumber: data.addressNumber,
+        complement: data.complement,
+        email: data.email,
+        ie: data.ie,
+        active: 'true',
+      };
+      await createCustomer(payload);
+      toast.success('Cliente cadastrado com sucesso!');
+      navigate({ to: '/customer', search: { q: undefined, page: 1 } });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Erro ao cadastrar cliente');
+      }
+      console.error(error);
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
@@ -40,286 +96,375 @@ const CustomersCreatePage = () => {
             <Button
               variant="outline"
               className="font-semibold shadow-sm px-6 h-11 rounded-lg"
+              asChild
             >
               <Link to="/customer" search={{ q: undefined, page: 1 }}>
                 Cancelar
               </Link>
             </Button>
 
-            <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2">
-              <Save className="h-4 w-4" /> Salvar Cliente
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2"
+            >
+              <Save className="h-4 w-4" />{' '}
+              {form.formState.isSubmitting ? 'Salvando...' : 'Salvar Cliente'}
             </Button>
           </div>
         </div>
       </div>
 
       {/* Form Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        {/* Left Column */}
-        <div className="xl:col-span-2 space-y-8">
-          {/* Informações Principais */}
-          <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
-            <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-              <CardTitle className="text-xl font-bold text-foreground">
-                Informações Principais
-              </CardTitle>
-              <p className="text-[14px] text-muted-foreground">
-                Dados de identificação do cliente.
-              </p>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="typePerson"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Tipo de Pessoa <span className="text-red-500">*</span>
-                  </Label>
-                  <Select defaultValue="PJ">
-                    <SelectTrigger id="typePerson" className="h-11 rounded-lg">
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="PJ">Pessoa Jurídica (PJ)</SelectItem>
-                      <SelectItem value="PF">Pessoa Física (PF)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="document"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Documento (CNPJ/CPF) <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="document"
-                    placeholder="00.000.000/0000-00"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="ie"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Inscrição Estadual (IE)
-                  </Label>
-                  <Input
-                    id="ie"
-                    placeholder="ISENTO ou Número"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
+      <div className="max-w-5xl space-y-8">
+        {/* Informações Principais */}
+        <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
+          <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
+            <CardTitle className="text-xl font-bold text-foreground">
+              Informações Principais
+            </CardTitle>
+            <p className="text-[14px] text-muted-foreground">
+              Dados de identificação do cliente.
+            </p>
+          </CardHeader>
+          <CardContent className="p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <Label
+                  htmlFor="typePerson"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Tipo de Pessoa <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  control={form.control}
+                  name="typePerson"
+                  render={({ field }) => (
+                    <Select
+                      value={field.value as string}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="typePerson"
+                        className="h-11 rounded-lg"
+                      >
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="PJ">Pessoa Jurídica (PJ)</SelectItem>
+                        <SelectItem value="PF">Pessoa Física (PF)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {form.formState.errors.typePerson && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.typePerson.message}
+                  </span>
+                )}
               </div>
+              <div className="space-y-3">
+                <Label
+                  htmlFor="document"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Documento (CNPJ/CPF) <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="document"
+                  placeholder="00.000.000/0000-00"
+                  className="h-11 rounded-lg"
+                  {...form.register('document')}
+                />
+                {form.formState.errors.document && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.document.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-3">
+                <Label
+                  htmlFor="ie"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Inscrição Estadual (IE)
+                </Label>
+                <Input
+                  id="ie"
+                  placeholder="ISENTO ou Número"
+                  className="h-11 rounded-lg"
+                  {...form.register('ie', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                />
+                {form.formState.errors.ie && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.ie.message}
+                  </span>
+                )}
+              </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="space-y-3 md:col-span-2">
-                  <Label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Razão Social / Nome Completo{' '}
-                    <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="name"
-                    placeholder="Insira o nome oficial"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="birthdate"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Data de Fundação / Nasc.
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="birthdate"
-                      placeholder="mm/dd/yyyy"
-                      className="h-11 rounded-lg pl-12 pr-4"
-                    />
-                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-3 md:col-span-2">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Razão Social / Nome Completo{' '}
+                  <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  placeholder="Insira o nome oficial"
+                  className="h-11 rounded-lg"
+                  {...form.register('name')}
+                />
+                {form.formState.errors.name && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.name.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-3">
+                <Label
+                  htmlFor="birthdate"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Data de Fundação / Nasc.
+                </Label>
+                <Controller
+                  control={form.control}
+                  name="birthdate"
+                  render={({ field }) => (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="birthdate"
+                          variant="outline"
+                          className={cn(
+                            'w-full h-11 rounded-lg justify-start text-left font-normal',
+                            !field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value as Date, 'PPP', { locale: ptBR })
+                          ) : (
+                            <span>Selecione uma data</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value as Date | undefined}
+                          onSelect={field.onChange}
+                          locale={ptBR}
+                          captionLayout="dropdown"
+                          fromYear={1900}
+                          toYear={new Date().getFullYear()}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                />
+                {form.formState.errors.birthdate && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.birthdate.message}
+                  </span>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Contato */}
+        <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
+          <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
+            <CardTitle className="text-xl font-bold text-foreground">
+              Contato
+            </CardTitle>
+            <p className="text-[14px] text-muted-foreground">
+              Informações de comunicação primária.
+            </p>
+          </CardHeader>
+          <CardContent className="p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Email Corporativo
+                </Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
                   </div>
+                  <Input
+                    id="email"
+                    placeholder="contato@empresa.com.br"
+                    className="h-11 rounded-lg pl-12 pr-4"
+                    {...form.register('email', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
+                  />
                 </div>
+                {form.formState.errors.email && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.email.message}
+                  </span>
+                )}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Contato */}
-          <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
-            <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-              <CardTitle className="text-xl font-bold text-foreground">
-                Contato
-              </CardTitle>
-              <p className="text-[14px] text-muted-foreground">
-                Informações de comunicação primária.
-              </p>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="email"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Email Corporativo <span className="text-red-500">*</span>
-                  </Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <Input
-                      id="email"
-                      placeholder="contato@empresa.com.br"
-                      className="h-11 rounded-lg pl-12 pr-4"
-                    />
+              <div className="space-y-3">
+                <Label
+                  htmlFor="phone"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Telefone Principal
+                </Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
                   </div>
+                  <Input
+                    id="phone"
+                    placeholder="(00) 00000-0000"
+                    className="h-11 rounded-lg pl-12 pr-4"
+                    {...form.register('phone', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
+                  />
                 </div>
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="phone"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Telefone Principal <span className="text-red-500">*</span>
-                  </Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <Input
-                      id="phone"
-                      placeholder="(00) 00000-0000"
-                      className="h-11 rounded-lg pl-12 pr-4"
-                    />
-                  </div>
-                </div>
+                {form.formState.errors.phone && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.phone.message}
+                  </span>
+                )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Endereço */}
-          <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
-            <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-              <CardTitle className="text-xl font-bold text-foreground">
-                Endereço
-              </CardTitle>
-              <p className="text-[14px] text-muted-foreground">
-                Localização do faturamento/sede.
-              </p>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="zipcode"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    CEP <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="zipcode"
-                    placeholder="00000-000"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3 md:col-span-2">
-                  <Label
-                    htmlFor="city"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Cidade / Estado <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="city"
-                    placeholder="Ex: São Paulo / SP"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
+        {/* Endereço */}
+        <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
+          <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
+            <CardTitle className="text-xl font-bold text-foreground">
+              Endereço
+            </CardTitle>
+            <p className="text-[14px] text-muted-foreground">
+              Localização do faturamento/sede.
+            </p>
+          </CardHeader>
+          <CardContent className="p-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <Label
+                  htmlFor="zipcode"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  CEP
+                </Label>
+                <Input
+                  id="zipcode"
+                  placeholder="00000-000"
+                  className="h-11 rounded-lg"
+                  {...form.register('zipcode', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                />
+                {form.formState.errors.zipcode && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.zipcode.message}
+                  </span>
+                )}
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="space-y-3 md:col-span-6">
-                  <Label
-                    htmlFor="address"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Logradouro (Rua/Av.) <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="address"
-                    placeholder="Ex: Av. Paulista"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3 md:col-span-3">
-                  <Label
-                    htmlFor="number"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Número <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="number"
-                    placeholder="000"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3 md:col-span-3">
-                  <Label
-                    htmlFor="complement"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Complemento
-                  </Label>
-                  <Input
-                    id="complement"
-                    placeholder="Sala"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-8">
-          {/* Configurações */}
-          <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
-            <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-              <CardTitle className="text-xl font-bold text-foreground">
-                Configurações
-              </CardTitle>
-              <p className="text-[14px] text-muted-foreground">
-                Status da conta do cliente.
-              </p>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="flex items-center justify-between border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 bg-card shadow-sm">
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold text-foreground">
-                    Status do Cliente
-                  </Label>
-                  <p className="text-[13px] text-muted-foreground">
-                    Ativar ou desativar acesso
-                  </p>
-                </div>
-                <Switch
-                  defaultChecked
-                  className="data-[state=checked]:bg-violet-600"
+              <div className="space-y-3 md:col-span-2">
+                <Label
+                  htmlFor="city"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Cidade / Estado
+                </Label>
+                <Input
+                  id="city"
+                  placeholder="Ex: São Paulo / SP"
+                  className="h-11 rounded-lg"
                 />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+              <div className="space-y-3 md:col-span-6">
+                <Label
+                  htmlFor="address"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Logradouro (Rua/Av.)
+                </Label>
+                <Input
+                  id="address"
+                  placeholder="Ex: Av. Paulista"
+                  className="h-11 rounded-lg"
+                  {...form.register('address', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                />
+                {form.formState.errors.address && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.address.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-3 md:col-span-3">
+                <Label
+                  htmlFor="number"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Número
+                </Label>
+                <Input
+                  id="number"
+                  type="number"
+                  placeholder="000"
+                  className="h-11 rounded-lg"
+                  {...form.register('addressNumber', {
+                    setValueAs: (v) => (v === '' ? undefined : Number(v)),
+                  })}
+                />
+                {form.formState.errors.addressNumber && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.addressNumber.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-3 md:col-span-3">
+                <Label
+                  htmlFor="complement"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Complemento
+                </Label>
+                <Input
+                  id="complement"
+                  placeholder="Sala"
+                  className="h-11 rounded-lg"
+                  {...form.register('complement', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                />
+                {form.formState.errors.complement && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.complement.message}
+                  </span>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </form>
   );
 };
 
