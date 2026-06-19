@@ -18,3 +18,43 @@ export interface PaginatedCustomerData {
   document: string;
   active: boolean;
 }
+
+/* handle customer POST */
+
+export interface CreateCustomerDataResponse {
+  status: string;
+  message: string;
+  data: {
+    id: number;
+    document: string;
+    typePerson: string;
+    name: string;
+    birthdate: Date;
+    phone: string;
+    address: string;
+    zipcode: string;
+    addressNumber: number;
+    complement: string;
+    email: string;
+    ie: string;
+    active: boolean;
+    cityId: number;
+  };
+}
+
+export interface CreateCustomerData {
+  id?: number;
+  document: string;
+  typePerson?: string;
+  name: string;
+  birthdate?: Date;
+  phone?: string;
+  address?: string;
+  zipcode?: string;
+  addressNumber?: number;
+  complement?: string;
+  email?: string;
+  ie?: string;
+  active?: boolean | string;
+  cityId?: number;
+}
