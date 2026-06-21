@@ -37,4 +37,19 @@ export const queryFilterSchema = z.object({
     .min(2, { error: 'Descriçao muito curta. Insira pelo menos 3 caracteres' })
     .max(50, { error: 'Descriçao muito longa. Insira no máximo 50 caracteres' })
     .optional(),
+
+  state: z
+    .string({ error: 'Insira um estado' })
+    .length(2, { error: 'Informe a sigla corretamente' })
+    .optional(),
+
+  city: z
+    .string({ error: 'Insira uma cidade' })
+    .min(3, {
+      error: 'Nome da cidade muito curta. Insira pelo menos 3 caracteres',
+    })
+    .max(32, {
+      error: 'Nome da cidade muito longa. Insira no máximo 32 caracteres',
+    })
+    .optional(),
 });
