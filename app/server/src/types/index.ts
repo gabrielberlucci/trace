@@ -1,28 +1,17 @@
-import type { CustomerQueryParamsFilters } from './customer.type';
-import type { PaymentMethodQueryParamsFilters } from './payment.methods.type';
-import type { ProductQueryParamsFilters } from './product.type';
-import type {
-  SaleCart,
-  ValidatedSaleCart,
-  SaleQueryParamsFilters,
-} from './sale.type';
-import type {
-  UserQueryParamsFilters,
-  UserLogin,
-  UserRoleLevel,
-} from './user.type';
-
-import type { SupplierQueryParamsFilters } from './supplier.type';
-
+export type { CustomerQueryParamsFilters } from "./customer.type";
+export type { PaymentMethodQueryParamsFilters } from "./payment.methods.type";
+export type { ProductQueryParamsFilters } from "./product.type";
 export type {
-  CustomerQueryParamsFilters,
-  PaymentMethodQueryParamsFilters,
-  ProductQueryParamsFilters,
   SaleCart,
   ValidatedSaleCart,
   SaleQueryParamsFilters,
+} from "./sale.type";
+export type {
   UserQueryParamsFilters,
   UserLogin,
   UserRoleLevel,
-  SupplierQueryParamsFilters,
-};
+} from "./user.type";
+
+export type { SupplierQueryParamsFilters } from "./supplier.type";
+
+export type { CityStateQueryParamsFilters } from "./localization.type";
