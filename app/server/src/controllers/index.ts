@@ -1,70 +1,44 @@
-import {
-  createCustomerController,
-  getPaginatedCustomersController,
-  modifyCustomerController,
-  getCustomerController,
-} from './customer.controller';
-
-import {
-  createSupplierController,
-  modifySupplierController,
-  getPaginatedSuppliersController,
-  getSupplierController,
-} from './supplier.controller';
-
-import {
-  createProductController,
-  getPaginatedProductsController,
-  modifyProductController,
-  getProductController,
-} from './product.controller';
-
-import {
-  registerUserController,
-  loginUserController,
-  getPaginatedUsersController,
-  modifyUserController,
-  getUserController,
-  meController,
-} from './user.controller';
-
-import {
-  createSaleController,
-  getSalesController,
-  getSingleSaleController,
-} from './sale.controller';
-
-import {
-  createPaymentMethodController,
-  modifyPaymentMethodController,
-  getPaginatedPaymentMethodsController,
-  getPaymentMethodController,
-} from './payment.methods.controller';
-
 export {
   createCustomerController,
-  createProductController,
-  createSupplierController,
   getPaginatedCustomersController,
-  getPaginatedProductsController,
   modifyCustomerController,
-  modifyProductController,
+  getCustomerController,
+} from "./customer.controller";
+
+export {
+  createSupplierController,
   modifySupplierController,
+  getPaginatedSuppliersController,
+  getSupplierController,
+} from "./supplier.controller";
+
+export {
+  createProductController,
+  getPaginatedProductsController,
+  modifyProductController,
+  getProductController,
+} from "./product.controller";
+
+export {
   registerUserController,
   loginUserController,
+  getPaginatedUsersController,
   modifyUserController,
+  getUserController,
+  meController,
+} from "./user.controller";
+
+export {
   createSaleController,
   getSalesController,
   getSingleSaleController,
+} from "./sale.controller";
+
+export {
   createPaymentMethodController,
   modifyPaymentMethodController,
   getPaginatedPaymentMethodsController,
-  getCustomerController,
   getPaymentMethodController,
-  getProductController,
-  getPaginatedSuppliersController,
-  getSupplierController,
-  getPaginatedUsersController,
-  getUserController,
-  meController,
-};
+} from "./payment.methods.controller";
+
+export { getStatesController } from "./localization.controller";
