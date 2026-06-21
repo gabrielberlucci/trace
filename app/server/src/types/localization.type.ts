@@ -1,4 +1,4 @@
-import type { PaginationQueryParams } from "./common.pagination.type";
+import type { PaginationQueryParams } from './common.pagination.type';
 
 export interface CityStateQueryParamsFilters extends PaginationQueryParams {
   state: string;

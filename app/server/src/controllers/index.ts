@@ -3,21 +3,21 @@ export {
   getPaginatedCustomersController,
   modifyCustomerController,
   getCustomerController,
-} from "./customer.controller";
+} from './customer.controller';
 
 export {
   createSupplierController,
   modifySupplierController,
   getPaginatedSuppliersController,
   getSupplierController,
-} from "./supplier.controller";
+} from './supplier.controller';
 
 export {
   createProductController,
   getPaginatedProductsController,
   modifyProductController,
   getProductController,
-} from "./product.controller";
+} from './product.controller';
 
 export {
   registerUserController,
@@ -26,19 +26,22 @@ export {
   modifyUserController,
   getUserController,
   meController,
-} from "./user.controller";
+} from './user.controller';
 
 export {
   createSaleController,
   getSalesController,
   getSingleSaleController,
-} from "./sale.controller";
+} from './sale.controller';
 
 export {
   createPaymentMethodController,
   modifyPaymentMethodController,
   getPaginatedPaymentMethodsController,
   getPaymentMethodController,
-} from "./payment.methods.controller";
+} from './payment.methods.controller';
 
-export { getStatesController } from "./localization.controller";
+export {
+  getStatesController,
+  getCitiesByStateController,
+} from './localization.controller';

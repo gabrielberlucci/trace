@@ -2,21 +2,21 @@ export {
   createCustomer,
   modifyCustomer,
   getPaginatedCustomers,
-} from "./customer.service";
+} from './customer.service';
 
 export {
   createProduct,
   modifyProduct,
   getPaginatedProducts,
   getProduct,
-} from "./product.service";
+} from './product.service';
 
 export {
   createSupplier,
   modifySupplier,
   getPaginatedSuppliers,
   getSupplier,
-} from "./supplier.service";
+} from './supplier.service';
 
 export {
   createUser,
@@ -25,15 +25,15 @@ export {
   modifyUser,
   getUser,
   getMe,
-} from "./user.service";
+} from './user.service';
 
-export { createSale, getPaginatedSales, getSale } from "./sale.service";
+export { createSale, getPaginatedSales, getSale } from './sale.service';
 
 export {
   createPaymentMethod,
   modifyPaymentMethod,
   getPaginatedPaymentMethods,
   getPaymentMethod,
-} from "./payment.methods.service";
+} from './payment.methods.service';
 
-export { getUniqueStates } from "./localization.service";
+export { getUniqueStates, getCitiesByState } from './localization.service';
