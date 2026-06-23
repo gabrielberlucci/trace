@@ -37,3 +37,9 @@ export type {
 } from './payment-methods';
 
 export type { GenericErrorMessageResponse } from './generics';
+
+export type {
+  PaginatedCity,
+  PaginatedCityMeta,
+  PaginatedCityData,
+} from './localization-type';
