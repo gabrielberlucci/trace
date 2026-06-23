@@ -26,13 +26,105 @@ import { createCustomerSchema } from '@app/shared';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import type { CreateCustomerData } from '@/types/customer-type';
-import { createCustomer } from '@/api';
+import { createCustomer, getStates, getCityByState } from '@/api';
+import { useEffect, useState } from 'react';
+import type { PaginatedCityData } from '@/types';
+import type { UseFormReturn } from 'react-hook-form';
 
 type CustomerFormInput = z.input<typeof createCustomerSchema>;
 type CustomerFormOutput = z.output<typeof createCustomerSchema>;
 
+const CityAutocomplete = ({
+  form,
+  selectedState,
+}: {
+  form: UseFormReturn<CustomerFormInput, unknown, CustomerFormOutput>;
+  selectedState: string;
+}) => {
+  const [cities, setCities] = useState<PaginatedCityData[]>([]);
+  const [citySearch, setCitySearch] = useState('');
+  const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!selectedState) {
+        setCities([]);
+        return;
+      }
+      try {
+        const response = await getCityByState(1, selectedState, citySearch);
+        if (response?.data) {
+          setCities(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch cities', error);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      fetchCities();
+    }, 600);
+
+    return () => clearTimeout(timeoutId);
+  }, [selectedState, citySearch]);
+
+  return (
+    <div className="space-y-3 relative">
+      <Label
+        htmlFor="citySearch"
+        className="text-sm font-semibold text-foreground"
+      >
+        Cidade
+      </Label>
+      <Input
+        id="citySearch"
+        placeholder="Digite o nome da cidade"
+        className="h-11 rounded-lg"
+        value={citySearch}
+        disabled={!selectedState}
+        onChange={(e) => {
+          setCitySearch(e.target.value);
+          setShowCitiesDropdown(true);
+          form.setValue('cityId', undefined as any);
+        }}
+        onFocus={() => {
+          if (selectedState) setShowCitiesDropdown(true);
+        }}
+        onBlur={() => setShowCitiesDropdown(false)}
+      />
+
+      {showCitiesDropdown && cities.length > 0 && (
+        <div className="absolute z-10 w-full bg-popover text-popover-foreground shadow-md rounded-md border mt-1 max-h-60 overflow-auto">
+          {cities.map((city) => (
+            <div
+              key={city.id}
+              className="px-4 py-2 cursor-pointer hover:bg-muted text-sm"
+              onMouseDown={(e) => {
+                e.preventDefault(); // Prevent input blur from firing first
+                setCitySearch(city.name);
+                form.setValue('cityId', city.id);
+                setShowCitiesDropdown(false);
+              }}
+            >
+              {city.name}
+            </div>
+          ))}
+        </div>
+      )}
+      {form.formState.errors.cityId && (
+        <span className="text-red-500 text-xs">
+          {form.formState.errors.cityId.message}
+        </span>
+      )}
+    </div>
+  );
+};
+
 const CustomersCreatePage = () => {
   const navigate = useNavigate();
+
+  const [states, setStates] = useState<Record<string, string>>({});
+  const [selectedState, setSelectedState] = useState<string>('');
 
   const form = useForm<CustomerFormInput, unknown, CustomerFormOutput>({
     resolver: zodResolver(createCustomerSchema),
@@ -40,6 +132,20 @@ const CustomersCreatePage = () => {
       typePerson: 'PJ',
     },
   });
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const response: any = await getStates();
+        if (response?.data) {
+          setStates(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch states', error);
+      }
+    };
+    fetchStates();
+  }, []);
 
   const onSubmit = async (data: CustomerFormOutput) => {
     try {
@@ -56,6 +162,7 @@ const CustomersCreatePage = () => {
         email: data.email,
         ie: data.ie,
         active: 'true',
+        cityId: data.cityId,
       };
       await createCustomer(payload);
       toast.success('Cliente cadastrado com sucesso!');
@@ -380,19 +487,34 @@ const CustomersCreatePage = () => {
                   </span>
                 )}
               </div>
-              <div className="space-y-3 md:col-span-2">
+              <div className="space-y-3">
                 <Label
-                  htmlFor="city"
+                  htmlFor="state"
                   className="text-sm font-semibold text-foreground"
                 >
-                  Cidade / Estado
+                  Estado
                 </Label>
-                <Input
-                  id="city"
-                  placeholder="Ex: São Paulo / SP"
-                  className="h-11 rounded-lg"
-                />
+                <Select
+                  value={selectedState}
+                  onValueChange={(val) => {
+                    setSelectedState(val);
+                    form.setValue('cityId', undefined as any);
+                  }}
+                >
+                  <SelectTrigger id="state" className="h-11 rounded-lg">
+                    <SelectValue placeholder="Selecione o estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(states).map(([uf, name]) => (
+                      <SelectItem key={uf} value={uf}>
+                        {name} ({uf})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
+
+              <CityAutocomplete form={form} selectedState={selectedState} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
