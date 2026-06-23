@@ -5,3 +5,6 @@ export { getPaymentMethods } from './payment-methods/get-payment-methods';
 export { getUsers } from './users/get-users';
 
 export { createCustomer } from './customers/post-client';
+
+export { getStates } from './localization/get-states';
+export { getCityByState } from './localization/get-city-by-state';
