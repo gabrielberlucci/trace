@@ -1,3 +1,11 @@
+import { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { createSupplierSchema } from '@app/shared';
+import { getCityByState } from '@/api';
+import { createSupplier } from '@/api/suppliers/post-supplier';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,23 +17,73 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import {
   Building2,
   MapPin,
   Contact,
-  Settings,
-  Info,
   Search,
   Mail,
   Phone,
   Save,
+  Loader2,
 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
+type FormInput = z.input<typeof createSupplierSchema>;
+type FormOutput = z.infer<typeof createSupplierSchema>;
 const SuppliersCreatePage = () => {
+  const navigate = useNavigate();
+  const [stateFilter, setStateFilter] = useState('');
+  const [cityFilter, setCityFilter] = useState('');
+  const [cities, setCities] = useState<any[]>([]);
+  const [showCities, setShowCities] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<FormInput, any, FormOutput>({
+    resolver: zodResolver(createSupplierSchema),
+    defaultValues: {
+      typePerson: 'PJ',
+    },
+  });
+
+  useEffect(() => {
+    if (stateFilter && cityFilter.length >= 2) {
+      const fetchCities = async () => {
+        try {
+          const res = await getCityByState(1, stateFilter, cityFilter);
+          setCities(res.data);
+        } catch (e) {
+          setCities([]);
+        }
+      };
+      const timer = setTimeout(fetchCities, 500);
+      return () => clearTimeout(timer);
+    } else {
+      setCities([]);
+    }
+  }, [stateFilter, cityFilter]);
+
+  const onSubmit = async (data: FormOutput) => {
+    try {
+      setIsSubmitting(true);
+      await createSupplier(data);
+      toast.success('Fornecedor criado com sucesso!');
+      navigate({ to: '/supplier', search: { page: 1, q: undefined as any } });
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao criar fornecedor');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {/* Header */}
       <div className="mb-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -46,8 +104,17 @@ const SuppliersCreatePage = () => {
                 Cancelar
               </Link>
             </Button>
-            <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2">
-              <Save className="h-4 w-4" /> Salvar Fornecedor
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
+              Salvar Fornecedor
             </Button>
           </div>
         </div>
@@ -78,9 +145,15 @@ const SuppliersCreatePage = () => {
                   </Label>
                   <Input
                     id="name"
+                    {...register('name')}
                     placeholder="Ex: Logística Silva LTDA"
                     className="h-11 rounded-lg"
                   />
+                  {errors.name && (
+                    <span className="text-xs text-red-500">
+                      {errors.name.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -90,15 +163,34 @@ const SuppliersCreatePage = () => {
                   >
                     Tipo de Pessoa <span className="text-red-500">*</span>
                   </Label>
-                  <Select defaultValue="PJ">
-                    <SelectTrigger id="typePerson" className="h-11 rounded-lg">
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="PJ">Pessoa Jurídica (PJ)</SelectItem>
-                      <SelectItem value="PF">Pessoa Física (PF)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="typePerson"
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger
+                          id="typePerson"
+                          className="h-11 rounded-lg"
+                        >
+                          <SelectValue placeholder="Selecione o tipo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PJ">
+                            Pessoa Jurídica (PJ)
+                          </SelectItem>
+                          <SelectItem value="PF">Pessoa Física (PF)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.typePerson && (
+                    <span className="text-xs text-red-500">
+                      {errors.typePerson.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -110,9 +202,15 @@ const SuppliersCreatePage = () => {
                   </Label>
                   <Input
                     id="document"
+                    {...register('document')}
                     placeholder="00.000.000/0000-00"
                     className="h-11 rounded-lg"
                   />
+                  {errors.document && (
+                    <span className="text-xs text-red-500">
+                      {errors.document.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-3 md:col-span-2">
@@ -124,9 +222,17 @@ const SuppliersCreatePage = () => {
                   </Label>
                   <Input
                     id="ie"
+                    {...register('ie', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
                     placeholder="Opcional"
                     className="h-11 rounded-lg"
                   />
+                  {errors.ie && (
+                    <span className="text-xs text-red-500">
+                      {errors.ie.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -149,11 +255,14 @@ const SuppliersCreatePage = () => {
                     htmlFor="zipcode"
                     className="text-sm font-semibold text-foreground"
                   >
-                    CEP <span className="text-red-500">*</span>
+                    CEP
                   </Label>
                   <div className="relative">
                     <Input
                       id="zipcode"
+                      {...register('zipcode', {
+                        setValueAs: (v) => (v === '' ? undefined : v),
+                      })}
                       placeholder="00000-000"
                       className="h-11 rounded-lg pr-12"
                     />
@@ -161,20 +270,75 @@ const SuppliersCreatePage = () => {
                       <Search className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                     </div>
                   </div>
+                  {errors.zipcode && (
+                    <span className="text-xs text-red-500">
+                      {errors.zipcode.message}
+                    </span>
+                  )}
                 </div>
 
-                <div className="space-y-3 md:col-span-2">
+                <div className="space-y-3 md:col-span-1">
+                  <Label
+                    htmlFor="state"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Estado (UF)
+                  </Label>
+                  <Input
+                    id="state"
+                    placeholder="Ex: SP"
+                    value={stateFilter}
+                    onChange={(e) =>
+                      setStateFilter(e.target.value.toUpperCase())
+                    }
+                    className="h-11 rounded-lg uppercase"
+                    maxLength={2}
+                  />
+                </div>
+
+                <div className="space-y-3 md:col-span-1 relative">
                   <Label
                     htmlFor="city"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Cidade / Estado <span className="text-red-500">*</span>
+                    Cidade
                   </Label>
                   <Input
                     id="city"
                     placeholder="Nome da cidade"
+                    value={cityFilter}
+                    onChange={(e) => {
+                      setCityFilter(e.target.value);
+                      setShowCities(true);
+                      setValue('cityId', undefined as any);
+                    }}
+                    onFocus={() => setShowCities(true)}
+                    onBlur={() => setTimeout(() => setShowCities(false), 200)}
                     className="h-11 rounded-lg"
                   />
+                  {showCities && cities.length > 0 && (
+                    <ul className="absolute z-10 w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg">
+                      {cities.map((city) => (
+                        <li
+                          key={city.id}
+                          className="px-4 py-2 hover:bg-violet-100 dark:hover:bg-violet-900/30 cursor-pointer text-sm"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setCityFilter(city.name);
+                            setValue('cityId', city.id);
+                            setShowCities(false);
+                          }}
+                        >
+                          {city.name} - {city.state}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {errors.cityId && (
+                    <span className="text-xs text-red-500">
+                      {errors.cityId.message}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -184,13 +348,21 @@ const SuppliersCreatePage = () => {
                     htmlFor="address"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Logradouro <span className="text-red-500">*</span>
+                    Logradouro
                   </Label>
                   <Input
                     id="address"
+                    {...register('address', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
                     placeholder="Rua, Avenida, etc."
                     className="h-11 rounded-lg"
                   />
+                  {errors.address && (
+                    <span className="text-xs text-red-500">
+                      {errors.address.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-3 md:col-span-4">
@@ -198,13 +370,23 @@ const SuppliersCreatePage = () => {
                     htmlFor="number"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Número <span className="text-red-500">*</span>
+                    Número
                   </Label>
                   <Input
                     id="number"
+                    {...register('addressNumber', {
+                      setValueAs: (v) =>
+                        v === '' || isNaN(Number(v)) ? undefined : Number(v),
+                    })}
+                    type="number"
                     placeholder="S/N"
                     className="h-11 rounded-lg"
                   />
+                  {errors.addressNumber && (
+                    <span className="text-xs text-red-500">
+                      {errors.addressNumber.message}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -217,9 +399,17 @@ const SuppliersCreatePage = () => {
                 </Label>
                 <Input
                   id="complement"
+                  {...register('complement', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
                   placeholder="Sala, Andar, Galpão..."
                   className="h-11 rounded-lg"
                 />
+                {errors.complement && (
+                  <span className="text-xs text-red-500">
+                    {errors.complement.message}
+                  </span>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -243,7 +433,7 @@ const SuppliersCreatePage = () => {
                   htmlFor="email"
                   className="text-sm font-semibold text-foreground"
                 >
-                  E-mail Principal <span className="text-red-500">*</span>
+                  E-mail Principal
                 </Label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
@@ -251,10 +441,18 @@ const SuppliersCreatePage = () => {
                   </div>
                   <Input
                     id="email"
+                    {...register('email', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
                     placeholder="contato@empresa.com"
                     className="h-11 rounded-lg pl-12 pr-4"
                   />
                 </div>
+                {errors.email && (
+                  <span className="text-xs text-red-500">
+                    {errors.email.message}
+                  </span>
+                )}
               </div>
 
               <div className="space-y-3">
@@ -262,7 +460,7 @@ const SuppliersCreatePage = () => {
                   htmlFor="phone"
                   className="text-sm font-semibold text-foreground"
                 >
-                  Telefone / WhatsApp <span className="text-red-500">*</span>
+                  Telefone / WhatsApp
                 </Label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
@@ -270,54 +468,24 @@ const SuppliersCreatePage = () => {
                   </div>
                   <Input
                     id="phone"
+                    {...register('phone', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
                     placeholder="(00) 00000-0000"
                     className="h-11 rounded-lg pl-12 pr-4"
                   />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Configurações */}
-          <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
-            <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-              <CardTitle className="text-xl font-bold flex items-center gap-2.5">
-                <div className="p-2 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg">
-                  <Settings className="h-5 w-5" />
-                </div>
-                Configurações
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8">
-              <div className="flex items-center justify-between border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 bg-card shadow-sm">
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold text-foreground">
-                    Status do Fornecedor
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Ativar ou desativar temporariamente
-                  </p>
-                </div>
-                <Switch
-                  defaultChecked
-                  className="data-[state=checked]:bg-violet-600"
-                />
-              </div>
-
-              <div className="bg-violet-50/50 dark:bg-violet-900/10 rounded-xl p-5 flex gap-4 border border-violet-100 dark:border-violet-900/30">
-                <div className="text-violet-600 dark:text-violet-400 shrink-0">
-                  <Info className="h-5 w-5" />
-                </div>
-                <p className="text-[13px] text-violet-800 dark:text-violet-300 leading-relaxed font-medium">
-                  Fornecedores inativos não aparecerão nas opções de criação de
-                  novas ordens de compra (PO).
-                </p>
+                {errors.phone && (
+                  <span className="text-xs text-red-500">
+                    {errors.phone.message}
+                  </span>
+                )}
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 

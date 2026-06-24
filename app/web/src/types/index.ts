@@ -22,6 +22,8 @@ export type {
   PaginatedSuppliers,
   PaginatedSuppliersMeta,
   PaginatedSuppliersData,
+  CreateSupplierDataResponse,
+  CreateSupplierData,
 } from './supplier-type';
 
 export type {
