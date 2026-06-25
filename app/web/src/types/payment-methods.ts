@@ -36,8 +36,7 @@ export interface CreatePaymentMethodDataResponse {
 
 export interface CreatePaymentMethodData {
   description: string;
-  active: boolean;
+  active?: boolean;
   fee?: number;
   type: string;
-  createdAt: Date;
 }

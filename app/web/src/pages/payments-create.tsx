@@ -155,10 +155,18 @@ const PaymentsCreatePage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={PaymentType.PIX}>PIX</SelectItem>
-                        <SelectItem value={PaymentType.CREDITO}>Crédito</SelectItem>
-                        <SelectItem value={PaymentType.DEBITO}>Débito</SelectItem>
-                        <SelectItem value={PaymentType.POS}>Maquininha (POS)</SelectItem>
-                        <SelectItem value={PaymentType.TEF}>Integração TEF</SelectItem>
+                        <SelectItem value={PaymentType.CREDITO}>
+                          Crédito
+                        </SelectItem>
+                        <SelectItem value={PaymentType.DEBITO}>
+                          Débito
+                        </SelectItem>
+                        <SelectItem value={PaymentType.POS}>
+                          Maquininha (POS)
+                        </SelectItem>
+                        <SelectItem value={PaymentType.TEF}>
+                          Integração TEF
+                        </SelectItem>
                         <SelectItem value={PaymentType.OUTRO}>Outro</SelectItem>
                       </SelectContent>
                     </Select>
@@ -170,7 +178,7 @@ const PaymentsCreatePage = () => {
                   </span>
                 )}
               </div>
-              
+
               <div className="space-y-3">
                 <Label
                   htmlFor="fee"
