@@ -85,7 +85,7 @@ const CityAutocomplete = ({
         onChange={(e) => {
           setCitySearch(e.target.value);
           setShowCitiesDropdown(true);
-          form.setValue('cityId', undefined as any);
+          form.setValue('cityId', undefined as unknown as number);
         }}
         onFocus={() => {
           if (selectedState) setShowCitiesDropdown(true);
@@ -136,7 +136,9 @@ const CustomersCreatePage = () => {
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const response: any = await getStates();
+        const response = (await getStates()) as {
+          data: Record<string, string>;
+        };
         if (response?.data) {
           setStates(response.data);
         }
@@ -166,7 +168,7 @@ const CustomersCreatePage = () => {
       };
       await createCustomer(payload);
       toast.success('Cliente cadastrado com sucesso!');
-      navigate({ to: '/customer', search: { q: undefined, page: 1 } });
+      navigate({ to: '/customer', search: { page: 1 } as never });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -498,7 +500,7 @@ const CustomersCreatePage = () => {
                   value={selectedState}
                   onValueChange={(val) => {
                     setSelectedState(val);
-                    form.setValue('cityId', undefined as any);
+                    form.setValue('cityId', undefined as unknown as number);
                   }}
                 >
                   <SelectTrigger id="state" className="h-11 rounded-lg">

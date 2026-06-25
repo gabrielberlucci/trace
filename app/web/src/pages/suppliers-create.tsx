@@ -29,13 +29,15 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
 
+import type { PaginatedCityData } from '@/types';
+
 type FormInput = z.input<typeof createSupplierSchema>;
 type FormOutput = z.infer<typeof createSupplierSchema>;
 const SuppliersCreatePage = () => {
   const navigate = useNavigate();
   const [stateFilter, setStateFilter] = useState('');
   const [cityFilter, setCityFilter] = useState('');
-  const [cities, setCities] = useState<any[]>([]);
+  const [cities, setCities] = useState<PaginatedCityData[]>([]);
   const [showCities, setShowCities] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,7 +47,7 @@ const SuppliersCreatePage = () => {
     setValue,
     control,
     formState: { errors },
-  } = useForm<FormInput, any, FormOutput>({
+  } = useForm<FormInput, undefined, FormOutput>({
     resolver: zodResolver(createSupplierSchema),
     defaultValues: {
       typePerson: 'PJ',
@@ -53,20 +55,23 @@ const SuppliersCreatePage = () => {
   });
 
   useEffect(() => {
-    if (stateFilter && cityFilter.length >= 2) {
-      const fetchCities = async () => {
-        try {
-          const res = await getCityByState(1, stateFilter, cityFilter);
+    const fetchCities = async () => {
+      if (!stateFilter || cityFilter.length < 2) {
+        setCities([]);
+        return;
+      }
+      try {
+        const res = await getCityByState(1, stateFilter, cityFilter);
+        if (res?.data) {
           setCities(res.data);
-        } catch (e) {
-          setCities([]);
         }
-      };
-      const timer = setTimeout(fetchCities, 500);
-      return () => clearTimeout(timer);
-    } else {
-      setCities([]);
-    }
+      } catch (e) {
+        setCities([]);
+      }
+    };
+
+    const timer = setTimeout(fetchCities, 500);
+    return () => clearTimeout(timer);
   }, [stateFilter, cityFilter]);
 
   const onSubmit = async (data: FormOutput) => {
@@ -74,9 +79,13 @@ const SuppliersCreatePage = () => {
       setIsSubmitting(true);
       await createSupplier(data);
       toast.success('Fornecedor criado com sucesso!');
-      navigate({ to: '/supplier', search: { page: 1, q: undefined as any } });
-    } catch (error: any) {
-      toast.error(error.message || 'Erro ao criar fornecedor');
+      navigate({ to: '/supplier', search: { page: 1 } as never });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Erro ao criar fornecedor');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -310,7 +319,7 @@ const SuppliersCreatePage = () => {
                     onChange={(e) => {
                       setCityFilter(e.target.value);
                       setShowCities(true);
-                      setValue('cityId', undefined as any);
+                      setValue('cityId', undefined as unknown as number);
                     }}
                     onFocus={() => setShowCities(true)}
                     onBlur={() => setTimeout(() => setShowCities(false), 200)}
