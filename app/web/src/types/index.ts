@@ -30,6 +30,8 @@ export type {
   PaginatedProducts,
   PaginatedProductsMeta,
   PaginatedProductsData,
+  CreateProductDataResponse,
+  CreateProductData,
 } from './product-type';
 
 export type {
