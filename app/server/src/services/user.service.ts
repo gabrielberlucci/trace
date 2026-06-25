@@ -11,7 +11,7 @@ import { loggerStorage } from '@/logger';
 export const createUser = async (
   userData: Prisma.UserCreateInput,
   roleId: number,
-  cityId: number,
+  cityId: number | null,
   currentUserId: number,
 ) => {
   userData.password = await hashPassword(userData.password);
@@ -31,20 +31,22 @@ export const createUser = async (
     if (!role)
       throw new NotFound(`Não foi encontrado o cargo com o ID ${roleId}`);
 
-    const city = await tx.city.findUnique({
-      where: {
-        id: cityId,
-      },
+    if (cityId) {
+      const city = await tx.city.findUnique({
+        where: {
+          id: cityId,
+        },
 
-      select: {
-        id: true,
-      },
-    });
+        select: {
+          id: true,
+        },
+      });
 
-    if (!city)
-      throw new NotFound(
-        `Não foi possível encontrar a cidade com o ID ${cityId}`,
-      );
+      if (!city)
+        throw new NotFound(
+          `Não foi possível encontrar a cidade com o ID ${cityId}`,
+        );
+    }
 
     const currentUser = await tx.user.findUnique({
       where: {
