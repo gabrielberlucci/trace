@@ -18,3 +18,26 @@ export interface PaginatedPaymentMethodsData {
   type: string;
   active: boolean;
 }
+
+//**POST Payment */
+
+export interface CreatePaymentMethodDataResponse {
+  status: string;
+  message: string;
+  data: {
+    id: number;
+    description: string;
+    active: boolean;
+    fee: number;
+    type: string;
+    createdAt: Date;
+  };
+}
+
+export interface CreatePaymentMethodData {
+  description: string;
+  active: boolean;
+  fee?: number;
+  type: string;
+  createdAt: Date;
+}

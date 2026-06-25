@@ -38,6 +38,8 @@ export type {
   PaginatedPaymentMethods,
   PaginatedPaymentMethodsMeta,
   PaginatedPaymentMethodsData,
+  CreatePaymentMethodDataResponse,
+  CreatePaymentMethodData,
 } from './payment-methods';
 
 export type { GenericErrorMessageResponse } from './generics';
