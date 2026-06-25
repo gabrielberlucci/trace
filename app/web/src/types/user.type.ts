@@ -66,3 +66,39 @@ export interface UserItem {
 export interface PaginatedUsersData {
   userData: UserItem[];
 }
+
+// POST USER
+
+export interface CreateUserDataResponse {
+  status: string;
+  message: string;
+  data: {
+    id: number;
+    name: string;
+    birthdate: Date;
+    phone: string;
+    address: string;
+    zipcode: string;
+    addressNumber: number;
+    complement: string;
+    email: string;
+    username: string;
+    active: boolean;
+    cityId: number;
+    roleId: number;
+  };
+}
+
+export interface CreateUserData {
+  name: string;
+  birthdate?: Date;
+  phone?: string;
+  address?: string;
+  zipcode?: string;
+  addressNumber?: number;
+  complement?: string;
+  email?: string;
+  username: string;
+  cityId?: number;
+  roleId: number;
+}

@@ -10,3 +10,4 @@ export { getStates } from './localization/get-states';
 export { getCityByState } from './localization/get-city-by-state';
 export { createProduct } from './products/post-product';
 export { createPaymentMethod } from './payment-methods/post-payment';
+export { createUser } from './users/post-user';

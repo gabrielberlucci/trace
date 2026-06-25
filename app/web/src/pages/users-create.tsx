@@ -1,3 +1,10 @@
+import { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { userSchema } from '@app/shared';
+import { createUser, getStates, getCityByState } from '@/api';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,56 +16,135 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import {
   User,
   MapPin,
   Contact,
   Settings,
-  Shield,
   AtSign,
-  Calendar,
+  Calendar as CalendarIcon,
   Mail,
   Phone,
   Lock,
   Save,
+  Loader2,
 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import type { PaginatedCityData } from '@/types';
+
+type FormInput = z.input<typeof userSchema>;
+type FormOutput = z.infer<typeof userSchema>;
 
 const UsersCreatePage = () => {
-  return (
-    <>
-      {/* Breadcrumb & Header */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-          <span className="hover:text-violet-600 cursor-pointer font-medium">
-            Usuários
-          </span>
-          <span>›</span>
-          <span className="text-foreground font-semibold">Novo Usuário</span>
-        </div>
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [states, setStates] = useState<Record<string, string>>({});
+  const [selectedState, setSelectedState] = useState('');
+  const [cities, setCities] = useState<PaginatedCityData[]>([]);
+  const [citySearch, setCitySearch] = useState('');
+  const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<FormInput, undefined, FormOutput>({
+    resolver: zodResolver(userSchema),
+  });
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const response = (await getStates()) as { data: Record<string, string> };
+        if (response?.data) {
+          setStates(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch states', error);
+      }
+    };
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!selectedState || citySearch.length < 2) {
+        setCities([]);
+        return;
+      }
+      try {
+        const res = await getCityByState(1, selectedState, citySearch);
+        if (res?.data) {
+          setCities(res.data);
+        }
+      } catch (e) {
+        setCities([]);
+      }
+    };
+
+    const timer = setTimeout(fetchCities, 600);
+    return () => clearTimeout(timer);
+  }, [selectedState, citySearch]);
+
+  const onSubmit = async (data: FormOutput) => {
+    try {
+      setIsSubmitting(true);
+      await createUser(data);
+      toast.success('Usuário criado com sucesso!');
+      navigate({ to: '/user', search: { page: 1 } as never });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Erro ao criar usuário');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Header */}
+      <div className="mb-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Cadastrar Usuário
+              Novo Usuário
             </h1>
             <p className="text-muted-foreground">
-              Preencha os dados abaixo para adicionar um novo acesso ao sistema
-              Trace.
+              Cadastre os detalhes de acesso e informações do colaborador.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
               className="font-semibold shadow-sm px-6 h-11 rounded-lg"
+              asChild
             >
               <Link to="/user" search={{ q: undefined, page: 1 }}>
                 Cancelar
               </Link>
             </Button>
-            <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2">
-              <Save className="h-4 w-4" /> Salvar Usuário
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-md px-6 h-11 rounded-lg gap-2"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
+              Salvar Usuário
             </Button>
           </div>
         </div>
@@ -88,9 +174,15 @@ const UsersCreatePage = () => {
                 </Label>
                 <Input
                   id="name"
+                  {...register('name')}
                   placeholder="Ex: João da Silva"
                   className="h-11 rounded-lg"
                 />
+                {errors.name && (
+                  <span className="text-xs text-red-500">
+                    {errors.name.message}
+                  </span>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -107,11 +199,18 @@ const UsersCreatePage = () => {
                     </div>
                     <Input
                       id="username"
+                      {...register('username')}
                       placeholder="joao.silva"
                       className="h-11 rounded-lg pl-12 pr-4"
                     />
                   </div>
+                  {errors.username && (
+                    <span className="text-xs text-red-500">
+                      {errors.username.message}
+                    </span>
+                  )}
                 </div>
+
                 <div className="space-y-3">
                   <Label
                     htmlFor="birthdate"
@@ -119,52 +218,91 @@ const UsersCreatePage = () => {
                   >
                     Data de Nascimento
                   </Label>
-                  <div className="relative">
-                    <Input
-                      id="birthdate"
-                      placeholder="mm/dd/yyyy"
-                      className="h-11 rounded-lg pl-12 pr-4"
-                    />
-                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                  </div>
+                  <Controller
+                    control={control}
+                    name="birthdate"
+                    render={({ field }) => (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            id="birthdate"
+                            variant="outline"
+                            className={cn(
+                              'w-full h-11 rounded-lg justify-start text-left font-normal',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value as Date, 'PPP', { locale: ptBR })
+                            ) : (
+                              <span>Selecione uma data</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value as Date | undefined}
+                            onSelect={field.onChange}
+                            locale={ptBR}
+                            captionLayout="dropdown"
+                            fromYear={1900}
+                            toYear={new Date().getFullYear()}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  />
+                  {errors.birthdate && (
+                    <span className="text-xs text-red-500">
+                      {errors.birthdate.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Contato e Acesso */}
+          {/* Contato e Senha */}
           <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-card">
             <CardHeader className="pb-6 pt-8 px-8 border-b border-zinc-100 dark:border-zinc-800/50">
               <CardTitle className="text-xl font-bold flex items-center gap-2.5">
                 <div className="p-2 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg">
                   <Contact className="h-5 w-5" />
                 </div>
-                Contato e Acesso
+                Contato e Senha
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8 space-y-8">
-              <div className="space-y-3">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  Email <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <Input
-                    id="email"
-                    placeholder="joao@exemplo.com"
-                    className="h-11 rounded-lg pl-12 pr-4"
-                  />
-                </div>
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <Input
+                      id="email"
+                      {...register('email', {
+                        setValueAs: (v) => (v === '' ? undefined : v),
+                      })}
+                      placeholder="joao@exemplo.com"
+                      className="h-11 rounded-lg pl-12 pr-4"
+                    />
+                  </div>
+                  {errors.email && (
+                    <span className="text-xs text-red-500">
+                      {errors.email.message}
+                    </span>
+                  )}
+                </div>
+
                 <div className="space-y-3">
                   <Label
                     htmlFor="phone"
@@ -178,17 +316,26 @@ const UsersCreatePage = () => {
                     </div>
                     <Input
                       id="phone"
+                      {...register('phone', {
+                        setValueAs: (v) => (v === '' ? undefined : v),
+                      })}
                       placeholder="(00) 00000-0000"
                       className="h-11 rounded-lg pl-12 pr-4"
                     />
                   </div>
+                  {errors.phone && (
+                    <span className="text-xs text-red-500">
+                      {errors.phone.message}
+                    </span>
+                  )}
                 </div>
+
                 <div className="space-y-3">
                   <Label
                     htmlFor="password"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Senha Provisória <span className="text-red-500">*</span>
+                    Senha <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
@@ -197,10 +344,42 @@ const UsersCreatePage = () => {
                     <Input
                       id="password"
                       type="password"
+                      {...register('password')}
                       placeholder="••••••••"
                       className="h-11 rounded-lg pl-12 pr-4"
                     />
                   </div>
+                  {errors.password && (
+                    <span className="text-xs text-red-500">
+                      {errors.password.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <Label
+                    htmlFor="confirmedPassword"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Confirmar Senha <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center pointer-events-none">
+                      <Lock className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <Input
+                      id="confirmedPassword"
+                      type="password"
+                      {...register('confirmedPassword')}
+                      placeholder="••••••••"
+                      className="h-11 rounded-lg pl-12 pr-4"
+                    />
+                  </div>
+                  {errors.confirmedPassword && (
+                    <span className="text-xs text-red-500">
+                      {errors.confirmedPassword.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -217,8 +396,8 @@ const UsersCreatePage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="space-y-3 md:col-span-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-3">
                   <Label
                     htmlFor="zipcode"
                     className="text-sm font-semibold text-foreground"
@@ -227,27 +406,120 @@ const UsersCreatePage = () => {
                   </Label>
                   <Input
                     id="zipcode"
+                    {...register('zipcode', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
                     placeholder="00000-000"
                     className="h-11 rounded-lg"
                   />
+                  {errors.zipcode && (
+                    <span className="text-xs text-red-500">
+                      {errors.zipcode.message}
+                    </span>
+                  )}
                 </div>
+                
+                <div className="space-y-3">
+                  <Label
+                    htmlFor="state"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Estado
+                  </Label>
+                  <Select
+                    value={selectedState}
+                    onValueChange={(val) => {
+                      setSelectedState(val);
+                      setValue('cityId', undefined as unknown as number);
+                    }}
+                  >
+                    <SelectTrigger id="state" className="h-11 rounded-lg">
+                      <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(states).map(([uf, name]) => (
+                        <SelectItem key={uf} value={uf}>
+                          {name} ({uf})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-3 relative">
+                  <Label
+                    htmlFor="citySearch"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Cidade
+                  </Label>
+                  <Input
+                    id="citySearch"
+                    placeholder="Digite a cidade"
+                    className="h-11 rounded-lg"
+                    value={citySearch}
+                    disabled={!selectedState}
+                    onChange={(e) => {
+                      setCitySearch(e.target.value);
+                      setShowCitiesDropdown(true);
+                      setValue('cityId', undefined as unknown as number);
+                    }}
+                    onFocus={() => {
+                      if (selectedState) setShowCitiesDropdown(true);
+                    }}
+                    onBlur={() => setShowCitiesDropdown(false)}
+                  />
+
+                  {showCitiesDropdown && cities.length > 0 && (
+                    <div className="absolute z-10 w-full bg-popover text-popover-foreground shadow-md rounded-md border mt-1 max-h-60 overflow-auto">
+                      {cities.map((city) => (
+                        <div
+                          key={city.id}
+                          className="px-4 py-2 cursor-pointer hover:bg-muted text-sm"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setCitySearch(city.name);
+                            setValue('cityId', city.id);
+                            setShowCitiesDropdown(false);
+                          }}
+                        >
+                          {city.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {errors.cityId && (
+                    <span className="text-red-500 text-xs">
+                      {errors.cityId.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                 <div className="space-y-3 md:col-span-8">
                   <Label
                     htmlFor="address"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Logradouro
+                    Logradouro (Rua/Av.)
                   </Label>
                   <Input
                     id="address"
-                    placeholder="Rua, Avenida, etc."
+                    {...register('address', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
+                    placeholder="Ex: Av. Paulista"
                     className="h-11 rounded-lg"
                   />
+                  {errors.address && (
+                    <span className="text-xs text-red-500">
+                      {errors.address.message}
+                    </span>
+                  )}
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="space-y-3 md:col-span-3">
+                <div className="space-y-3 md:col-span-4">
                   <Label
                     htmlFor="number"
                     className="text-sm font-semibold text-foreground"
@@ -256,36 +528,42 @@ const UsersCreatePage = () => {
                   </Label>
                   <Input
                     id="number"
-                    placeholder="123"
+                    type="number"
+                    {...register('addressNumber', {
+                      setValueAs: (v) =>
+                        v === '' || isNaN(Number(v)) ? undefined : Number(v),
+                    })}
+                    placeholder="000"
                     className="h-11 rounded-lg"
                   />
+                  {errors.addressNumber && (
+                    <span className="text-xs text-red-500">
+                      {errors.addressNumber.message}
+                    </span>
+                  )}
                 </div>
-                <div className="space-y-3 md:col-span-4">
-                  <Label
-                    htmlFor="complement"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Complemento
-                  </Label>
-                  <Input
-                    id="complement"
-                    placeholder="Apto, Sala"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
-                <div className="space-y-3 md:col-span-5">
-                  <Label
-                    htmlFor="city"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Cidade
-                  </Label>
-                  <Input
-                    id="city"
-                    placeholder="São Paulo"
-                    className="h-11 rounded-lg"
-                  />
-                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label
+                  htmlFor="complement"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Complemento
+                </Label>
+                <Input
+                  id="complement"
+                  {...register('complement', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                  placeholder="Sala, Andar..."
+                  className="h-11 rounded-lg"
+                />
+                {errors.complement && (
+                  <span className="text-xs text-red-500">
+                    {errors.complement.message}
+                  </span>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -311,58 +589,42 @@ const UsersCreatePage = () => {
                 >
                   Nível de Acesso (Role) <span className="text-red-500">*</span>
                 </Label>
-                <Select>
-                  <SelectTrigger id="role" className="h-11 rounded-lg">
-                    <SelectValue placeholder="Selecione um nível..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Administrador (Total)</SelectItem>
-                    <SelectItem value="manager">Gerente (Parcial)</SelectItem>
-                    <SelectItem value="operator">Operador / Caixa</SelectItem>
-                  </SelectContent>
-                </Select>
+                {/* TODO: Alterar para API de Roles quando for implementada */}
+                <Controller
+                  control={control}
+                  name="roleId"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={(val) => field.onChange(Number(val))}
+                      defaultValue={field.value?.toString()}
+                    >
+                      <SelectTrigger id="role" className="h-11 rounded-lg">
+                        <SelectValue placeholder="Selecione um nível..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Administrador</SelectItem>
+                        <SelectItem value="2">Gerente</SelectItem>
+                        <SelectItem value="3">Financeiro</SelectItem>
+                        <SelectItem value="4">Vendedor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.roleId && (
+                  <span className="text-xs text-red-500">
+                    {errors.roleId.message}
+                  </span>
+                )}
                 <p className="text-[13px] text-muted-foreground leading-relaxed mt-2.5">
                   Define as permissões que o usuário terá dentro do sistema
                   Trace.
                 </p>
               </div>
-
-              <div className="flex items-center justify-between pt-6 border-t border-zinc-100 dark:border-zinc-800/50">
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold text-foreground">
-                    Status da Conta
-                  </Label>
-                  <p className="text-[13px] text-muted-foreground">
-                    Ativar ou desativar o acesso
-                  </p>
-                </div>
-                <Switch
-                  defaultChecked
-                  className="data-[state=checked]:bg-violet-600"
-                />
-              </div>
             </CardContent>
           </Card>
-
-          {/* Segurança Trace Callout */}
-          <div className="rounded-2xl p-8 bg-linear-to-br from-indigo-50 to-violet-100 dark:from-indigo-950/40 dark:to-violet-900/40 border border-indigo-100 dark:border-indigo-900/50 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-bl-full pointer-events-none" />
-
-            <div className="mb-6 text-violet-600 dark:text-violet-400 bg-white dark:bg-zinc-900 w-12 h-12 rounded-full flex items-center justify-center shadow-sm relative z-10">
-              <Shield className="h-6 w-6" />
-            </div>
-            <h3 className="font-bold text-foreground mb-3 text-lg relative z-10">
-              Segurança Trace
-            </h3>
-            <p className="text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed font-medium relative z-10">
-              Senhas provisórias devem conter no mínimo 8 caracteres. O usuário
-              será solicitado a alterar a senha no primeiro acesso para garantir
-              a segurança da conta.
-            </p>
-          </div>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 

@@ -8,6 +8,8 @@ export type {
   PaginatedUsersMeta,
   PaginatedUsersData,
   UserItem,
+  CreateUserDataResponse,
+  CreateUserData,
 } from './user.type';
 
 export type {
