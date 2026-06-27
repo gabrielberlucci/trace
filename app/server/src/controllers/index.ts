@@ -45,3 +45,5 @@ export {
   getStatesController,
   getCitiesByStateController,
 } from './localization.controller';
+
+export { getRolesController } from './role.controller';

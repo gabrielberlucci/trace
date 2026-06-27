@@ -36,4 +36,6 @@ export {
   getPaymentMethod,
 } from './payment.methods.service';
 
+export { getRoles } from './role.service';
+
 export { getUniqueStates, getCitiesByState } from './localization.service';
