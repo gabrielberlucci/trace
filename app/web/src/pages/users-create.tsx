@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { userSchema } from '@app/shared';
-import { createUser, getStates, getCityByState } from '@/api';
+import { createUser, getStates, getCityByState, getRoles } from '@/api';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,8 +34,12 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { PaginatedCityData } from '@/types';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import type { PaginatedCityData, RoleData } from '@/types';
 
 type FormInput = z.input<typeof userSchema>;
 type FormOutput = z.infer<typeof userSchema>;
@@ -49,6 +53,7 @@ const UsersCreatePage = () => {
   const [cities, setCities] = useState<PaginatedCityData[]>([]);
   const [citySearch, setCitySearch] = useState('');
   const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+  const [roles, setRoles] = useState<RoleData[]>([]);
 
   const {
     register,
@@ -63,7 +68,9 @@ const UsersCreatePage = () => {
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const response = (await getStates()) as { data: Record<string, string> };
+        const response = (await getStates()) as {
+          data: Record<string, string>;
+        };
         if (response?.data) {
           setStates(response.data);
         }
@@ -72,6 +79,18 @@ const UsersCreatePage = () => {
       }
     };
     fetchStates();
+
+    const fetchRoles = async () => {
+      try {
+        const response = await getRoles();
+        if (response?.data) {
+          setRoles(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch roles', error);
+      }
+    };
+    fetchRoles();
   }, []);
 
   useEffect(() => {
@@ -234,7 +253,9 @@ const UsersCreatePage = () => {
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {field.value ? (
-                              format(field.value as Date, 'PPP', { locale: ptBR })
+                              format(field.value as Date, 'PPP', {
+                                locale: ptBR,
+                              })
                             ) : (
                               <span>Selecione uma data</span>
                             )}
@@ -418,7 +439,7 @@ const UsersCreatePage = () => {
                     </span>
                   )}
                 </div>
-                
+
                 <div className="space-y-3">
                   <Label
                     htmlFor="state"
@@ -589,7 +610,6 @@ const UsersCreatePage = () => {
                 >
                   Nível de Acesso (Role) <span className="text-red-500">*</span>
                 </Label>
-                {/* TODO: Alterar para API de Roles quando for implementada */}
                 <Controller
                   control={control}
                   name="roleId"
@@ -602,10 +622,12 @@ const UsersCreatePage = () => {
                         <SelectValue placeholder="Selecione um nível..." />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1">Administrador</SelectItem>
-                        <SelectItem value="2">Gerente</SelectItem>
-                        <SelectItem value="3">Financeiro</SelectItem>
-                        <SelectItem value="4">Vendedor</SelectItem>
+                        {roles.map((role) => (
+                          <SelectItem key={role.id} value={role.id.toString()}>
+                            {role.name.charAt(0).toUpperCase() +
+                              role.name.slice(1)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}

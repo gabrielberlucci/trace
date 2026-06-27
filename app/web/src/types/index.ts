@@ -51,3 +51,5 @@ export type {
   PaginatedCityMeta,
   PaginatedCityData,
 } from './localization-type';
+
+export type { RoleResponse, RoleData } from './role-type';
