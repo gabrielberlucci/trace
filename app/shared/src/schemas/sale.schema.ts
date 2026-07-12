@@ -3,7 +3,7 @@ import { productSchema } from './product.schema';
 import { commonSchema } from './common.schema';
 
 export const saleCartSchema = z.object({
-  document: commonSchema.shape.document,
+  document: z.string({ error: 'Insira o documento do cliente' }),
   cashier: z.coerce.number({ error: 'Insira um vendedor' }),
   payment: z.number({ error: 'Insira um id de pagamento' }),
   items: z.array(
