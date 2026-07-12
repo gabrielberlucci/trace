@@ -32,6 +32,7 @@ import {
   UserCog,
   Database,
   LayoutDashboard,
+  ReceiptText,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { UserSideBar } from './ui/user-info';
@@ -70,6 +71,11 @@ const data: { navMain: NavGroup[] } = {
           title: 'Vendas / PDV',
           url: '/sale-create',
           icon: ShoppingCart,
+        },
+        {
+          title: 'Histórico de Vendas',
+          url: '/sale',
+          icon: ReceiptText,
         },
       ],
     },

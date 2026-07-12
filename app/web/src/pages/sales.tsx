@@ -2,15 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
-import {
-  Plus,
-  MoreVertical,
-  CreditCard,
-  Banknote,
-  QrCode,
-  Filter,
-  Edit,
-} from 'lucide-react';
+import { Plus, CreditCard, Banknote, QrCode, Filter, Edit } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 export type Sale = {
@@ -163,31 +155,31 @@ const SalesPage = () => {
 
   return (
     <>
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                  Vendas
-                </h1>
-                <p className="text-muted-foreground">
-                  Gerencie e acompanhe o histórico de vendas realizadas.
-                </p>
-              </div>
-              <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
-                <Link to="/sale-create" className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" /> Nova Venda
-                </Link>
-              </Button>
-            </div>
+      <div className="flex items-start justify-between">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Vendas
+          </h1>
+          <p className="text-muted-foreground">
+            Gerencie e acompanhe o histórico de vendas realizadas.
+          </p>
+        </div>
+        <Button className="bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2 shadow-md px-6">
+          <Link to="/sale-create" className="flex items-center gap-2">
+            <Plus className="h-4 w-4" /> Nova Venda
+          </Link>
+        </Button>
+      </div>
 
-            <div className="mt-6">
-              <DataTable
-                columns={salesColumns}
-                data={salesData}
-                searchPlaceholder="Buscar por ID, cliente ou SKU..."
-                toolbarActions={salesToolbarActions}
-              />
-            </div>
-          </>
+      <div className="mt-6">
+        <DataTable
+          columns={salesColumns}
+          data={salesData}
+          searchPlaceholder="Buscar por ID, cliente ou SKU..."
+          toolbarActions={salesToolbarActions}
+        />
+      </div>
+    </>
   );
 };
 

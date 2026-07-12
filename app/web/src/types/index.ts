@@ -53,3 +53,5 @@ export type {
 } from './localization-type';
 
 export type { RoleResponse, RoleData } from './role-type';
+
+export type {SaleResponse, SaleItem, SaleData,SaleDataItem} from './sale-type'
