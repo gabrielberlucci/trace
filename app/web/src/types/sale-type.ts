@@ -43,7 +43,7 @@ export interface PaginatedSales {
   status: string;
   message: string;
   meta: {
-    total: number;
+    totalSales: number;
     totalPages: number;
     hasPrevious: boolean;
     hasNext: boolean;

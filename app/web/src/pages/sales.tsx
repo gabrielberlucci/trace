@@ -1,114 +1,58 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import { type ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
-import type { ColumnDef } from '@tanstack/react-table';
-import { Plus, CreditCard, Banknote, QrCode, Filter, Edit } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
+import { Plus, Loader2, Edit, CreditCard, Banknote, QrCode } from 'lucide-react';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { getSales } from '@/api';
+import type { PaginatedSalesData } from '@/types';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
-export type Sale = {
-  id: string;
-  date: string;
-  client: string;
-  items: string;
-  paymentMethod: string;
-  paymentIcon: React.ElementType;
-  total: string;
-};
-
-const salesData: Sale[] = [
-  {
-    id: '#1024',
-    date: '22 Out,\n14:30',
-    client: 'João Silva',
-    items: '4 itens (MacBook Pro...)',
-    paymentMethod: 'Cartão',
-    paymentIcon: CreditCard,
-    total: '$4,950.00',
-  },
-  {
-    id: '#1023',
-    date: '22 Out,\n11:15',
-    client: 'Maria Oliveira',
-    items: '1 item (AirPods Max)',
-    paymentMethod: 'Dinheiro',
-    paymentIcon: Banknote,
-    total: '$549.00',
-  },
-  {
-    id: '#1022',
-    date: '21 Out,\n17:45',
-    client: 'Consumidor Final',
-    items: '2 itens (Cabos)',
-    paymentMethod: 'Pix',
-    paymentIcon: QrCode,
-    total: '$258.00',
-  },
-];
-
-const salesColumns: ColumnDef<Sale>[] = [
+const columns: ColumnDef<PaginatedSalesData>[] = [
   {
     accessorKey: 'id',
     header: 'ID Venda',
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-muted-foreground">
-        {row.getValue('id')}
+      <span className="text-sm font-semibold text-foreground">
+        #{row.getValue('id')}
       </span>
     ),
   },
   {
-    accessorKey: 'date',
-    header: 'Data',
-    cell: ({ row }) => (
-      <span className="text-sm whitespace-pre-line text-foreground/80">
-        {row.getValue('date')}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'client',
+    id: 'customer',
+    accessorFn: (row) => row.customer.name,
     header: 'Cliente',
     cell: ({ row }) => (
       <span className="text-sm font-medium text-foreground">
-        {row.getValue('client')}
+        {row.original.customer.name}
       </span>
     ),
   },
   {
-    accessorKey: 'items',
-    header: 'Itens',
-    cell: ({ row }) => (
-      <span className="text-sm text-muted-foreground">
-        {row.getValue('items')}
-      </span>
-    ),
-  },
-  {
-    accessorKey: 'paymentMethod',
+    id: 'paymentMethod',
+    accessorFn: (row) => row.paymentMethod.description,
     header: 'Pagamento',
     cell: ({ row }) => {
-      const Icon = row.original.paymentIcon;
+      // Basic logic to pick an icon based on name or fallback
+      const desc = row.original.paymentMethod.description.toLowerCase();
+      let Icon = Banknote;
+      if (desc.includes('cartão') || desc.includes('credito') || desc.includes('debito')) Icon = CreditCard;
+      if (desc.includes('pix')) Icon = QrCode;
+
       return (
         <div className="flex items-center gap-2 text-sm text-foreground/80">
           <Icon className="h-4 w-4 text-muted-foreground" />
-          {row.getValue('paymentMethod')}
+          {row.original.paymentMethod.description}
         </div>
       );
     },
   },
   {
-    accessorKey: 'total',
-    header: 'Total',
-    cell: ({ row }) => (
-      <span className="font-bold text-sm text-foreground">
-        {row.getValue('total')}
-      </span>
-    ),
-  },
-  {
     id: 'actions',
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <Link to="/sale/$id" params={{ id: row.getValue('id') as string }}>
+        <Link to="/sale/$id" params={{ id: String(row.getValue('id')) }}>
           <Button
             variant="ghost"
             size="icon"
@@ -123,42 +67,102 @@ const salesColumns: ColumnDef<Sale>[] = [
 ];
 
 const SalesPage = () => {
-  const salesToolbarActions = (
-    <>
-      <Button
-        variant="default"
-        className="bg-violet-600 hover:bg-violet-700 text-white rounded-full h-9 px-5 text-[13px] font-medium shadow-sm"
-      >
-        Hoje
-      </Button>
-      <Button
-        variant="outline"
-        className="rounded-full h-9 px-5 text-[13px] font-medium text-muted-foreground border-zinc-200 dark:border-zinc-800 hover:bg-muted"
-      >
-        Últimos 7 dias
-      </Button>
-      <Button
-        variant="outline"
-        className="rounded-full h-9 px-5 text-[13px] font-medium text-muted-foreground border-zinc-200 dark:border-zinc-800 hover:bg-muted"
-      >
-        Este Mês
-      </Button>
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-full h-9 w-9 text-muted-foreground border-zinc-200 dark:border-zinc-800 ml-1 hover:bg-muted"
-      >
-        <Filter className="h-4 w-4" />
-      </Button>
-    </>
-  );
+  const { page, q } = useSearch({ from: '/_app/sale' });
+  const navigate = useNavigate();
+  const toastShownRef = useRef(false);
+  const [localSearch, setLocalSearch] = useState(q ?? '');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== (q ?? '')) {
+        navigate({
+          to: '/sale',
+          search: {
+            page: 1,
+            q: localSearch || undefined,
+          },
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [localSearch, navigate, q]);
+
+  const { isFetching, error, data } = useQuery({
+    queryKey: ['sales', page, q],
+    queryFn: () => getSales(page || 1, q || ''),
+    placeholderData: keepPreviousData,
+  });
+
+  useEffect(() => {
+    if (data?.message && !toastShownRef.current) {
+      toast.success(data.message);
+      toastShownRef.current = true;
+    }
+  }, [data]);
+
+  if (error) {
+    console.error('Error fetching sales:', error);
+  }
+
+  const handlePreviousPage = () => {
+    if (data?.meta.hasPrevious) {
+      navigate({ to: '/sale', search: { page: (page || 1) - 1, q } });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data?.meta.hasNext) {
+      navigate({ to: '/sale', search: { page: (page || 1) + 1, q } });
+    }
+  };
+
+  const renderPageNumbers = () => {
+    if (!data?.meta) return null;
+    const { totalPages } = data.meta;
+    const pages = [];
+    const currentPage = page || 1;
+
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage <= 3) {
+      endPage = Math.min(5, totalPages);
+    }
+    if (currentPage >= totalPages - 2) {
+      startPage = Math.max(1, totalPages - 4);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant="outline"
+          size="sm"
+          disabled={i === currentPage}
+          className={`w-9 ${
+            i === currentPage
+              ? 'bg-violet-600 text-white border-transparent disabled:opacity-100 disabled:cursor-default'
+              : ''
+          }`}
+          onClick={() => navigate({ to: '/sale', search: { page: i, q } })}
+        >
+          {i}
+        </Button>,
+      );
+    }
+
+    return <div className="flex items-center gap-1 mx-2">{pages}</div>;
+  };
 
   return (
     <>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             Vendas
+            {isFetching && (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            )}
           </h1>
           <p className="text-muted-foreground">
             Gerencie e acompanhe o histórico de vendas realizadas.
@@ -173,11 +177,44 @@ const SalesPage = () => {
 
       <div className="mt-6">
         <DataTable
-          columns={salesColumns}
-          data={salesData}
-          searchPlaceholder="Buscar por ID, cliente ou SKU..."
-          toolbarActions={salesToolbarActions}
+          columns={columns}
+          data={data?.data || []}
+          searchPlaceholder="Buscar por documento do cliente..."
+          exportFileName="vendas.csv"
+          showPagination={false}
+          searchValue={localSearch}
+          onSearchChange={setLocalSearch}
         />
+
+        {data && data.meta && (
+          <div className="flex items-center justify-between mt-4 px-2">
+            <div className="text-sm text-muted-foreground">
+              Mostrando página {page || 1} de {data.meta.totalPages} (
+              {data.meta.totalSales} vendas no total)
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={!data.meta.hasPrevious}
+              >
+                Anterior
+              </Button>
+
+              {renderPageNumbers()}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!data.meta.hasNext}
+              >
+                Próxima
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

@@ -213,7 +213,6 @@ const SalesCreatePage = () => {
         })),
       };
 
-      // Workaround para o erro de tipagem esperado na assinatura
       // @ts-expect-error backend expect these fields correctly matching our payload shape
       await createSale(payload);
 
@@ -249,7 +248,8 @@ const SalesCreatePage = () => {
               Nova Venda
             </h2>
             <p className="text-muted-foreground mt-1 text-sm font-medium">
-              Terminal PDV #04 • Caixa: {cashier ? cashier.name : 'Carregando...'}
+              Terminal PDV #04 • Caixa:{' '}
+              {cashier ? cashier.name : 'Carregando...'}
             </p>
           </div>
 
@@ -596,8 +596,12 @@ const SalesCreatePage = () => {
                     {selectedPayment ? (
                       <>
                         {(() => {
-                          const pm = paymentMethods.find((p) => p.id === selectedPayment);
-                          const Icon = pm ? (PaymentIcons[pm.type] || Banknote) : Banknote;
+                          const pm = paymentMethods.find(
+                            (p) => p.id === selectedPayment,
+                          );
+                          const Icon = pm
+                            ? PaymentIcons[pm.type] || Banknote
+                            : Banknote;
                           return (
                             <>
                               <Icon className="w-5 h-5" />
@@ -637,8 +641,9 @@ const SalesCreatePage = () => {
                               <div
                                 key={pm.id}
                                 className={cn(
-                                  "flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-muted/50 rounded-md cursor-pointer transition-colors",
-                                  selectedPayment === pm.id && "bg-violet-500/10 text-violet-600"
+                                  'flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-muted/50 rounded-md cursor-pointer transition-colors',
+                                  selectedPayment === pm.id &&
+                                    'bg-violet-500/10 text-violet-600',
                                 )}
                                 onClick={() => {
                                   setSelectedPayment(pm.id);

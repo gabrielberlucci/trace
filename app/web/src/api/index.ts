@@ -13,4 +13,5 @@ export { createPaymentMethod } from './payment-methods/post-payment';
 export { createUser } from './users/post-user';
 export { getRoles } from './roles/get-roles';
 export { createSale } from './sales/post-sales';
+export { getSales } from './sales/get-sales';
 export { getMe } from './users/me';
