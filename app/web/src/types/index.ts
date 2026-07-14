@@ -54,4 +54,11 @@ export type {
 
 export type { RoleResponse, RoleData } from './role-type';
 
-export type {SaleResponse, SaleItem, SaleData,SaleDataItem} from './sale-type'
+export type {
+  SaleResponse,
+  SaleItem,
+  SaleData,
+  SaleDataItem,
+  PaginatedSales,
+  PaginatedSalesData,
+} from './sale-type';
