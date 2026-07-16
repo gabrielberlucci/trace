@@ -95,14 +95,7 @@ customerRoute.post(
   validatePermission(UserPermissions.CREATE_CUSTOMER),
   createCustomerController,
 );
-customerRoute.patch(
-  '/:id',
-  authMiddleware,
-  validatePermission(UserPermissions.MODIFY_CUSTOMER),
-  validateData(modifyCustomerSchema),
-  validateParam(reqParamSchema),
-  modifyCustomerController,
-);
+
 customerRoute.get(
   '/',
   authMiddleware,
@@ -114,7 +107,16 @@ customerRoute.get(
   '/:id',
   authMiddleware,
   validatePermission(UserPermissions.VIEW_CUSTOMER),
+  validateParam(reqParamSchema),
   getCustomerController,
+);
+customerRoute.patch(
+  '/:id',
+  authMiddleware,
+  validatePermission(UserPermissions.MODIFY_CUSTOMER),
+  validateData(modifyCustomerSchema),
+  validateParam(reqParamSchema),
+  modifyCustomerController,
 );
 
 export { customerRoute };
