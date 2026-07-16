@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios';
 import { apiClient } from '../api.client';
 import type { PaginatedCustomers } from '@/types/customer-type';
 
@@ -25,4 +26,17 @@ export const getCustomers = async (
 
   const response = await apiClient.get<PaginatedCustomers>(url);
   return response.data;
+};
+
+export const getSingleCustomer = async (customerId: number) => {
+  try {
+    const result = await apiClient.get(`/customers/${customerId}`);
+
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.data.message) {
+      throw new Error(error.request.data.message);
+    }
+    throw error;
+  }
 };

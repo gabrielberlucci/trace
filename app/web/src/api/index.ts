@@ -1,10 +1,11 @@
-export { getCustomers } from './customers/get.customer';
+export { getCustomers, getSingleCustomer } from './customers/get.customer';
 export { getSuppliers } from './suppliers/get-supplier';
 export { getProducts } from './products/get-product';
 export { getPaymentMethods } from './payment-methods/get-payment-methods';
 export { getUsers } from './users/get-users';
 
 export { createCustomer } from './customers/post-client';
+export { modifyCustomer } from './customers/patch-client';
 
 export { getStates } from './localization/get-states';
 export { getCityByState } from './localization/get-city-by-state';
