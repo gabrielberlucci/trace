@@ -188,6 +188,10 @@ export const getUser = async (userId: number) => {
     where: {
       id: userId,
     },
+    include: {
+      role: true,
+      city: true,
+    },
   });
 
   if (!result)

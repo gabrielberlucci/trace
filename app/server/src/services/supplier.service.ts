@@ -77,6 +77,9 @@ export const getSupplier = async (supplierId: number) => {
     where: {
       id: supplierId,
     },
+    include: {
+      city: true,
+    },
   });
 
   if (!result)

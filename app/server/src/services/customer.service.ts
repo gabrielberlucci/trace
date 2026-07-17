@@ -80,6 +80,9 @@ export const getCustomer = async (customerId: number) => {
     where: {
       id: customerId,
     },
+    include: {
+      city: true,
+    },
   });
 
   if (!data)
