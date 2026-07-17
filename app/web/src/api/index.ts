@@ -1,5 +1,5 @@
 export { getCustomers, getSingleCustomer } from './customers/get.customer';
-export { getSuppliers } from './suppliers/get-supplier';
+export { getSuppliers, getSingleSupplier } from './suppliers/get-supplier';
 export { getProducts, getSingleProduct } from './products/get-product';
 export { getPaymentMethods } from './payment-methods/get-payment-methods';
 export { getUsers } from './users/get-users';
@@ -18,3 +18,4 @@ export { getSales } from './sales/get-sales';
 export { getMe } from './users/me';
 
 export { patchProduct } from './products/patch-product';
+export { modifySupplier } from './suppliers/patch-supplier';

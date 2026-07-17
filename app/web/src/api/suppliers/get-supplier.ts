@@ -1,5 +1,6 @@
 import type { PaginatedSuppliers } from '@/types/supplier-type';
 import { apiClient } from '../api.client';
+import { isAxiosError } from 'axios';
 
 export const getSuppliers = async (
   page: number = 1,
@@ -27,4 +28,17 @@ export const getSuppliers = async (
   const result = await apiClient.get<PaginatedSuppliers>(url);
 
   return result.data;
+};
+
+export const getSingleSupplier = async (supplierId: number) => {
+  try {
+    const result = await apiClient.get(`/suppliers/${supplierId}`);
+
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.data.message) {
+      throw new Error(error.request.data.message);
+    }
+    throw error;
+  }
 };
