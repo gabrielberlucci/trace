@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently -n server,web -c green,blue --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
 }
