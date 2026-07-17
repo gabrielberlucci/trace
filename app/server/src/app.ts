@@ -1,6 +1,6 @@
 import express, { type Express } from 'express';
 import cors from 'cors';
-import { routes } from '@/routes/index';
+import { routes } from '@/routes';
 import cookieParser from 'cookie-parser';
 import { validateError } from '@/middlewares';
 import { logger } from '@/logger/pino.logger';
