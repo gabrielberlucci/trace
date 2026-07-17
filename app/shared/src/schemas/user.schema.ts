@@ -55,7 +55,11 @@ export const userQueryFilterSchema = z.object({
 });
 
 export const modifyUserSchema = z
-  .object(userSchema.shape)
+  .object(
+    (userSchema as any).innerType
+      ? (userSchema as any).innerType().shape
+      : (userSchema as any).shape,
+  )
   .partial()
   .refine(
     (data) => {
@@ -67,7 +71,7 @@ export const modifyUserSchema = z
         );
       }
     },
-    { error: 'Por favor, confirme a senha', abort: true },
+    { error: 'Por favor, confirme a senha', path: ['confirmedPassword'] },
   )
   .refine(
     (data) => {
@@ -78,5 +82,6 @@ export const modifyUserSchema = z
     },
     {
       error: 'As senhas não são iguais',
+      path: ['confirmedPassword'],
     },
   );
