@@ -1,5 +1,6 @@
 import type { PaginatedProducts } from '@/types/product-type';
 import { apiClient } from '../api.client';
+import { isAxiosError } from 'axios';
 
 export const getProducts = async (
   page: number = 1,
@@ -19,4 +20,17 @@ export const getProducts = async (
   const result = await apiClient.get<PaginatedProducts>(url);
 
   return result.data;
+};
+
+export const getSingleProduct = async (productId: number) => {
+  try {
+    const result = await apiClient.get(`/products/${productId}`);
+
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.data.message) {
+      throw new Error(error.request.data.message);
+    }
+    throw error;
+  }
 };
