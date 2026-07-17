@@ -1,3 +1,4 @@
+import UserViewPage from '@/pages/user-view';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/user_/$id')({
@@ -5,10 +6,5 @@ export const Route = createFileRoute('/_app/user_/$id')({
 });
 
 function RouteComponent() {
-  const { id } = Route.useParams();
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Visualizando Usuário: {id}</h1>
-    </div>
-  );
+  return <UserViewPage />;
 }

@@ -5,7 +5,7 @@ export {
   getPaymentMethods,
   getSinglePaymentMethod,
 } from './payment-methods/get-payment-methods';
-export { getUsers } from './users/get-users';
+export { getUsers, getSingleUser } from './users/get-users';
 
 export { createCustomer } from './customers/post-client';
 export { modifyCustomer } from './customers/patch-client';
@@ -23,3 +23,4 @@ export { getMe } from './users/me';
 export { patchProduct } from './products/patch-product';
 export { modifySupplier } from './suppliers/patch-supplier';
 export { modifyPaymentMethod } from './payment-methods/patch-payment-methods';
+export { modifyUser } from './users/patch-user';

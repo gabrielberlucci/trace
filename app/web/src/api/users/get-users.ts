@@ -1,5 +1,6 @@
 import type { PaginatedUsers } from '@/types';
 import { apiClient } from '../api.client';
+import { isAxiosError } from 'axios';
 
 export const getUsers = async (
   page: number = 1,
@@ -23,4 +24,17 @@ export const getUsers = async (
   const result = await apiClient.get<PaginatedUsers>(url);
 
   return result.data;
+};
+
+export const getSingleUser = async (userId: number) => {
+  try {
+    const result = await apiClient.get(`/users/${userId}`);
+
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.data.message) {
+      throw new Error(error.request.data.message);
+    }
+    throw error;
+  }
 };
