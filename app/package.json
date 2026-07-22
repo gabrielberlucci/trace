@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently -n server,web -c green,blue --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\""
+    "dev:all": "concurrently -n server,web -c green,blue --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
+    "dev:server": "concurrently -n --raw \"pnpm --filter server dev\"",
+    "dev:web": "concurrently \"pnpm --filter web dev\""
   },
   "keywords": [],
   "author": "",
