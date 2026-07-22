@@ -82,6 +82,7 @@ model City {
   customers Customer[]
   suppliers Supplier[]
   users     User[]
+  companies Company[]
 }
 
 model User {
@@ -170,6 +171,22 @@ model RolePermission {
   permissionId Int
 
   @@unique([roleId, permissionId])
+}
+
+model Company {
+  id            Int     @id @default(autoincrement())
+  document      String  @unique
+  name          String
+  phone         String?
+  address       String?
+  zipcode       String?
+  addressNumber Int?
+  complement    String?
+  email         String? @unique
+  ie            String? @unique
+  active        Boolean @default(true)
+  city          City?   @relation(fields: [cityId], references: [id])
+  cityId        Int?
 }
 
 // MAKE SERVICE MODEL
