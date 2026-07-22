@@ -7,6 +7,7 @@ import { saleRouter } from './sale.route';
 import { paymentMethodsRoutes } from './payment.methods.route';
 import { localizationRouter } from './localization.route';
 import { roleRouter } from './role.route';
+import { companyRouter } from './company.route';
 
 const routes: Router = Router();
 
@@ -18,5 +19,6 @@ routes.use('/api/v1/sales', saleRouter);
 routes.use('/api/v1/payment-methods', paymentMethodsRoutes);
 routes.use('/api/v1/localization', localizationRouter);
 routes.use('/api/v1/roles', roleRouter);
+routes.use('/api/v1/company', companyRouter);
 
 export { routes };

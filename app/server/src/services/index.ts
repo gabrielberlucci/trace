@@ -39,3 +39,5 @@ export {
 export { getRoles } from './role.service';
 
 export { getUniqueStates, getCitiesByState } from './localization.service';
+
+export { createCompany } from './company.service';

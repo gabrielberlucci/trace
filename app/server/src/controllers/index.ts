@@ -47,3 +47,5 @@ export {
 } from './localization.controller';
 
 export { getRolesController } from './role.controller';
+
+export { createCompanyController } from './company.controller';
