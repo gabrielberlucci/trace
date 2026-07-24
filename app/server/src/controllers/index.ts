@@ -51,4 +51,5 @@ export { getRolesController } from './role.controller';
 export {
   createCompanyController,
   getPaginatedCompanyController,
+  getCompanyController,
 } from './company.controller';

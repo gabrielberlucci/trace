@@ -40,4 +40,8 @@ export { getRoles } from './role.service';
 
 export { getUniqueStates, getCitiesByState } from './localization.service';
 
-export { createCompany, getPaginatedCompany } from './company.service';
+export {
+  createCompany,
+  getPaginatedCompany,
+  getCompany,
+} from './company.service';

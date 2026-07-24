@@ -37,3 +37,13 @@ export const getPaginatedCompany = async (
 
   return { total, data, totalPages, hasPrevious, hasNext };
 };
+
+export const getCompany = async (companyId: number) => {
+  const result = await prisma.company.findUnique({
+    where: {
+      id: companyId,
+    },
+  });
+
+  return result;
+};
