@@ -15,6 +15,7 @@ O projeto está estruturado como um monorepo gerenciado com `pnpm workspaces`, c
 ## Stack
 
 ### Frontend (`web`)
+
 - **Framework & UI:** React 19, Vite, Tailwind CSS v4
 - **Componentes:** shadcn/ui, Radix UI, Lucide React
 - **Roteamento & Estado:** TanStack Router, TanStack Query
@@ -22,6 +23,7 @@ O projeto está estruturado como um monorepo gerenciado com `pnpm workspaces`, c
 - **Gráficos:** Recharts
 
 ### Backend (`server`)
+
 - **Ecosistema:** Node.js, TypeScript, Express
 - **Banco de Dados:** PostgreSQL
 - **ORM & Modelagem:** Prisma ORM
@@ -41,6 +43,7 @@ O projeto está estruturado como um monorepo gerenciado com `pnpm workspaces`, c
 ## Roadmap de Desenvolvimento (To-Do)
 
 ### Backend (`server`)
+
 - [x] Modelagem do Banco de Dados (Prisma Schema)
 - [x] Configuração do Zod e validações de documentos (CPF/CNPJ)
 - [x] CRUD e testes de integração das rotas de Fornecedores, Produtos, Usuários e Tipos de Pagamento
@@ -50,6 +53,7 @@ O projeto está estruturado como um monorepo gerenciado com `pnpm workspaces`, c
 - [ ] Integração com serviços externos (Enviar NFS-e e NFCe para a SEFAZ)
 
 ### Frontend (`web`)
+
 - [x] Setup do Vite, React, TailwindCSS v4 e Shadcn
 - [x] Implementação de Telas e Dashboards (Dashboard, Clientes, Fornecedores, Produtos, Vendas, Usuários)
 - [x] Integração com as rotas da API usando TanStack Query
@@ -81,8 +85,9 @@ DATABASE_URL="postgresql://user:password@localhost:5432/db_name?schema=public"
 PORT=3000
 JWT_SECRET="supersecret"
 NODE_ENV="development"
-BASE_URL="localhost:3000"
+BASE_URL="http://localhost:3000"
 LOG_LEVEL="debug"
+FRONT_END_ORIGIN="http://localhost:5173"
 ```
 
 **4. Execute as Migrations para montar o banco:**
@@ -110,12 +115,14 @@ npx tsx ./prisma/populate.role.permissions.ts
 Você pode iniciar o servidor e a aplicação web.
 
 Para o Backend:
+
 ```bash
 cd app/server
 pnpm dev
 ```
 
 Para o Frontend:
+
 ```bash
 cd app/web
 pnpm dev
