@@ -44,4 +44,5 @@ export {
   createCompany,
   getPaginatedCompany,
   getCompany,
+  modifyCompany,
 } from './company.service';

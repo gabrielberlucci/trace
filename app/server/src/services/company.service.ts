@@ -47,3 +47,18 @@ export const getCompany = async (companyId: number) => {
 
   return result;
 };
+
+export const modifyCompany = async (
+  companyData: Prisma.CompanyUpdateInput,
+  companyId: number,
+) => {
+  const result = await prisma.company.update({
+    where: {
+      id: companyId,
+    },
+
+    data: companyData,
+  });
+
+  return result;
+};

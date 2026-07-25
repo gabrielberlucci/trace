@@ -2,6 +2,7 @@ import {
   createCompanyController,
   getCompanyController,
   getPaginatedCompanyController,
+  modifyCompanyController,
 } from '@/controllers';
 import {
   authMiddleware,
@@ -11,7 +12,12 @@ import {
   validateQuery,
 } from '@/middlewares';
 import { Router } from 'express';
-import { companySchema, queryFilterSchema, reqParamSchema } from '@app/shared';
+import {
+  companySchema,
+  modifyCompanySchema,
+  queryFilterSchema,
+  reqParamSchema,
+} from '@app/shared';
 
 const companyRouter: Router = Router();
 
@@ -35,6 +41,14 @@ companyRouter.get(
   authMiddleware,
   validateParam(reqParamSchema),
   getCompanyController,
+);
+
+companyRouter.patch(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  validateData(modifyCompanySchema),
+  modifyCompanyController,
 );
 
 export { companyRouter };

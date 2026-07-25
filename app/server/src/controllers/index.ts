@@ -52,4 +52,5 @@ export {
   createCompanyController,
   getPaginatedCompanyController,
   getCompanyController,
+  modifyCompanyController,
 } from './company.controller';

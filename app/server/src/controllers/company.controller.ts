@@ -1,4 +1,9 @@
-import { createCompany, getCompany, getPaginatedCompany } from '@/services';
+import {
+  createCompany,
+  getCompany,
+  getPaginatedCompany,
+  modifyCompany,
+} from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -45,6 +50,19 @@ export const getCompanyController = async (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
     message: 'Empresa resgatada com sucesso',
+    data: data,
+  });
+};
+
+export const modifyCompanyController = async (req: Request, res: Response) => {
+  const companyId = res.locals.params.id;
+  const companyData = req.body;
+
+  const data = await modifyCompany(companyData, companyId);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Empresa modificada com sucesso',
     data: data,
   });
 };
