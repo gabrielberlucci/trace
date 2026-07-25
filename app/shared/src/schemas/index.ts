@@ -16,4 +16,4 @@ export {
 } from './payment.schema';
 export { reqParamSchema } from './req.param.schema';
 
-export { companySchema } from './company.schema';
+export { companySchema, modifyCompanySchema } from './company.schema';

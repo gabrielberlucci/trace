@@ -24,7 +24,10 @@ export {
   modifyPaymentMethodSchema,
 } from './src/schemas/payment.schema';
 export { reqParamSchema } from './src/schemas/req.param.schema';
-export { companySchema } from './src/schemas/company.schema';
+export {
+  companySchema,
+  modifyCompanySchema,
+} from './src/schemas/company.schema';
 
 export * from './src/constants/enums';
 export * from './src/utils/index';
