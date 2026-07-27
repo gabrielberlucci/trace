@@ -19,6 +19,6 @@ routes.use('/api/v1/sales', saleRouter);
 routes.use('/api/v1/payment-methods', paymentMethodsRoutes);
 routes.use('/api/v1/localization', localizationRouter);
 routes.use('/api/v1/roles', roleRouter);
-routes.use('/api/v1/company', companyRouter);
+routes.use('/api/v1/companies', companyRouter);
 
 export { routes };
