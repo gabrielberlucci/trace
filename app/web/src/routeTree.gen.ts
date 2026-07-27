@@ -26,12 +26,14 @@ import { Route as AppPaymentRouteImport } from './routes/_app/payment'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppCustomerCreateRouteImport } from './routes/_app/customer-create'
 import { Route as AppCustomerRouteImport } from './routes/_app/customer'
+import { Route as AppCompanyRouteImport } from './routes/_app/company'
 import { Route as AppUserIdRouteImport } from './routes/_app/user_.$id'
 import { Route as AppSupplierIdRouteImport } from './routes/_app/supplier_.$id'
 import { Route as AppSaleIdRouteImport } from './routes/_app/sale_.$id'
 import { Route as AppProductIdRouteImport } from './routes/_app/product_.$id'
 import { Route as AppPaymentIdRouteImport } from './routes/_app/payment_.$id'
 import { Route as AppCustomerIdRouteImport } from './routes/_app/customer_.$id'
+import { Route as AppCompanyIdRouteImport } from './routes/_app/company_.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -116,6 +118,11 @@ const AppCustomerRoute = AppCustomerRouteImport.update({
   path: '/customer',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCompanyRoute = AppCompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppUserIdRoute = AppUserIdRouteImport.update({
   id: '/user_/$id',
   path: '/user/$id',
@@ -146,9 +153,15 @@ const AppCustomerIdRoute = AppCustomerIdRouteImport.update({
   path: '/customer/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCompanyIdRoute = AppCompanyIdRouteImport.update({
+  id: '/company_/$id',
+  path: '/company/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/company': typeof AppCompanyRoute
   '/customer': typeof AppCustomerRoute
   '/customer-create': typeof AppCustomerCreateRoute
   '/dashboard': typeof AppDashboardRoute
@@ -163,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/user': typeof AppUserRoute
   '/user-create': typeof AppUserCreateRoute
   '/login': typeof AuthLoginRoute
+  '/company/$id': typeof AppCompanyIdRoute
   '/customer/$id': typeof AppCustomerIdRoute
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
@@ -172,6 +186,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/company': typeof AppCompanyRoute
   '/customer': typeof AppCustomerRoute
   '/customer-create': typeof AppCustomerCreateRoute
   '/dashboard': typeof AppDashboardRoute
@@ -186,6 +201,7 @@ export interface FileRoutesByTo {
   '/user': typeof AppUserRoute
   '/user-create': typeof AppUserCreateRoute
   '/login': typeof AuthLoginRoute
+  '/company/$id': typeof AppCompanyIdRoute
   '/customer/$id': typeof AppCustomerIdRoute
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
@@ -198,6 +214,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
+  '/_app/company': typeof AppCompanyRoute
   '/_app/customer': typeof AppCustomerRoute
   '/_app/customer-create': typeof AppCustomerCreateRoute
   '/_app/dashboard': typeof AppDashboardRoute
@@ -212,6 +229,7 @@ export interface FileRoutesById {
   '/_app/user': typeof AppUserRoute
   '/_app/user-create': typeof AppUserCreateRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_app/company_/$id': typeof AppCompanyIdRoute
   '/_app/customer_/$id': typeof AppCustomerIdRoute
   '/_app/payment_/$id': typeof AppPaymentIdRoute
   '/_app/product_/$id': typeof AppProductIdRoute
@@ -223,6 +241,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/company'
     | '/customer'
     | '/customer-create'
     | '/dashboard'
@@ -237,6 +256,7 @@ export interface FileRouteTypes {
     | '/user'
     | '/user-create'
     | '/login'
+    | '/company/$id'
     | '/customer/$id'
     | '/payment/$id'
     | '/product/$id'
@@ -246,6 +266,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/company'
     | '/customer'
     | '/customer-create'
     | '/dashboard'
@@ -260,6 +281,7 @@ export interface FileRouteTypes {
     | '/user'
     | '/user-create'
     | '/login'
+    | '/company/$id'
     | '/customer/$id'
     | '/payment/$id'
     | '/product/$id'
@@ -271,6 +293,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/_auth'
+    | '/_app/company'
     | '/_app/customer'
     | '/_app/customer-create'
     | '/_app/dashboard'
@@ -285,6 +308,7 @@ export interface FileRouteTypes {
     | '/_app/user'
     | '/_app/user-create'
     | '/_auth/login'
+    | '/_app/company_/$id'
     | '/_app/customer_/$id'
     | '/_app/payment_/$id'
     | '/_app/product_/$id'
@@ -420,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomerRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/company': {
+      id: '/_app/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof AppCompanyRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/user_/$id': {
       id: '/_app/user_/$id'
       path: '/user/$id'
@@ -462,10 +493,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomerIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/company_/$id': {
+      id: '/_app/company_/$id'
+      path: '/company/$id'
+      fullPath: '/company/$id'
+      preLoaderRoute: typeof AppCompanyIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppCompanyRoute: typeof AppCompanyRoute
   AppCustomerRoute: typeof AppCustomerRoute
   AppCustomerCreateRoute: typeof AppCustomerCreateRoute
   AppDashboardRoute: typeof AppDashboardRoute
@@ -479,6 +518,7 @@ interface AppRouteChildren {
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
   AppUserRoute: typeof AppUserRoute
   AppUserCreateRoute: typeof AppUserCreateRoute
+  AppCompanyIdRoute: typeof AppCompanyIdRoute
   AppCustomerIdRoute: typeof AppCustomerIdRoute
   AppPaymentIdRoute: typeof AppPaymentIdRoute
   AppProductIdRoute: typeof AppProductIdRoute
@@ -488,6 +528,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCompanyRoute: AppCompanyRoute,
   AppCustomerRoute: AppCustomerRoute,
   AppCustomerCreateRoute: AppCustomerCreateRoute,
   AppDashboardRoute: AppDashboardRoute,
@@ -501,6 +542,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSupplierCreateRoute: AppSupplierCreateRoute,
   AppUserRoute: AppUserRoute,
   AppUserCreateRoute: AppUserCreateRoute,
+  AppCompanyIdRoute: AppCompanyIdRoute,
   AppCustomerIdRoute: AppCustomerIdRoute,
   AppPaymentIdRoute: AppPaymentIdRoute,
   AppProductIdRoute: AppProductIdRoute,

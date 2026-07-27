@@ -33,6 +33,7 @@ import {
   Database,
   LayoutDashboard,
   ReceiptText,
+  Building2,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { UserSideBar } from './ui/user-info';
@@ -93,6 +94,11 @@ const data: { navMain: NavGroup[] } = {
           title: 'Fornecedor',
           url: '/supplier',
           icon: Truck,
+        },
+        {
+          title: 'Empresa',
+          url: '/company',
+          icon: Building2,
         },
         {
           title: 'Produtos',

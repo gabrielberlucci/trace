@@ -24,3 +24,5 @@ export { patchProduct } from './products/patch-product';
 export { modifySupplier } from './suppliers/patch-supplier';
 export { modifyPaymentMethod } from './payment-methods/patch-payment-methods';
 export { modifyUser } from './users/patch-user';
+export { getCompanies, getSingleCompany } from './companies/get-companies';
+export { modifyCompany } from './companies/patch-company';

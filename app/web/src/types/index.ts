@@ -62,3 +62,10 @@ export type {
   PaginatedSales,
   PaginatedSalesData,
 } from './sale-type';
+
+export type {
+  PaginatedCompanies,
+  PaginatedCompanyMeta,
+  PaginatedCompanyData,
+  CreateCompanyData,
+} from './company-type';
