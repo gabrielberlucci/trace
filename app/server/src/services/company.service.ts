@@ -43,6 +43,9 @@ export const getCompany = async (companyId: number) => {
     where: {
       id: companyId,
     },
+    include: {
+      city: true,
+    },
   });
 
   return result;
