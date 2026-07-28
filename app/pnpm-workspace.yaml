@@ -2,3 +2,14 @@ packages:
   - 'server'
   - 'web'
   - 'shared'
+allowBuilds:
+  '@prisma/engines': false
+  '@scarf/scarf': false
+  '@swc/core': false
+  '@tree-sitter-grammars/tree-sitter-yaml': false
+  bcrypt: false
+  core-js-pure: false
+  esbuild: false
+  prisma: false
+  tree-sitter: false
+  tree-sitter-json: false
