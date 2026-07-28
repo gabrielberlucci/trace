@@ -8,6 +8,7 @@ import { paymentMethodsRoutes } from './payment.methods.route';
 import { localizationRouter } from './localization.route';
 import { roleRouter } from './role.route';
 import { companyRouter } from './company.route';
+import { uploadXMLRouter } from './upload.xml.route';
 
 const routes: Router = Router();
 
@@ -20,5 +21,6 @@ routes.use('/api/v1/payment-methods', paymentMethodsRoutes);
 routes.use('/api/v1/localization', localizationRouter);
 routes.use('/api/v1/roles', roleRouter);
 routes.use('/api/v1/companies', companyRouter);
+routes.use('/api/v1/uploader-xml', uploadXMLRouter);
 
 export { routes };

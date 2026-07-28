@@ -54,3 +54,5 @@ export {
   getCompanyController,
   modifyCompanyController,
 } from './company.controller';
+
+export { uploadXMLController } from './upload.xml.controller';
