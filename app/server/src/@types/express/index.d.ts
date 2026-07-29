@@ -13,7 +13,7 @@ namespace NodeJS {
     AXIOM_DATASET: string;
     AXIOM_TOKEN: string;
     FRONT_END_ORIGIN: string;
-    REDIS_URL: string;
+    REDIS_HOST: string;
     REDIS_PORT: number;
   }
 }
