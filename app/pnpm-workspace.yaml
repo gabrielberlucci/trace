@@ -10,6 +10,7 @@ allowBuilds:
   bcrypt: false
   core-js-pure: false
   esbuild: false
+  msgpackr-extract: set this to true or false
   prisma: false
   tree-sitter: false
   tree-sitter-json: false
