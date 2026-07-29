@@ -46,3 +46,5 @@ export {
   getCompany,
   modifyCompany,
 } from './company.service';
+
+export { uploadXMLService } from './upload.xml.service';
