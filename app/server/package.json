@@ -7,6 +7,7 @@
   "scripts": {
     "build": "npx prisma generate && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "dev": "tsx watch src/server.ts",
+    "worker:upload-xml": "tsx watch src/workers/upload.xml.worker.ts",
     "distClean": "node -e \"require('fs').rm('./dist', { recursive: true, force: true }, (err) => { if (err) throw err; console.log('Directory deleted.'); });\"",
     "modulesClean": "node -e \"require('fs').rm('./node_modules', { recursive: true, force: true }, (err) => { if (err) throw err; console.log('Directory deleted.'); });\"",
     "test": "vitest"
