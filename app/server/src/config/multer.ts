@@ -2,7 +2,7 @@ import { BadRequest } from '@/error';
 import multer from 'multer';
 import path from 'path';
 
-const uploadDir = path.join(process.cwd(), 'uploads', 'pending');
+const uploadDir = path.join(process.cwd(), 'uploads-xml', 'pending');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
