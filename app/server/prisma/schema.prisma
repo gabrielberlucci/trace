@@ -189,6 +189,13 @@ model Company {
   cityId        Int?
 }
 
+model NfeUploadControl {
+  id           Int      @id @default(autoincrement())
+  nfeAccessKey String   @unique
+  processedAt  DateTime
+  createdAt    DateTime @default(now())
+}
+
 // MAKE SERVICE MODEL
 
 enum typePerson {
