@@ -21,8 +21,8 @@ const storage = multer.diskStorage({
 export const upload = multer({
   storage: storage,
   fileFilter: (_req, file, cb) => {
-    if (!file.originalname.startsWith('NFe_'))
-      return cb(new BadRequest('Arquivo XML com nome inválido'));
+    // if (!file.originalname.startsWith('NFe_'))
+    //   return cb(new BadRequest('Arquivo XML com nome inválido'));
     if (file.mimetype === 'text/xml' || file.mimetype === 'application/xml')
       cb(null, true);
     else {
