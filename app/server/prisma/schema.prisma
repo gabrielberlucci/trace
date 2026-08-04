@@ -215,6 +215,7 @@ enum Movement {
   SERVICO
   AJUSTE
   PERDA
+  IMPORTACAO
 }
 
 enum PaymentType {

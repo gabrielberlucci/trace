@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "Movement" ADD VALUE 'IMPORTACAO';
