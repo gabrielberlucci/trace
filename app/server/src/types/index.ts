@@ -17,3 +17,5 @@ export type { SupplierQueryParamsFilters } from './supplier.type';
 export type { CityStateQueryParamsFilters } from './localization.type';
 
 export type { CompanyQueryParamsFilters } from './company.type';
+
+export type { XMLProducts } from './worker.xml.type';
