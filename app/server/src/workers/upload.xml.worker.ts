@@ -1,11 +1,8 @@
 import { Job, Worker } from 'bullmq';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { XMLParser } from 'fast-xml-parser';
-import { SyntaxValidator } from 'fast-xml-validator';
-import { SignedXml } from 'xml-crypto';
-import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
-import { getNFe } from './utils';
+import { uploadXMLWorkerPrisma } from './lib/worker.prisma';
+import { getXMLInfo, updateInfoFromXML, validateXML } from './services';
 
 export const uploadXMLWorker = new Worker(
   'upload-xml',
@@ -15,41 +12,16 @@ export const uploadXMLWorker = new Worker(
 [Worker-Time]: ${new Date()}`,
     );
 
-    const filePath = path.join(job.data.path, job.data.name);
+    const { res, docDOM } = await validateXML(job);
 
-    const xmlData = await fs.readFile(filePath, { encoding: 'utf8' });
-    if (!xmlData) throw new Error('Falha ao ler o arquivo XML');
-
-    const isValid = SyntaxValidator.validate(xmlData);
-    if (isValid !== true) throw new Error();
-
-    const docDOM = new DOMParser().parseFromString(xmlData, 'application/xml');
-    if (!docDOM)
-      throw new Error('Não foi possível parsear o XML usando o DOM Parser');
-
-    const key = docDOM.getElementsByTagName('X509Certificate')[0]?.textContent;
-    if (!key)
-      throw new Error(
-        'Chave da assinatura(X509Certificate) não foi encontrada',
-      );
-
-    const signature = docDOM.getElementsByTagName('Signature')[0];
-    if (!signature)
-      throw new Error(
-        'Não foi possível encontrar a TAG de assinature(Signature) do XML',
-      );
-
-    const nfe = getNFe(xmlData);
-    if (!nfe) throw new Error('Não foi possível capturar a TAG <NFe/> do XML');
-
-    const pem = `-----BEGIN CERTIFICATE-----\n${key}\n-----END CERTIFICATE-----`;
-    const sig = new SignedXml({ publicCert: pem });
-    sig.loadSignature(signature as unknown as Node);
-
-    const res = sig.checkSignature(nfe);
     if (!res) {
       throw new Error('Assinatura do XML inválida ou arquivo corrompido!');
     }
+
+    const { emitCNPJ, destCNPJ, nfeKey, products } = getXMLInfo(docDOM);
+
+    await updateInfoFromXML(emitCNPJ, destCNPJ, nfeKey, products);
+
     // // DEBUG:
     // console.log('Resultado:', res);
     // console.log('Erros do Validador:', (sig as any).validationErrors);
@@ -70,7 +42,7 @@ uploadXMLWorker.on('completed', async (job: Job) => {
   const filePath = path.join(job.data.path, job.data.name);
   const processedDir = path.join(
     process.cwd(),
-    'uploads',
+    'uploads-xml',
     'processed',
     job.data.name,
   );
@@ -87,7 +59,12 @@ uploadXMLWorker.on('completed', async (job: Job) => {
 
 uploadXMLWorker.on('failed', async (job: Job | undefined, error: Error) => {
   const filePath = path.join(job?.data.path, job?.data.name);
-  const errorDir = path.join(process.cwd(), 'uploads', 'error', job?.data.name);
+  const errorDir = path.join(
+    process.cwd(),
+    'uploads-xml',
+    'error',
+    job?.data.name,
+  );
 
   await fs.mkdir(path.dirname(errorDir), { recursive: true });
 
