@@ -29,4 +29,7 @@ export const upload = multer({
       cb(new BadRequest(`Apenas arquivos XML's podem ser enviados.`));
     }
   },
+  limits: {
+    fileSize: 500 * 1024, // 500KB em bytes
+  },
 });
