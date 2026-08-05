@@ -3,13 +3,17 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { uploadXMLWorkerPrisma } from './lib/worker.prisma';
 import { getXMLInfo, updateInfoFromXML, validateXML } from './services';
+import { logger, loggerStorage } from '@/logger';
 
 export const uploadXMLWorker = new Worker(
   'upload-xml',
   async (job: Job) => {
-    console.log(
-      `[Worker-File]: XML: ${job.data.name} has started to be processed at:
-[Worker-Time]: ${new Date()}`,
+    logger.info(
+      {
+        jobName: job.data.name,
+        jobData: new Date(),
+      },
+      'Iniciando o processo de importação',
     );
 
     const { res, docDOM } = await validateXML(job);
@@ -51,9 +55,12 @@ uploadXMLWorker.on('completed', async (job: Job) => {
 
   await fs.rename(filePath, processedDir);
 
-  console.log(
-    `[Worker-File]: XML: ${job.data.name} has been processed at:
-[Worker-Time]: ${new Date(job.finishedOn!)}`,
+  logger.info(
+    {
+      jobName: job.data.name,
+      processedAt: new Date(job.finishedOn!),
+    },
+    'o XML foi processado com sucesso',
   );
 });
 
@@ -66,10 +73,14 @@ uploadXMLWorker.on('failed', async (job: Job | undefined, error: Error) => {
     job?.data.name,
   );
 
+  if (!job) throw new Error('Job search failed');
+
   await fs.mkdir(path.dirname(errorDir), { recursive: true });
 
   await fs.rename(filePath, errorDir);
 
-  console.error(`[Worker-Error]: O Job ${job?.data.name} falhou!`);
-  console.error('Job Error message: ' + error.message);
+  logger.error(
+    { jobName: job.data.name, jobErrorMessage: error.message },
+    'Erro ao importar XML',
+  );
 });
