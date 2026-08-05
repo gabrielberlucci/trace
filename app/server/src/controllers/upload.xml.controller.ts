@@ -6,6 +6,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 export const uploadXMLController = async (req: Request, res: Response) => {
   const file = req.file;
   if (!file) throw new BadRequest('Nenhum arquivo encontrado para upload.');
+  if (file.size === 0) throw new BadRequest('Arquivo não pode ter 0KB');
 
   await uploadXMLService(file.destination, file.filename);
 
