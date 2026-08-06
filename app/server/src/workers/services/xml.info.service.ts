@@ -12,6 +12,9 @@ export const getXMLInfo = (docDOM: XMLDomDocument) => {
     .getElementsByTagName('infNFe')[0]
     ?.getAttribute('Id')
     ?.replace('NFe', '')!;
+  const numnf = docDOM.getElementsByTagName('nNF')[0]?.textContent;
+  const serienf = docDOM.getElementsByTagName('serie')[0]?.textContent;
+
   let products = [];
 
   for (let i = 0; i < det.length; i++) {
@@ -27,5 +30,5 @@ export const getXMLInfo = (docDOM: XMLDomDocument) => {
     products.push(currentProduct);
   }
 
-  return { emitCNPJ, destCNPJ, nfeKey, products };
+  return { emitCNPJ, destCNPJ, nfeKey, numnf, serienf, products };
 };
