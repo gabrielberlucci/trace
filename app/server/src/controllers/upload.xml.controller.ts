@@ -13,6 +13,5 @@ export const uploadXMLController = async (req: Request, res: Response) => {
   res.status(StatusCodes.ACCEPTED).send({
     status: ReasonPhrases.ACCEPTED,
     message: 'Upload de XML realizado com sucesso para processamento',
-    data: req.file,
   });
 };
