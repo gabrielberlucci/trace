@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppUserCreateRouteImport } from './routes/_app/user-create'
 import { Route as AppUserRouteImport } from './routes/_app/user'
+import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
 import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
 import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
 import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
@@ -61,6 +62,11 @@ const AppUserCreateRoute = AppUserCreateRouteImport.update({
 const AppUserRoute = AppUserRouteImport.update({
   id: '/user',
   path: '/user',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUploadXmlRoute = AppUploadXmlRouteImport.update({
+  id: '/upload-xml',
+  path: '/upload-xml',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSupplierCreateRoute = AppSupplierCreateRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/sale-create': typeof AppSaleCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
+  '/upload-xml': typeof AppUploadXmlRoute
   '/user': typeof AppUserRoute
   '/user-create': typeof AppUserCreateRoute
   '/login': typeof AuthLoginRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/sale-create': typeof AppSaleCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
+  '/upload-xml': typeof AppUploadXmlRoute
   '/user': typeof AppUserRoute
   '/user-create': typeof AppUserCreateRoute
   '/login': typeof AuthLoginRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/_app/sale-create': typeof AppSaleCreateRoute
   '/_app/supplier': typeof AppSupplierRoute
   '/_app/supplier-create': typeof AppSupplierCreateRoute
+  '/_app/upload-xml': typeof AppUploadXmlRoute
   '/_app/user': typeof AppUserRoute
   '/_app/user-create': typeof AppUserCreateRoute
   '/_auth/login': typeof AuthLoginRoute
@@ -253,6 +262,7 @@ export interface FileRouteTypes {
     | '/sale-create'
     | '/supplier'
     | '/supplier-create'
+    | '/upload-xml'
     | '/user'
     | '/user-create'
     | '/login'
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/sale-create'
     | '/supplier'
     | '/supplier-create'
+    | '/upload-xml'
     | '/user'
     | '/user-create'
     | '/login'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/_app/sale-create'
     | '/_app/supplier'
     | '/_app/supplier-create'
+    | '/_app/upload-xml'
     | '/_app/user'
     | '/_app/user-create'
     | '/_auth/login'
@@ -365,6 +377,13 @@ declare module '@tanstack/react-router' {
       path: '/user'
       fullPath: '/user'
       preLoaderRoute: typeof AppUserRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/upload-xml': {
+      id: '/_app/upload-xml'
+      path: '/upload-xml'
+      fullPath: '/upload-xml'
+      preLoaderRoute: typeof AppUploadXmlRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/supplier-create': {
@@ -516,6 +535,7 @@ interface AppRouteChildren {
   AppSaleCreateRoute: typeof AppSaleCreateRoute
   AppSupplierRoute: typeof AppSupplierRoute
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
+  AppUploadXmlRoute: typeof AppUploadXmlRoute
   AppUserRoute: typeof AppUserRoute
   AppUserCreateRoute: typeof AppUserCreateRoute
   AppCompanyIdRoute: typeof AppCompanyIdRoute
@@ -540,6 +560,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSaleCreateRoute: AppSaleCreateRoute,
   AppSupplierRoute: AppSupplierRoute,
   AppSupplierCreateRoute: AppSupplierCreateRoute,
+  AppUploadXmlRoute: AppUploadXmlRoute,
   AppUserRoute: AppUserRoute,
   AppUserCreateRoute: AppUserCreateRoute,
   AppCompanyIdRoute: AppCompanyIdRoute,

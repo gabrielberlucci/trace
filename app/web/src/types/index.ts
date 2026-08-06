@@ -69,3 +69,9 @@ export type {
   PaginatedCompanyData,
   CreateCompanyData,
 } from './company-type';
+
+export type {
+  PaginatedNfeLogs,
+  PaginatedNfeLogMeta,
+  NfeLogData,
+} from './nfe-log-type';

@@ -34,6 +34,7 @@ import {
   LayoutDashboard,
   ReceiptText,
   Building2,
+  FileType,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { UserSideBar } from './ui/user-info';
@@ -109,6 +110,11 @@ const data: { navMain: NavGroup[] } = {
           title: 'Pagamentos',
           url: '/payment',
           icon: CreditCard,
+        },
+        {
+          title: 'Importar XML',
+          url: '/upload-xml',
+          icon: FileType,
         },
         {
           title: 'Usuários',
