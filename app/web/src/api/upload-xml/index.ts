@@ -1,18 +1,29 @@
 import { isAxiosError } from 'axios';
 import { apiClient } from '../api.client';
-import type { PaginatedNfeLogs } from '@/types';
+import type { PaginatedNfeLogs, PaginatedAxiomErrors } from '@/types';
 
 export const getNfeLogs = async (
   page: number = 1,
   search?: string,
 ): Promise<PaginatedNfeLogs> => {
-  let url = `/uploader-xml/logs?page=${page}`;
+  let url = `/uploader-xml/logs/imports?page=${page}`;
 
   if (search && search.trim()) {
     url += `&name=${encodeURIComponent(search.trim())}`;
   }
 
   const result = await apiClient.get<PaginatedNfeLogs>(url);
+  return result.data;
+};
+
+export const getAxiomErrors = async (
+  cursor?: string,
+): Promise<PaginatedAxiomErrors> => {
+  let url = `/uploader-xml/logs/imports/errors`;
+  if (cursor) {
+    url += `?cursor=${encodeURIComponent(cursor)}`;
+  }
+  const result = await apiClient.get<PaginatedAxiomErrors>(url);
   return result.data;
 };
 

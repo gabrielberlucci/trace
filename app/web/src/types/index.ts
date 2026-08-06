@@ -74,4 +74,6 @@ export type {
   PaginatedNfeLogs,
   PaginatedNfeLogMeta,
   NfeLogData,
+  PaginatedAxiomErrors,
+  AxiomErrorData,
 } from './nfe-log-type';

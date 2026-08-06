@@ -9,22 +9,13 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { getNfeLogs, uploadXmlFile } from '@/api';
-import type { NfeLogData } from '@/types';
-import { useEffect, useRef, useState } from 'react';
+import { getNfeLogs, uploadXmlFile, getAxiomErrors } from '@/api';
+import type { NfeLogData, AxiomErrorData } from '@/types';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 
-const columns: ColumnDef<NfeLogData>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-    cell: ({ row }) => (
-      <span className="text-sm font-semibold text-foreground">
-        {row.getValue('id')}
-      </span>
-    ),
-  },
+const columnsHistory: ColumnDef<NfeLogData>[] = [
   {
     accessorKey: 'nfeAccessKey',
     header: 'Chave NFe',
@@ -63,17 +54,69 @@ const columns: ColumnDef<NfeLogData>[] = [
       );
     },
   },
+  {
+    accessorKey: 'message',
+    header: 'Mensagem',
+    cell: ({ row }) => {
+      const msg = row.getValue('message') as string | undefined;
+      const isError = msg && msg !== 'Importado com sucesso';
+      return (
+        <span
+          className={`text-sm font-medium max-w-2xl block whitespace-normal break-words ${
+            isError ? 'text-red-500' : 'text-emerald-500'
+          }`}
+        >
+          {msg || 'Processando...'}
+        </span>
+      );
+    },
+  },
+];
+
+const columnsErrors: ColumnDef<AxiomErrorData>[] = [
+  {
+    accessorKey: 'jobName',
+    header: 'Chave NFe',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('jobName')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'time',
+    header: 'Data / Hora',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('time')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'jobMessage',
+    header: 'Mensagem de Erro',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-red-500 max-w-2xl block whitespace-normal break-words">
+        {row.getValue('jobMessage')}
+      </span>
+    ),
+  },
 ];
 
 const UploadXmlPage = () => {
   const { page, q } = useSearch({ from: '/_app/upload-xml' });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const toastShownRef = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [localSearch, setLocalSearch] = useState(q ?? '');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [activeTab, setActiveTab] = useState<'history' | 'errors'>('history');
+
+  // Axiom Cursor Pagination State
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -90,11 +133,51 @@ const UploadXmlPage = () => {
     return () => clearTimeout(handler);
   }, [localSearch, navigate, q]);
 
-  const { isFetching, error, data } = useQuery({
+  // Query 1: Prisma Logs (History)
+  const { isFetching, data } = useQuery({
     queryKey: ['nfe-logs', page, q],
     queryFn: () => getNfeLogs(page, q),
     placeholderData: keepPreviousData,
   });
+
+  // Query 2: Axiom Errors (first page only for merging)
+  const { data: firstPageAxiomErrors } = useQuery({
+    queryKey: ['axiom-errors-merge'],
+    queryFn: () => getAxiomErrors(undefined),
+  });
+
+  // Query 3: Axiom Errors (for detailed tab with cursor pagination)
+  const { isFetching: isFetchingAxiom, data: axiomData } = useQuery({
+    queryKey: ['axiom-errors-tab', currentCursor],
+    queryFn: () => getAxiomErrors(currentCursor),
+    placeholderData: keepPreviousData,
+  });
+
+  // Merge Axiom errors into Prisma data for the first tab
+  const mergedHistoryData = useMemo(() => {
+    if (!data?.data) return [];
+
+    return data.data.map((item) => {
+      const isProcessed = !!item.processedAt;
+      let message = 'Importado com sucesso';
+
+      if (!isProcessed) {
+        message = 'Na Fila';
+      } else if (firstPageAxiomErrors?.data) {
+        const matchingError = firstPageAxiomErrors.data.find(
+          (err) => err.jobName === item.nfeAccessKey,
+        );
+        if (matchingError) {
+          message = matchingError.jobMessage;
+        }
+      }
+
+      return {
+        ...item,
+        message,
+      };
+    });
+  }, [data?.data, firstPageAxiomErrors?.data]);
 
   const uploadMutation = useMutation({
     mutationFn: (file: File) => uploadXmlFile(file),
@@ -258,48 +341,104 @@ const UploadXmlPage = () => {
       </Card>
 
       {/* Logs Table */}
-      <div className="mt-8 space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">
-          Logs de Processamento
-        </h2>
+      <div className="mt-8">
+        <div className="flex items-center space-x-2 border-b border-border pb-px mb-6">
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'history'
+                ? 'border-violet-600 text-violet-600'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Histórico de Importação
+          </button>
+          <button
+            onClick={() => setActiveTab('errors')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+              activeTab === 'errors'
+                ? 'border-violet-600 text-violet-600'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Erros Detalhados
+          </button>
+        </div>
 
-        <DataTable
-          columns={columns}
-          data={data?.data || []}
-          searchPlaceholder="Buscar por Chave NFe..."
-          exportFileName="logs-xml.csv"
-          showPagination={false}
-          searchValue={localSearch}
-          onSearchChange={setLocalSearch}
-        />
+        {activeTab === 'history' && (
+          <div className="space-y-4">
+            <DataTable
+              columns={columnsHistory}
+              data={mergedHistoryData}
+              searchPlaceholder="Buscar por Chave NFe..."
+              exportFileName="logs-xml.csv"
+              showPagination={false}
+              searchValue={localSearch}
+              onSearchChange={setLocalSearch}
+            />
 
-        {data && data.meta && (
-          <div className="flex items-center justify-between mt-4 px-2">
-            <div className="text-sm text-muted-foreground">
-              Mostrando página {page} de {data.meta.totalPages} (
-              {data.meta.total} registros no total)
+            {data && data.meta && (
+              <div className="flex items-center justify-between mt-4 px-2">
+                <div className="text-sm text-muted-foreground">
+                  Mostrando página {page} de {data.meta.totalPages} (
+                  {data.meta.total} registros no total)
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePreviousPage}
+                    disabled={!data.meta.hasPrevious}
+                  >
+                    Anterior
+                  </Button>
+
+                  {renderPageNumbers()}
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextPage}
+                    disabled={!data.meta.hasNext}
+                  >
+                    Próxima
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'errors' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-3">
+                Erros Detalhados
+                {isFetchingAxiom && (
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                )}
+              </h2>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePreviousPage}
-                disabled={!data.meta.hasPrevious}
-              >
-                Anterior
-              </Button>
 
-              {renderPageNumbers()}
+            <DataTable
+              columns={columnsErrors}
+              data={axiomData?.data || []}
+              exportFileName="erros-axiom.csv"
+              showPagination={false}
+            />
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleNextPage}
-                disabled={!data.meta.hasNext}
-              >
-                Próxima
-              </Button>
-            </div>
+            {axiomData && axiomData.meta && (
+              <div className="flex items-center justify-end mt-4 px-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentCursor(axiomData.meta.maxCursor)}
+                  disabled={!axiomData.meta.maxCursor}
+                >
+                  Carregar Mais Erros (Avançar Cursor)
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -26,4 +26,4 @@ export { modifyPaymentMethod } from './payment-methods/patch-payment-methods';
 export { modifyUser } from './users/patch-user';
 export { getCompanies, getSingleCompany } from './companies/get-companies';
 export { modifyCompany } from './companies/patch-company';
-export { uploadXmlFile, getNfeLogs } from './upload-xml';
+export { uploadXmlFile, getNfeLogs, getAxiomErrors } from './upload-xml';
