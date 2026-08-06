@@ -2,12 +2,17 @@ import { importXMLQueueService } from '@/queue';
 import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
+import { Axiom } from '@axiomhq/js';
+import type { AxiomData } from '@/types';
 
 export const uploadXMLService = async (filePath: string, fileName: string) => {
   await importXMLQueueService(filePath, fileName);
 };
 
-export const getPaginatedNfeLogs = async (queryFilters: { page: number; name?: string }) => {
+export const getPaginatedNfeLogs = async (queryFilters: {
+  page: number;
+  name?: string;
+}) => {
   const where: Prisma.NfeUploadControlWhereInput = {
     nfeAccessKey: queryFilters.name // or a separate query parameter for NFe key if added to shared schemas, but using name/q is standard for simple search
       ? { contains: queryFilters.name, mode: 'insensitive' }
@@ -28,4 +33,58 @@ export const getPaginatedNfeLogs = async (queryFilters: { page: number; name?: s
     );
 
   return { total, data, totalPages, hasPrevious, hasNext };
+};
+
+export const getAxiomNfeLogs = async (
+  cursor?: string,
+): Promise<{ minCursor: string; maxCursor: string; data: AxiomData[] }> => {
+  const axiom = new Axiom({
+    token: process.env.AXIOM_QUERY_TOKEN,
+  });
+
+  const res = await axiom.query(
+    `['trace'] | where level == 'error' and isnotempty(jobName) | limit 50`,
+    {
+      cursor: cursor || '',
+    },
+  );
+  const minCursor = res.status.minCursor;
+  const maxCursor = res.status.maxCursor;
+
+  const data: AxiomData[] = [];
+
+  if (!res.tables?.length) {
+    return { minCursor, maxCursor, data };
+  }
+
+  const table = res.tables[0];
+  const columns = table?.columns;
+
+  if (!columns || columns.length < 7) {
+    return { minCursor, maxCursor, data };
+  }
+
+  const totalLogs = columns[0]?.length ?? 0;
+
+  const formatter = new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'medium',
+    timeZone: 'America/Sao_Paulo',
+  });
+
+  const timeIndex = table.fields.findIndex((a) => a.name === '_time');
+  const jobMessageIndex = table.fields.findIndex(
+    (a) => a.name === 'jobErrorMessage',
+  );
+  const jobNameIndex = table.fields.findIndex((a) => a.name === 'jobName');
+
+  for (let i = 0; i < totalLogs; i++) {
+    data.push({
+      time: formatter.format(new Date(columns[timeIndex]?.[i])),
+      jobMessage: columns[jobMessageIndex]?.[i],
+      jobName: columns[jobNameIndex]?.[i],
+    });
+  }
+
+  return { minCursor, maxCursor, data };
 };

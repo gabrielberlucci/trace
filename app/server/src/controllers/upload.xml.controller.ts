@@ -1,5 +1,9 @@
 import { BadRequest } from '@/error';
-import { uploadXMLService, getPaginatedNfeLogs } from '@/services';
+import {
+  uploadXMLService,
+  getPaginatedNfeLogs,
+  getAxiomNfeLogs,
+} from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -33,6 +37,24 @@ export const getPaginatedNfeLogsController = async (
       hasPrevious: hasPrevious,
       hasNext: hasNext,
       totalPages: totalPages,
+    },
+    data: data,
+  });
+};
+
+export const getAxiomNfeLogsController = async (
+  req: Request,
+  res: Response,
+) => {
+  const cursor = req.query.cursor as string | undefined;
+  const { minCursor, maxCursor, data } = await getAxiomNfeLogs(cursor);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Logs resgatados com sucesso',
+    meta: {
+      minCursor: minCursor,
+      maxCursor: maxCursor,
     },
     data: data,
   });

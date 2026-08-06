@@ -12,6 +12,7 @@ namespace NodeJS {
     LOG_LEVEL: string;
     AXIOM_DATASET: string;
     AXIOM_TOKEN: string;
+    AXIOM_QUERY_TOKEN: string;
     FRONT_END_ORIGIN: string;
     REDIS_HOST: string;
     REDIS_PORT: number;

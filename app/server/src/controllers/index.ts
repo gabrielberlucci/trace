@@ -58,4 +58,5 @@ export {
 export {
   uploadXMLController,
   getPaginatedNfeLogsController,
+  getAxiomNfeLogsController,
 } from './upload.xml.controller';
