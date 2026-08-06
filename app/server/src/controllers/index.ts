@@ -55,4 +55,7 @@ export {
   modifyCompanyController,
 } from './company.controller';
 
-export { uploadXMLController } from './upload.xml.controller';
+export {
+  uploadXMLController,
+  getPaginatedNfeLogsController,
+} from './upload.xml.controller';

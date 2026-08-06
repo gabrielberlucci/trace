@@ -47,4 +47,4 @@ export {
   modifyCompany,
 } from './company.service';
 
-export { uploadXMLService } from './upload.xml.service';
+export { uploadXMLService, getPaginatedNfeLogs } from './upload.xml.service';

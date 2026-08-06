@@ -1,5 +1,5 @@
 import { BadRequest } from '@/error';
-import { uploadXMLService } from '@/services';
+import { uploadXMLService, getPaginatedNfeLogs } from '@/services';
 import type { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
@@ -13,5 +13,27 @@ export const uploadXMLController = async (req: Request, res: Response) => {
   res.status(StatusCodes.ACCEPTED).send({
     status: ReasonPhrases.ACCEPTED,
     message: 'Upload de XML realizado com sucesso para processamento',
+  });
+};
+
+export const getPaginatedNfeLogsController = async (
+  _req: Request,
+  res: Response,
+) => {
+  const query = res.locals.query;
+
+  const { total, data, hasPrevious, hasNext, totalPages } =
+    await getPaginatedNfeLogs(query);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Logs resgatados com sucesso',
+    meta: {
+      total: total,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+      totalPages: totalPages,
+    },
+    data: data,
   });
 };
