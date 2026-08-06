@@ -17,6 +17,9 @@ importers:
       '@app/shared':
         specifier: workspace:*
         version: link:../shared
+      '@axiomhq/js':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@axiomhq/pino':
         specifier: ^1.6.1
         version: 1.6.1
@@ -311,6 +314,10 @@ packages:
 
   '@axiomhq/js@1.6.1':
     resolution: {integrity: sha512-iNWOnGvP+R2lIWYk9jkfvRI/rfhOR9hlWJOBJhMKwZ9mfpE0KdnFnG2XPLoMcrbyrOBKj6Jw0hpIH5GhPucLog==}
+    engines: {node: '>=20'}
+
+  '@axiomhq/js@2.0.0':
+    resolution: {integrity: sha512-mhDH0KLFkDko9ytoltgmch2gOiwE6kY6VWhCmTux9lzL9hmjTej68JeQKwq9GGqOY7xwDsya88bNiTnp/zc8+Q==}
     engines: {node: '>=20'}
 
   '@axiomhq/pino@1.6.1':
@@ -5992,6 +5999,10 @@ snapshots:
       openapi-types: 12.1.3
 
   '@axiomhq/js@1.6.1':
+    dependencies:
+      fetch-retry: 6.0.0
+
+  '@axiomhq/js@2.0.0':
     dependencies:
       fetch-retry: 6.0.0
 
