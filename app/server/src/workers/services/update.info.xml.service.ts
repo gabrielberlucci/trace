@@ -5,6 +5,8 @@ export const updateInfoFromXML = async (
   emitCNPJ: string,
   destCNPJ: string,
   nfeKey: string,
+  numnf: string,
+  serienf: string,
   products: XMLProducts[],
 ) => {
   await uploadXMLWorkerPrisma.$transaction(async (tx) => {
@@ -94,6 +96,8 @@ export const updateInfoFromXML = async (
       data: {
         nfeAccessKey: nfeKey,
         processedAt: new Date(),
+        numNf: numnf,
+        serieNf: serienf,
       },
     });
   });
