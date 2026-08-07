@@ -192,6 +192,8 @@ model Company {
 model NfeUploadControl {
   id           Int      @id @default(autoincrement())
   nfeAccessKey String   @unique
+  numNf        String
+  serieNf      String
   processedAt  DateTime
   createdAt    DateTime @default(now())
 }
