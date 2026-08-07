@@ -10,17 +10,17 @@ export const productSchema = z.object({
 
   barcode: z
     .string({ error: 'Código de barras inválido' })
-    .transform((val) => val.replace(/\s+/g, ''))
+    // .transform((val) => val.replace(/\s+/g, ''))
     .pipe(
       z
         .string()
-        .min(6, { error: 'Insira pelo menos 6 caracteres no código de barras' })
+        .min(5, { error: 'Insira pelo menos 5 caracteres no código de barras' })
         .max(13, {
           error: 'Insira no máximo 13 caracteres no código de barras',
         }),
     ),
 
-  unity: z.nativeEnum(Unity, {
+  unity: z.enum(Unity, {
     error: 'Unidades de medida devem ser UN, CM, MT ou MM',
   }),
 
