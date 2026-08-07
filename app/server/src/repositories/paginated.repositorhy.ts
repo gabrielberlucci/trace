@@ -22,7 +22,7 @@ export const getPaginatedData = async <T>(
   let total: number;
   let data;
 
-  if (!where || Object.keys(where).length === 0) {
+  if (Object.keys(where).every((value) => value === undefined)) {
     const [fastTotal, generics] = await tx.$transaction([
       tx.totalCount.findUnique({
         where: { tableName: searchTable },
