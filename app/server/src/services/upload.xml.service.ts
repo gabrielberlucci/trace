@@ -76,13 +76,17 @@ export const getAxiomNfeLogs = async (
   const jobMessageIndex = table.fields.findIndex(
     (a) => a.name === 'jobErrorMessage',
   );
-  const jobNameIndex = table.fields.findIndex((a) => a.name === 'jobName');
+  const nfeKeyIndex = table.fields.findIndex((a) => a.name === 'nfeKey');
+  const numnfIndex = table.fields.findIndex((a) => a.name === 'numnf');
+  const serienfIndex = table.fields.findIndex((a) => a.name === 'serienf');
 
   for (let i = 0; i < totalLogs; i++) {
     data.push({
       time: formatter.format(new Date(columns[timeIndex]?.[i])),
       jobMessage: columns[jobMessageIndex]?.[i],
-      jobName: columns[jobNameIndex]?.[i],
+      nfeKey: columns[nfeKeyIndex]?.[i] || 'Chave não encontrada',
+      numnf: columns[numnfIndex]?.[i] || 'Número da NFe não encontrada',
+      serienf: columns[serienfIndex]?.[i] || 'Série da NFe não encontrada',
     });
   }
 

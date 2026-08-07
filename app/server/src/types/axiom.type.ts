@@ -1,5 +1,7 @@
 export interface AxiomData {
   time: string;
   jobMessage: string;
-  jobName: string;
+  nfeKey: string;
+  numnf: string;
+  serienf: string;
 }
