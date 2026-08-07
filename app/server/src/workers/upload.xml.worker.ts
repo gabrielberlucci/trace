@@ -1,9 +1,10 @@
 import { Job, Worker } from 'bullmq';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { uploadXMLWorkerPrisma } from './lib/worker.prisma';
 import { getXMLInfo, updateInfoFromXML, validateXML } from './services';
-import { logger, loggerStorage } from '@/logger';
+import { logger } from '@/logger';
+import { Prisma } from '../../generated/prisma/client';
+import { formatPrismaError } from '@/utils';
 
 export const uploadXMLWorker = new Worker(
   'upload-xml',
@@ -93,6 +94,12 @@ uploadXMLWorker.on('failed', async (job: Job | undefined, error: Error) => {
     'error',
     job?.data.name,
   );
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      error.message = 'XML já importado';
+    }
+  }
 
   if (!job) throw new Error('Job search failed');
 
