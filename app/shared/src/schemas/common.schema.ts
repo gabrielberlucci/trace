@@ -21,7 +21,7 @@ export const commonSchema = z.object({
     ),
 
   typePerson: z
-    .nativeEnum(typePerson, { error: 'O tipo de pessoa deve ser PJ ou PF' })
+    .enum(typePerson, { error: 'O tipo de pessoa deve ser PJ ou PF' })
     .transform((val) => val!.replace(/\s+/g, ''))
     .optional(),
 

@@ -54,4 +54,16 @@ export const queryFilterSchema = z.object({
       error: 'Nome da cidade muito longa. Insira no máximo 32 caracteres',
     })
     .optional(),
+
+  nfeKey: z
+    .string({ error: 'Insira uma chave NFe' })
+    .length(44, { error: 'Chave da NFe deve conter 44 dígitos' })
+    .trim()
+    .optional(),
+
+  numnf: z
+    .string({ error: 'Insira o número da NFe' })
+    .min(1, { error: 'Insira uma numeração' })
+    .max(9, { error: 'Numeração máxima deve conter 9 digitos' })
+    .optional(),
 });
