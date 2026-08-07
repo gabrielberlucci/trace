@@ -3,20 +3,20 @@ import { getPaginatedData } from '@/repositories/paginated.repositorhy';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { Axiom } from '@axiomhq/js';
-import type { AxiomData } from '@/types';
+import type { AxiomData, UploadXMLQueryParamsFilters } from '@/types';
 
 export const uploadXMLService = async (filePath: string, fileName: string) => {
   await importXMLQueueService(filePath, fileName);
 };
 
-export const getPaginatedNfeLogs = async (queryFilters: {
-  page: number;
-  name?: string;
-}) => {
+export const getPaginatedNfeLogs = async (
+  queryFilters: UploadXMLQueryParamsFilters,
+) => {
   const where: Prisma.NfeUploadControlWhereInput = {
-    nfeAccessKey: queryFilters.name // or a separate query parameter for NFe key if added to shared schemas, but using name/q is standard for simple search
-      ? { contains: queryFilters.name, mode: 'insensitive' }
+    nfeAccessKey: queryFilters.nfeKey
+      ? { contains: queryFilters.nfeKey, mode: 'insensitive' }
       : undefined,
+    numNf: queryFilters.numnf,
   };
 
   const { total, data, totalPages, hasPrevious, hasNext } =
