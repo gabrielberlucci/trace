@@ -22,9 +22,27 @@ export const uploadXMLWorker = new Worker(
       throw new Error('Assinatura do XML inválida ou arquivo corrompido!');
     }
 
-    const { emitCNPJ, destCNPJ, nfeKey, products } = getXMLInfo(docDOM);
+    const { emitCNPJ, destCNPJ, nfeKey, numnf, serienf, products } =
+      getXMLInfo(docDOM);
 
-    await updateInfoFromXML(emitCNPJ, destCNPJ, nfeKey, products);
+    if (!numnf || !serienf)
+      throw new Error('Número ou série da NFe não encontrado');
+
+    await job.updateData({
+      ...job.data,
+      numnf: numnf,
+      serienf: serienf,
+      nfeKey: nfeKey,
+    });
+
+    await updateInfoFromXML(
+      emitCNPJ,
+      destCNPJ,
+      nfeKey,
+      numnf,
+      serienf,
+      products,
+    );
 
     // // DEBUG:
     // console.log('Resultado:', res);
@@ -59,6 +77,9 @@ uploadXMLWorker.on('completed', async (job: Job) => {
     {
       jobName: job.data.name,
       processedAt: new Date(job.finishedOn!),
+      nfeKey: job.data.nfeKey,
+      numnf: job.data.numnf,
+      serienf: job.data.serienf,
     },
     'o XML foi processado com sucesso',
   );
@@ -80,7 +101,13 @@ uploadXMLWorker.on('failed', async (job: Job | undefined, error: Error) => {
   await fs.rename(filePath, errorDir);
 
   logger.error(
-    { jobName: job.data.name, jobErrorMessage: error.message },
+    {
+      jobName: job.data.name,
+      jobErrorMessage: error.message,
+      nfeKey: job.data.nfeKey,
+      numnf: job.data.numnf,
+      serienf: job.data.serienf,
+    },
     'Erro ao importar XML',
   );
 });
