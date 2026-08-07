@@ -5,11 +5,16 @@ import type { PaginatedNfeLogs, PaginatedAxiomErrors } from '@/types';
 export const getNfeLogs = async (
   page: number = 1,
   search?: string,
+  numnf?: string,
 ): Promise<PaginatedNfeLogs> => {
   let url = `/uploader-xml/logs/imports?page=${page}`;
 
   if (search && search.trim()) {
-    url += `&name=${encodeURIComponent(search.trim())}`;
+    url += `&nfeKey=${encodeURIComponent(search.trim())}`;
+  }
+
+  if (numnf && numnf.trim()) {
+    url += `&numnf=${encodeURIComponent(numnf.trim())}`;
   }
 
   const result = await apiClient.get<PaginatedNfeLogs>(url);

@@ -15,6 +15,8 @@ export interface PaginatedNfeLogMeta {
 export interface NfeLogData {
   id: number;
   nfeAccessKey: string;
+  numNf: string;
+  serieNf: string;
   processedAt: string;
   createdAt: string;
   message?: string; // added to merge axiom data
@@ -33,5 +35,7 @@ export interface PaginatedAxiomErrors {
 export interface AxiomErrorData {
   time: string;
   jobMessage: string;
-  jobName: string;
+  nfeKey: string;
+  numnf: string;
+  serienf: string;
 }

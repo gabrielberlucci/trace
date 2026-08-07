@@ -26,6 +26,24 @@ const columnsHistory: ColumnDef<NfeLogData>[] = [
     ),
   },
   {
+    accessorKey: 'numNf',
+    header: 'Número',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('numNf')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'serieNf',
+    header: 'Série',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('serieNf')}
+      </span>
+    ),
+  },
+  {
     accessorKey: 'createdAt',
     header: 'Data de Recebimento',
     cell: ({ row }) => {
@@ -75,11 +93,29 @@ const columnsHistory: ColumnDef<NfeLogData>[] = [
 
 const columnsErrors: ColumnDef<AxiomErrorData>[] = [
   {
-    accessorKey: 'jobName',
+    accessorKey: 'nfeKey',
     header: 'Chave NFe',
     cell: ({ row }) => (
       <span className="text-sm font-medium text-foreground">
-        {row.getValue('jobName')}
+        {row.getValue('nfeKey')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'numnf',
+    header: 'Número',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('numnf')}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'serienf',
+    header: 'Série',
+    cell: ({ row }) => (
+      <span className="text-sm font-medium text-foreground">
+        {row.getValue('serienf')}
       </span>
     ),
   },
@@ -104,12 +140,12 @@ const columnsErrors: ColumnDef<AxiomErrorData>[] = [
 ];
 
 const UploadXmlPage = () => {
-  const { page, q } = useSearch({ from: '/_app/upload-xml' });
+  const { page, q, numnf } = useSearch({ from: '/_app/upload-xml' });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [localSearch, setLocalSearch] = useState(q ?? '');
+  const [localSearch, setLocalSearch] = useState(q ?? numnf ?? '');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState<'history' | 'errors'>('history');
 
@@ -120,23 +156,28 @@ const UploadXmlPage = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (localSearch !== (q ?? '')) {
+      const isKey = localSearch.length === 44;
+      const newQ = isKey && localSearch ? localSearch : undefined;
+      const newNumnf = !isKey && localSearch ? localSearch : undefined;
+
+      if (newQ !== q || newNumnf !== numnf) {
         navigate({
           to: '/upload-xml',
           search: {
             page: 1,
-            q: localSearch || undefined,
+            q: newQ,
+            numnf: newNumnf,
           },
         });
       }
     }, 500);
     return () => clearTimeout(handler);
-  }, [localSearch, navigate, q]);
+  }, [localSearch, navigate, q, numnf]);
 
   // Query 1: Prisma Logs (History)
   const { isFetching, data } = useQuery({
-    queryKey: ['nfe-logs', page, q],
-    queryFn: () => getNfeLogs(page, q),
+    queryKey: ['nfe-logs', page, q, numnf],
+    queryFn: () => getNfeLogs(page, q, numnf),
     placeholderData: keepPreviousData,
   });
 
@@ -162,13 +203,14 @@ const UploadXmlPage = () => {
       let message = 'Importado com sucesso';
 
       if (!isProcessed) {
-        message = 'Na Fila';
-      } else if (firstPageAxiomErrors?.data) {
-        const matchingError = firstPageAxiomErrors.data.find(
-          (err) => err.jobName === item.nfeAccessKey,
+        const matchingError = firstPageAxiomErrors?.data?.find(
+          (err) => err.nfeKey === item.nfeAccessKey,
         );
+
         if (matchingError) {
           message = matchingError.jobMessage;
+        } else {
+          message = 'Na Fila';
         }
       }
 
@@ -211,13 +253,13 @@ const UploadXmlPage = () => {
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
-      navigate({ to: '/upload-xml', search: { page: page - 1, q } });
+      navigate({ to: '/upload-xml', search: { page: page - 1, q, numnf } });
     }
   };
 
   const handleNextPage = () => {
     if (data?.meta.hasNext) {
-      navigate({ to: '/upload-xml', search: { page: page + 1, q } });
+      navigate({ to: '/upload-xml', search: { page: page + 1, q, numnf } });
     }
   };
 
@@ -249,7 +291,7 @@ const UploadXmlPage = () => {
               : ''
           }`}
           onClick={() =>
-            navigate({ to: '/upload-xml', search: { page: i, q } })
+            navigate({ to: '/upload-xml', search: { page: i, q, numnf } })
           }
         >
           {i}
@@ -370,7 +412,7 @@ const UploadXmlPage = () => {
             <DataTable
               columns={columnsHistory}
               data={mergedHistoryData}
-              searchPlaceholder="Buscar por Chave NFe..."
+              searchPlaceholder="Buscar por Chave NFe ou Número..."
               exportFileName="logs-xml.csv"
               showPagination={false}
               searchValue={localSearch}
