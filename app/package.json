@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:all": "concurrently -n server,web,worker --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\" \"pnpm --filter server worker:upload-xml\"",
+    "dev:all": "concurrently -n server,web --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
     "dev:server": "concurrently -n --raw \"pnpm --filter server dev\"",
     "dev:web": "concurrently \"pnpm --filter web dev\"",
     "worker:upload-xml": "concurrently -n --raw \"pnpm --filter server worker:upload-xml\""
