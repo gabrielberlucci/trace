@@ -26,9 +26,6 @@ export const uploadXMLWorker = new Worker(
     const { emitCNPJ, destCNPJ, nfeKey, numnf, serienf, products } =
       getXMLInfo(docDOM);
 
-    if (!numnf || !serienf)
-      throw new Error('Número ou série da NFe não encontrado');
-
     await job.updateData({
       ...job.data,
       numnf: numnf,
