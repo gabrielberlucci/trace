@@ -12,8 +12,8 @@ export const getXMLInfo = (docDOM: XMLDomDocument) => {
     .getElementsByTagName('infNFe')[0]
     ?.getAttribute('Id')
     ?.replace('NFe', '')!;
-  const numnf = docDOM.getElementsByTagName('nNF')[0]?.textContent;
-  const serienf = docDOM.getElementsByTagName('serie')[0]?.textContent;
+  const numnf = docDOM.getElementsByTagName('nNF')[0]?.textContent!;
+  const serienf = docDOM.getElementsByTagName('serie')[0]?.textContent!;
 
   let products = [];
 
