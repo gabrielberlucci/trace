@@ -1,10 +1,9 @@
-import { Job, Worker } from 'bullmq';
+import { Job, Worker, UnrecoverableError } from 'bullmq';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { getXMLInfo, updateInfoFromXML, validateXML } from './services';
 import { logger } from '@/logger';
 import { Prisma } from '../../generated/prisma/client';
-import { formatPrismaError } from '@/utils';
 
 export const uploadXMLWorker = new Worker(
   'upload-xml',
@@ -20,7 +19,9 @@ export const uploadXMLWorker = new Worker(
     const { res, docDOM } = await validateXML(job);
 
     if (!res) {
-      throw new Error('Assinatura do XML inválida ou arquivo corrompido!');
+      throw new UnrecoverableError(
+        'Assinatura do XML inválida ou arquivo corrompido!',
+      );
     }
 
     const { emitCNPJ, destCNPJ, nfeKey, numnf, serienf, products } =
@@ -33,14 +34,23 @@ export const uploadXMLWorker = new Worker(
       nfeKey: nfeKey,
     });
 
-    await updateInfoFromXML(
-      emitCNPJ,
-      destCNPJ,
-      nfeKey,
-      numnf,
-      serienf,
-      products,
-    );
+    try {
+      await updateInfoFromXML(
+        emitCNPJ,
+        destCNPJ,
+        nfeKey,
+        numnf,
+        serienf,
+        products,
+      );
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new UnrecoverableError('XML já importado');
+        }
+      }
+      throw error;
+    }
 
     // // DEBUG:
     // console.log('Resultado:', res);
@@ -92,25 +102,23 @@ uploadXMLWorker.on('failed', async (job: Job | undefined, error: Error) => {
     job?.data.name,
   );
 
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    if (error.code === 'P2002') {
-      error.message = 'XML já importado';
-    }
+  const maxAttempts = job?.opts.attempts || 5;
+
+  if (
+    error instanceof UnrecoverableError ||
+    job?.attemptsMade === maxAttempts
+  ) {
+    await fs.mkdir(path.dirname(errorDir), { recursive: true });
+    await fs.rename(filePath, errorDir);
   }
-
-  if (!job) throw new Error('Job search failed');
-
-  await fs.mkdir(path.dirname(errorDir), { recursive: true });
-
-  await fs.rename(filePath, errorDir);
 
   logger.error(
     {
-      jobName: job.data.name,
+      jobName: job?.data.name,
       jobErrorMessage: error.message,
-      nfeKey: job.data.nfeKey,
-      numnf: job.data.numnf,
-      serienf: job.data.serienf,
+      nfeKey: job?.data.nfeKey,
+      numnf: job?.data.numnf,
+      serienf: job?.data.serienf,
     },
     'Erro ao importar XML',
   );
