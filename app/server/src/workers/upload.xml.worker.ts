@@ -65,6 +65,16 @@ export const uploadXMLWorker = new Worker(
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
     },
+
+    removeOnComplete: {
+      age: 3600,
+      count: 1000,
+      limit: 100,
+    },
+    removeOnFail: {
+      age: 24 * 3600,
+      limit: 50,
+    },
   },
 );
 
