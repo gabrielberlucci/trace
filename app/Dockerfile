@@ -30,6 +30,7 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/server/node_modules ./server/node_modules
 COPY --from=builder /usr/src/app/shared ./shared
 COPY --from=builder /usr/src/app/server/prisma ./server/prisma
+COPY --from=builder /usr/src/app/server/prisma.config.ts ./server
 
 EXPOSE 3000
 
