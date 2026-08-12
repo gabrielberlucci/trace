@@ -11,4 +11,4 @@ RUN pnpm install --no-frozen-lockfile
 
 COPY . .
 RUN pnpm --filter server build
-CMD ["pnpm", "start"]
+CMD ["pnpm", "--filter", "server", "start"]
