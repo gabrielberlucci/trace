@@ -8,7 +8,6 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 
 COPY server/package.json ./server/
 COPY shared/package.json ./shared/
-COPY web/package.json ./web/
 
 RUN pnpm install --no-frozen-lockfile
 
