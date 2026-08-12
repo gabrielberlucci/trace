@@ -10,5 +10,5 @@ COPY app/server/package.json ./app/server/
 RUN pnpm install --no-frozen-lockfile
 
 COPY . .
-RUN pnpm build
+RUN pnpm --filter server build
 CMD ["pnpm", "start"]
