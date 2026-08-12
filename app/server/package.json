@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "npx prisma generate && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "start": "node dist/server/src/server.js",
+    "start": "node dist/src/server.js",
     "dev": "tsx watch src/server.ts",
     "worker:upload-xml": "tsx watch src/workers/upload.xml.worker.ts",
     "worker:prod": "tsx src/workers/upload.xml.worker.ts",
