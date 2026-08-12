@@ -20,7 +20,6 @@
     "@app/shared": "workspace:*",
     "@axiomhq/js": "^2.0.0",
     "@axiomhq/pino": "^1.6.1",
-    "@prisma/adapter-neon": "^7.9.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@xmldom/xmldom": "^0.9.10",
