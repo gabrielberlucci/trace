@@ -2,7 +2,7 @@ FROM node:24.13.0-alpine
 WORKDIR /usr/src/app
 RUN npm install -g pnpm
 
-COPY pnpm-workspace.yaml ./
+COPY app/pnpm-workspace.yaml ./
 COPY app/server/package.json ./
 
 RUN pnpm install
