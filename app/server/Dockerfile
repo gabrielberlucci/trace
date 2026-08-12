@@ -1,11 +1,13 @@
 FROM node:24.13.0-alpine
 WORKDIR /usr/src/app
-RUN npm install -g pnpm
 
-COPY app/pnpm-workspace.yaml ./
-COPY app/server/package.json ./
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-RUN pnpm install
+COPY app/pnpm-workspace.yaml app/package.json ./
+
+COPY app/server/package.json ./app/server/
+
+RUN pnpm install --no-frozen-lockfile
 
 COPY . .
 RUN pnpm build
