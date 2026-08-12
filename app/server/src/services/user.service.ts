@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma';
 import jwt from 'jsonwebtoken';
 import { Forbidden, NotFound, Unauthorized } from '@/error';
 import 'dotenv/config';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import { hashPassword, verifyPassword } from '@/utils';
 import { loggerStorage } from '@/logger';
 
