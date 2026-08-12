@@ -1,4 +1,4 @@
-import { UserPermissions } from '@app/shared/index';
+import { UserPermissions } from '@app/shared';
 import {
   createProductController,
   getPaginatedProductsController,

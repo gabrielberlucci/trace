@@ -18,7 +18,7 @@ import {
   validatePermission,
   validateQuery,
 } from '@/middlewares';
-import { UserPermissions } from '@app/shared/index';
+import { UserPermissions } from '@app/shared';
 
 /**
  * @swagger
