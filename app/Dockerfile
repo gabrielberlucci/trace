@@ -1,6 +1,6 @@
 FROM node:24.13.0-alpine AS builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
 
@@ -13,16 +13,17 @@ COPY . .
 
 RUN pnpm --filter server build
 
+# --- Runtime Stage ---
 FROM node:24.13.0-alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
 
-COPY --from=builder /app/server/dist ./server/dist
-COPY --from=builder /app/server/package.json ./server/package.json
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/server/node_modules ./server/node_modules
+COPY --from=builder /usr/src/app/server/dist ./server/dist
+COPY --from=builder /usr/src/app/server/package.json ./server/package.json
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/server/node_modules ./server/node_modules
 
 EXPOSE 3000
 
