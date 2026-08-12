@@ -1,7 +1,7 @@
 FROM node:24.13.0-alpine
 WORKDIR /usr/src/app
 RUN npm install -g pnpm
-COPY package.json ./
+COPY app/server/package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install
 COPY . .
 RUN pnpm build
