@@ -14,3 +14,10 @@ allowBuilds:
   prisma: false
   tree-sitter: false
   tree-sitter-json: false
+supportedArchitectures:
+  os:
+    - win32
+    - linux
+  cpu:
+    - x64
+    - arm64
