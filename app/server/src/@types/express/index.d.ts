@@ -6,6 +6,7 @@ namespace NodeJS {
   interface ProcessEnv {
     DATABASE_URL: string;
     PORT: number;
+    HOST: string;
     NODE_ENV: string;
     BASE_URL: string;
     JWT_SECRET: string;
