@@ -2,7 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { loggerStorage } from '@/logger/storage';
 import type { CustomerQueryParamsFilters } from '@/types';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import { NotFound } from '@/error';
 
 export const createCustomer = async (

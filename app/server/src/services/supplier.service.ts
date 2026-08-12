@@ -1,7 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import type { SupplierQueryParamsFilters } from '@/types';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import { NotFound } from '@/error';
 
 export const createSupplier = async (

@@ -1,4 +1,4 @@
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import type { CityStateQueryParamsFilters } from '@/types';

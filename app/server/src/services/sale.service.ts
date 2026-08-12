@@ -7,7 +7,7 @@ import type {
   ValidatedSaleCart,
 } from '@/types';
 import { loggerStorage } from '@/logger';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 
 export const createSale = async (saleData: SaleCart) => {
   return await prisma.$transaction(async (tx) => {

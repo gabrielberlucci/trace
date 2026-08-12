@@ -1,5 +1,5 @@
 import { importXMLQueueService } from '@/queue';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { Axiom } from '@axiomhq/js';

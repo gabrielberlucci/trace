@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
-import { getPaginatedData } from '@/repositories/paginated.repositorhy';
+import { getPaginatedData } from '@/repositories';
 import type { ProductQueryParamsFilters } from '@/types';
 import { NotFound } from '@/error';
 
