@@ -1,1 +1,1 @@
-export { getPaginatedData } from './paginated.repositorhy';
+export { getPaginatedData } from './paginated.respository';
