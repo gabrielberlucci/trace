@@ -2,7 +2,7 @@ FROM node:24.13.0-alpine AS builder
 
 WORKDIR /usr/src/app
 
-RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
+RUN corepack enable && corepack prepare pnpm@11.17.0 --activate
 
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 
@@ -20,7 +20,7 @@ FROM node:24.13.0-alpine
 
 WORKDIR /usr/src/app
 
-RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
+RUN corepack enable && corepack prepare pnpm@11.17.0 --activate
 
 COPY --from=builder /usr/src/app/pnpm-workspace.yaml /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/server/dist ./server/dist
