@@ -2,7 +2,7 @@ import { z } from './config';
 import { PaymentType } from '../constants/enums';
 
 export const createPaymentMethodSchema = z.object({
-  description: z.string({ error: 'Insira uma descrição' }),
+  description: z.string({ error: 'Insira uma descrição' }).min(1, 'Insira uma descrição'),
   active: z
     .stringbool({
       truthy: ['true'],
