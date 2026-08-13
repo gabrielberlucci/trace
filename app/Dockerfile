@@ -24,6 +24,9 @@ RUN corepack enable && corepack prepare pnpm@11.17.0 --activate
 
 COPY --from=builder /usr/src/app/pnpm-workspace.yaml /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/server/dist ./server/dist
+COPY --from=builder /usr/src/app/server/src ./server/src
+COPY --from=builder /usr/src/app/server/lib ./server/lib
+COPY --from=builder /usr/src/app/server/tsconfig.json ./server/tsconfig.json
 COPY --from=builder /usr/src/app/server/generated ./server/generated
 COPY --from=builder /usr/src/app/server/package.json ./server/package.json
 COPY --from=builder /usr/src/app/node_modules ./node_modules
