@@ -40,7 +40,8 @@ export const loginUserController = async (req: Request, res: Response) => {
   res
     .cookie('access_token', loggedUser, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 1000,
     })
     .status(StatusCodes.OK)
