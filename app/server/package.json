@@ -9,15 +9,26 @@
     "start": "node dist/src/server.js",
     "dev": "tsx watch src/server.ts",
     "worker:upload-xml": "tsx watch src/workers/upload.xml.worker.ts",
-    "worker:prod": "tsx src/workers/upload.xml.worker.ts",
+    "worker:prod": "node dist/src/workers/upload.xml.worker.js",
     "distClean": "node -e \"require('fs').rm('./dist', { recursive: true, force: true }, (err) => { if (err) throw err; console.log('Directory deleted.'); });\"",
     "modulesClean": "node -e \"require('fs').rm('./node_modules', { recursive: true, force: true }, (err) => { if (err) throw err; console.log('Directory deleted.'); });\"",
-    "test": "vitest"
+    "test": "vitest",
+    "seed:roles": "tsx prisma/create.roles.ts",
+    "seed:user": "tsx prisma/create.user.ts",
+    "seed:city": "tsx prisma/populate.city.ts",
+    "seed:permissions": "tsx prisma/populate.permissions.ts",
+    "seed:role-permissions": "tsx prisma/populate.role.permission.ts",
+    "seed:total-table": "tsx prisma/setup.total.table.ts",
+    "seed:trigger": "tsx prisma/setup.trigger.ts",
+    "seed:all": "pnpm run seed:total-table && pnpm run seed:trigger && pnpm run seed:city && pnpm run seed:roles && pnpm run seed:permissions && pnpm run seed:role-permissions && pnpm run seed:user"
   },
   "keywords": [],
   "author": "Gabriel Berlucci",
   "license": "ISC",
   "packageManager": "pnpm@10.30.3",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@app/shared": "workspace:*",
     "@axiomhq/js": "^2.0.0",

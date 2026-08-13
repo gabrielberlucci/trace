@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "pnpm -r build",
-    "dev:all": "concurrently -n server,web --raw \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
-    "dev:server": "concurrently -n --raw \"pnpm --filter server dev\"",
+    "dev:all": "concurrently -n shared,server,web --raw \"pnpm --filter @app/shared dev\" \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
+    "dev:server": "concurrently -n shared,server --raw \"pnpm --filter @app/shared dev\" \"pnpm --filter server dev\"",
     "dev:web": "concurrently \"pnpm --filter web dev\"",
     "worker:upload-xml": "concurrently -n --raw \"pnpm --filter server worker:upload-xml\""
   },
