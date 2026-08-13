@@ -35,6 +35,8 @@ COPY --from=builder /usr/src/app/shared ./shared
 COPY --from=builder /usr/src/app/server/prisma ./server/prisma
 COPY --from=builder /usr/src/app/server/prisma.config.ts ./server
 
+RUN mkdir -p server/uploads-xml/pending server/uploads-xml/error server/uploads-xml/processed
+
 EXPOSE 3000
 
 CMD ["pnpm", "--filter", "server", "start"]
