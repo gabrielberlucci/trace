@@ -13,8 +13,8 @@ datasource db {
 }
 
 model Customer {
-  id            Int        @id @default(autoincrement())
-  document      String     @unique
+  id            Int            @id @default(autoincrement())
+  document      String         @unique
   typePerson    typePerson
   name          String
   birthdate     DateTime?
@@ -23,12 +23,13 @@ model Customer {
   zipcode       String?
   addressNumber Int?
   complement    String?
-  email         String?    @unique
-  ie            String?    @unique
-  active        Boolean    @default(true)
-  city          City?      @relation(fields: [cityId], references: [id])
+  email         String?        @unique
+  ie            String?        @unique
+  active        Boolean        @default(true)
+  city          City?          @relation(fields: [cityId], references: [id])
   cityId        Int?
   sale          Sale[]
+  serviceOrders ServiceOrder[]
 }
 
 model Supplier {
@@ -174,19 +175,20 @@ model RolePermission {
 }
 
 model Company {
-  id            Int     @id @default(autoincrement())
-  document      String  @unique
+  id            Int            @id @default(autoincrement())
+  document      String         @unique
   name          String
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
   complement    String?
-  email         String? @unique
-  ie            String? @unique
-  active        Boolean @default(true)
-  city          City?   @relation(fields: [cityId], references: [id])
+  email         String?        @unique
+  ie            String?        @unique
+  active        Boolean        @default(true)
+  city          City?          @relation(fields: [cityId], references: [id])
   cityId        Int?
+  serviceOrders ServiceOrder[]
 }
 
 model NfeUploadControl {
@@ -196,6 +198,28 @@ model NfeUploadControl {
   serieNf      String
   processedAt  DateTime
   createdAt    DateTime @default(now())
+}
+
+model ServiceOrder {
+  id       Int      @id @default(autoincrement())
+  date     DateTime
+  customer Customer @relation(fields: [customerId], references: [id])
+  company  Company  @relation(fields: [companyId], references: [id])
+
+  serviceOrderItems ServiceOrderItem[]
+  customerId        Int
+  companyId         Int
+}
+
+model ServiceOrderItem {
+  id             Int          @id @default(autoincrement())
+  data           DateTime
+  description    String
+  hours          Decimal      @db.Decimal(9, 2)
+  hourlyRate     Decimal      @db.Decimal(9, 2)
+  totalPrice     Decimal      @db.Decimal(9, 2)
+  order          ServiceOrder @relation(fields: [serviceOrderId], references: [id])
+  serviceOrderId Int
 }
 
 // MAKE SERVICE MODEL
