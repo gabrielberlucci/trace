@@ -23,3 +23,5 @@ export type { XMLProducts } from './worker.xml.type';
 export type { AxiomData } from './axiom.type';
 
 export type { UploadXMLQueryParamsFilters } from './upload.xml.type';
+
+export type { ServiceOrder } from './service.type';
