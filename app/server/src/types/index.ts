@@ -24,4 +24,7 @@ export type { AxiomData } from './axiom.type';
 
 export type { UploadXMLQueryParamsFilters } from './upload.xml.type';
 
-export type { ServiceOrder } from './service.type';
+export type {
+  ServiceOrder,
+  ServiceOrderQueryParamsFilters,
+} from './service.type';
