@@ -1,10 +1,18 @@
-import { createServiceOrderController } from '@/controllers';
+import {
+  createServiceOrderController,
+  getPaginatedServiceOrderController,
+} from '@/controllers';
 import {
   authMiddleware,
   validateData,
   validatePermission,
+  validateQuery,
 } from '@/middlewares';
-import { serviceOrderSchema, UserPermissions } from '@app/shared';
+import {
+  queryFilterSchema,
+  serviceOrderSchema,
+  UserPermissions,
+} from '@app/shared';
 import { Router } from 'express';
 
 const serviceOrderRouter: Router = Router();
@@ -15,6 +23,14 @@ serviceOrderRouter.post(
   validateData(serviceOrderSchema),
   validatePermission(UserPermissions.CREATE_SERVICE_ORDER),
   createServiceOrderController,
+);
+
+serviceOrderRouter.get(
+  '/',
+  authMiddleware,
+  validateQuery(queryFilterSchema),
+  validatePermission(UserPermissions.VIEW_SERVICE_ORDER),
+  getPaginatedServiceOrderController,
 );
 
 export { serviceOrderRouter };
