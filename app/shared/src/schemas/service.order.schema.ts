@@ -1,7 +1,7 @@
 import { z } from './config';
 
 export const serviceOrderSchema = z.object({
-  date: z.iso.date({ error: 'Insira a uma data' }),
+  date: z.iso.datetime({ error: 'Insira a uma data' }),
   document: z
     .string({ error: 'Insira o documento do cliente' })
     .min(11, { error: 'O documento deve conter pelo menos 11 dígitos' })
@@ -9,7 +9,7 @@ export const serviceOrderSchema = z.object({
   items: z
     .array(
       z.object({
-        date: z.iso.date({ error: 'Insira a uma data' }),
+        date: z.iso.datetime({ error: 'Insira a uma data' }),
         description: z
           .string({ error: 'Insira uma descrição' })
           .min(1, { error: 'A descrição deve conter pelo menos 1 caracteres' })
