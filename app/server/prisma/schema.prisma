@@ -213,7 +213,7 @@ model ServiceOrder {
 
 model ServiceOrderItem {
   id             Int          @id @default(autoincrement())
-  data           DateTime
+  date           DateTime
   description    String
   hours          Decimal      @db.Decimal(9, 2)
   hourlyRate     Decimal      @db.Decimal(9, 2)
