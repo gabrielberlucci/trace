@@ -53,4 +53,7 @@ export {
   getAxiomNfeLogs,
 } from './upload.xml.service';
 
-export { createServiceOrder } from './service.order.service';
+export {
+  createServiceOrder,
+  getPaginatedServiceOrder,
+} from './service.order.service';
