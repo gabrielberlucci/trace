@@ -27,3 +27,8 @@ export { modifyUser } from './users/patch-user';
 export { getCompanies, getSingleCompany } from './companies/get-companies';
 export { modifyCompany } from './companies/patch-company';
 export { uploadXmlFile, getNfeLogs, getAxiomErrors } from './upload-xml';
+export {
+  getServiceOrders,
+  getSingleServiceOrder,
+} from './service-orders/get-service-orders';
+export { createServiceOrder } from './service-orders/post-service-orders';

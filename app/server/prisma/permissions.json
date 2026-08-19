@@ -16,7 +16,10 @@
     "view:sale",
     "create:customer",
     "modify:customer",
-    "view:customer"
+    "view:customer",
+    "create:service-order",
+    "view:service-order",
+    "modify:service-order"
   ],
   "gerente": [
     "create:user",
@@ -31,7 +34,10 @@
     "view:sale",
     "create:customer",
     "modify:customer",
-    "view:customer"
+    "view:customer",
+    "create:service-order",
+    "view:service-order",
+    "modify:service-order"
   ],
 
   "vendedor": [

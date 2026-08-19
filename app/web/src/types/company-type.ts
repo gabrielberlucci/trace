@@ -16,8 +16,10 @@ export interface PaginatedCompanyData {
   id: number;
   document: string;
   name: string;
+  fantasyName: string | null;
   phone: string;
   address: string;
+  neighborhood: string | null;
   zipcode: string;
   addressNumber: number;
   complement: string;
@@ -38,9 +40,11 @@ export interface CreateCompanyData {
   id?: number;
   document: string;
   name: string;
+  fantasyName?: string;
   birthdate?: Date;
   phone?: string;
   address?: string;
+  neighborhood?: string;
   zipcode?: string;
   addressNumber?: number;
   complement?: string;
