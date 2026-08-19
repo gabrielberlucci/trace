@@ -23,6 +23,6 @@ routes.use('/api/v1/localization', localizationRouter);
 routes.use('/api/v1/roles', roleRouter);
 routes.use('/api/v1/companies', companyRouter);
 routes.use('/api/v1/uploader-xml', uploadXMLRouter);
-routes.use('/api/v1/services-orders', serviceOrderRouter);
+routes.use('/api/v1/service-orders', serviceOrderRouter);
 
 export { routes };
