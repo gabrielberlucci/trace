@@ -31,6 +31,17 @@ export const commonSchema = z.object({
     .min(2, { error: 'Nome muito curto. Insira pelo menos 3 caracteres' })
     .max(50, { error: 'Nome muito longo. Insira no máximo 50 caracteres' }),
 
+  fantasyName: z
+    .string({ error: 'Insira um nome' })
+    .trim()
+    .min(2, {
+      error: 'Nome fantasia muito curto. Insira pelo menos 3 caracteres',
+    })
+    .max(55, {
+      error: 'Nome fantasia muito longo. Insira no máximo 55 caracteres',
+    })
+    .optional(),
+
   phone: z
     .string({ error: 'Insira um telefone' })
     .trim()
