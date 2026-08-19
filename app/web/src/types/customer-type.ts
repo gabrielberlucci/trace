@@ -29,9 +29,11 @@ export interface CreateCustomerDataResponse {
     document: string;
     typePerson: string;
     name: string;
+    fantasyName: string | null;
     birthdate: Date;
     phone: string;
     address: string;
+    neighborhood: string | null;
     zipcode: string;
     addressNumber: number;
     complement: string;
@@ -47,9 +49,11 @@ export interface CreateCustomerData {
   document: string;
   typePerson?: string;
   name: string;
+  fantasyName?: string;
   birthdate?: Date;
   phone?: string;
   address?: string;
+  neighborhood?: string;
   zipcode?: string;
   addressNumber?: number;
   complement?: string;

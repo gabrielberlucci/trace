@@ -100,6 +100,7 @@ const SupplierViewPage = () => {
     resolver: zodResolver(modifySupplierSchema),
     values: response?.data ? {
       name: response.data.name,
+      fantasyName: response.data.fantasyName || undefined,
       document: response.data.document,
       typePerson: response.data.typePerson,
       ie: response.data.ie || undefined,
@@ -107,6 +108,7 @@ const SupplierViewPage = () => {
       phone: response.data.phone || undefined,
       zipcode: response.data.zipcode || undefined,
       address: response.data.address || undefined,
+      neighborhood: response.data.neighborhood || undefined,
       addressNumber: response.data.addressNumber || undefined,
       complement: response.data.complement || undefined,
       cityId: response.data.cityId || undefined,
@@ -350,6 +352,12 @@ const SupplierViewPage = () => {
                       colSpan={2}
                     />
                     <InfoItem
+                      label="Nome Fantasia"
+                      value={supplier.fantasyName}
+                      icon={Building2}
+                      colSpan={2}
+                    />
+                    <InfoItem
                       label="Tipo de Cadastro"
                       value={
                         supplier.typePerson === 'PJ'
@@ -381,6 +389,21 @@ const SupplierViewPage = () => {
                       />
                       {renderError('name')}
                     </div>
+                    {supplier.typePerson === 'PJ' && (
+                      <div className="space-y-3 md:col-span-2">
+                        <Label htmlFor="fantasyName" className="text-sm font-semibold">
+                          Nome Fantasia
+                        </Label>
+                        <Input
+                          id="fantasyName"
+                          className={getInputClassName('fantasyName')}
+                          {...form.register('fantasyName', {
+                            setValueAs: (v) => (v === '' ? undefined : v),
+                          })}
+                        />
+                        {renderError('fantasyName')}
+                      </div>
+                    )}
                     <div className="space-y-3">
                       <Label className="text-sm font-semibold">
                         Tipo de Pessoa
@@ -462,6 +485,10 @@ const SupplierViewPage = () => {
                       }
                     />
                     <InfoItem
+                      label="Bairro"
+                      value={supplier.neighborhood}
+                    />
+                    <InfoItem
                       label="Logradouro"
                       value={[
                         supplier.address,
@@ -470,7 +497,6 @@ const SupplierViewPage = () => {
                       ]
                         .filter(Boolean)
                         .join(', ')}
-                      colSpan={2}
                     />
                   </div>
                 ) : (
@@ -558,7 +584,7 @@ const SupplierViewPage = () => {
                       {renderError('cityId')}
                     </div>
                     <div className="space-y-3 md:col-span-2 grid grid-cols-12 gap-4">
-                      <div className="col-span-12 md:col-span-6 space-y-3">
+                      <div className="col-span-12 md:col-span-12 space-y-3">
                         <Label
                           htmlFor="address"
                           className="text-sm font-semibold"
@@ -573,6 +599,22 @@ const SupplierViewPage = () => {
                           })}
                         />
                         {renderError('address')}
+                      </div>
+                      <div className="col-span-12 md:col-span-6 space-y-3">
+                        <Label
+                          htmlFor="neighborhood"
+                          className="text-sm font-semibold"
+                        >
+                          Bairro
+                        </Label>
+                        <Input
+                          id="neighborhood"
+                          className={getInputClassName('neighborhood')}
+                          {...form.register('neighborhood', {
+                            setValueAs: (v) => (v === '' ? undefined : v),
+                          })}
+                        />
+                        {renderError('neighborhood')}
                       </div>
                       <div className="col-span-6 md:col-span-3 space-y-3">
                         <Label

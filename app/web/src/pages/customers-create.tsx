@@ -133,6 +133,8 @@ const CustomersCreatePage = () => {
     },
   });
 
+  const isPJ = form.watch('typePerson') === 'PJ';
+
   useEffect(() => {
     const fetchStates = async () => {
       try {
@@ -155,9 +157,11 @@ const CustomersCreatePage = () => {
         document: data.document,
         typePerson: data.typePerson || 'PJ',
         name: data.name,
+        fantasyName: data.fantasyName || undefined,
         birthdate: data.birthdate as Date,
         phone: data.phone,
         address: data.address,
+        neighborhood: data.neighborhood,
         zipcode: data.zipcode,
         addressNumber: data.addressNumber,
         complement: data.complement,
@@ -335,6 +339,29 @@ const CustomersCreatePage = () => {
                   </span>
                 )}
               </div>
+
+              {isPJ && (
+                <div className="space-y-3 md:col-span-2">
+                  <Label
+                    htmlFor="fantasyName"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Nome Fantasia
+                  </Label>
+                  <Input
+                    id="fantasyName"
+                    placeholder="Nome Fantasia"
+                    className="h-11 rounded-lg"
+                    {...form.register('fantasyName')}
+                  />
+                  {form.formState.errors.fantasyName && (
+                    <span className="text-red-500 text-xs">
+                      {form.formState.errors.fantasyName.message}
+                    </span>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-3">
                 <Label
                   htmlFor="birthdate"
@@ -538,6 +565,27 @@ const CustomersCreatePage = () => {
                 {form.formState.errors.address && (
                   <span className="text-red-500 text-xs">
                     {form.formState.errors.address.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-3 md:col-span-3">
+                <Label
+                  htmlFor="neighborhood"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Bairro
+                </Label>
+                <Input
+                  id="neighborhood"
+                  placeholder="Ex: Centro"
+                  className="h-11 rounded-lg"
+                  {...form.register('neighborhood', {
+                    setValueAs: (v) => (v === '' ? undefined : v),
+                  })}
+                />
+                {form.formState.errors.neighborhood && (
+                  <span className="text-red-500 text-xs">
+                    {form.formState.errors.neighborhood.message}
                   </span>
                 )}
               </div>

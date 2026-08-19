@@ -28,6 +28,7 @@ export {
   companySchema,
   modifyCompanySchema,
 } from './src/schemas/company.schema';
+export { serviceOrderSchema } from './src/schemas/service.order.schema';
 
 export * from './src/constants/enums';
 export * from './src/utils/index';

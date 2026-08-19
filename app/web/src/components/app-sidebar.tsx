@@ -35,6 +35,7 @@ import {
   ReceiptText,
   Building2,
   FileType,
+  ClipboardList,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { UserSideBar } from './ui/user-info';
@@ -78,6 +79,11 @@ const data: { navMain: NavGroup[] } = {
           title: 'Histórico de Vendas',
           url: '/sale',
           icon: ReceiptText,
+        },
+        {
+          title: 'Ordens de Serviço',
+          url: '/service-orders',
+          icon: ClipboardList,
         },
       ],
     },

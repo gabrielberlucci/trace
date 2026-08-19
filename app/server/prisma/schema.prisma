@@ -13,22 +13,25 @@ datasource db {
 }
 
 model Customer {
-  id            Int        @id @default(autoincrement())
-  document      String     @unique
+  id            Int            @id @default(autoincrement())
+  document      String         @unique
   typePerson    typePerson
   name          String
+  fantasyName   String?
   birthdate     DateTime?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
+  neighborhood  String?
   complement    String?
-  email         String?    @unique
-  ie            String?    @unique
-  active        Boolean    @default(true)
-  city          City?      @relation(fields: [cityId], references: [id])
+  email         String?        @unique
+  ie            String?        @unique
+  active        Boolean        @default(true)
+  city          City?          @relation(fields: [cityId], references: [id])
   cityId        Int?
   sale          Sale[]
+  serviceOrders ServiceOrder[]
 }
 
 model Supplier {
@@ -36,11 +39,13 @@ model Supplier {
   document      String     @unique
   typePerson    typePerson @default(PJ) // IDK IF ITS NECESSARY, BUT MAYBE WILL BE BAYED FROM A GUY WITH CPF? WHY NOT.
   name          String
+  fantasyName   String?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
   complement    String?
+  neighborhood  String?
   email         String?    @unique
   ie            String?    @unique
   active        Boolean    @default(true)
@@ -94,6 +99,7 @@ model User {
   zipcode       String?
   addressNumber Int?
   complement    String?
+  neighborhood  String?
   email         String?   @unique
   password      String
   username      String    @unique
@@ -174,19 +180,22 @@ model RolePermission {
 }
 
 model Company {
-  id            Int     @id @default(autoincrement())
-  document      String  @unique
+  id            Int            @id @default(autoincrement())
+  document      String         @unique
   name          String
+  fantasyName   String?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
   complement    String?
-  email         String? @unique
-  ie            String? @unique
-  active        Boolean @default(true)
-  city          City?   @relation(fields: [cityId], references: [id])
+  neighborhood  String?
+  email         String?        @unique
+  ie            String?        @unique
+  active        Boolean        @default(true)
+  city          City?          @relation(fields: [cityId], references: [id])
   cityId        Int?
+  serviceOrders ServiceOrder[]
 }
 
 model NfeUploadControl {
@@ -196,6 +205,28 @@ model NfeUploadControl {
   serieNf      String
   processedAt  DateTime
   createdAt    DateTime @default(now())
+}
+
+model ServiceOrder {
+  id       Int      @id @default(autoincrement())
+  date     DateTime
+  customer Customer @relation(fields: [customerId], references: [id])
+  company  Company  @relation(fields: [companyId], references: [id])
+
+  serviceOrderItems ServiceOrderItem[]
+  customerId        Int
+  companyId         Int
+}
+
+model ServiceOrderItem {
+  id             Int          @id @default(autoincrement())
+  date           DateTime
+  description    String
+  hours          Decimal      @db.Decimal(9, 2)
+  hourlyRate     Decimal      @db.Decimal(9, 2)
+  totalPrice     Decimal      @db.Decimal(9, 2)
+  order          ServiceOrder @relation(fields: [serviceOrderId], references: [id])
+  serviceOrderId Int
 }
 
 // MAKE SERVICE MODEL
