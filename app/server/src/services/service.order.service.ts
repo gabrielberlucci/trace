@@ -65,40 +65,10 @@ export const getPaginatedServiceOrder = async (
   };
 
   const include: Prisma.ServiceOrderInclude = {
-    serviceOrderItems: {
-      omit: {
-        serviceOrderId: true,
-      },
-    },
-
-    company: {
-      omit: {
-        id: true,
-        cityId: true,
-      },
-
-      include: {
-        city: {
-          omit: {
-            id: true,
-          },
-        },
-      },
-    },
-
     customer: {
-      omit: {
-        id: true,
-        typePerson: true,
-        birthdate: true,
-        cityId: true,
-      },
-      include: {
-        city: {
-          omit: {
-            id: true,
-          },
-        },
+      select: {
+        document: true,
+        name: true,
       },
     },
   };
