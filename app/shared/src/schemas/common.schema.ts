@@ -67,6 +67,13 @@ export const commonSchema = z.object({
 
   addressNumber: z.int({ error: 'Insira um número' }).optional(),
 
+  neighborhood: z
+    .string({ error: 'Insira um bairro' })
+    .trim()
+    .min(3, { error: 'Bairro muito curto. Insira pelo menos 3 caracteres' })
+    .max(50, { error: 'Bairro muito longo. Insira no máximo 50 caracteres' })
+    .optional(),
+
   complement: z
     .string()
     .trim()
