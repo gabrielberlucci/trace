@@ -23,6 +23,7 @@ import { Route as AppProductCreateRouteImport } from './routes/_app/product-crea
 import { Route as AppSaleRouteImport } from './routes/_app/sale'
 import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
 import { Route as AppServiceOrdersRouteImport } from './routes/_app/service-orders'
+import { Route as AppServiceOrdersCreateRouteImport } from './routes/_app/service-orders-create'
 import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
 import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
 import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
@@ -104,6 +105,11 @@ const AppSaleCreateRoute = AppSaleCreateRouteImport.update({
 const AppServiceOrdersRoute = AppServiceOrdersRouteImport.update({
   id: '/service-orders',
   path: '/service-orders',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppServiceOrdersCreateRoute = AppServiceOrdersCreateRouteImport.update({
+  id: '/service-orders-create',
+  path: '/service-orders-create',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSupplierRoute = AppSupplierRouteImport.update({
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
   '/service-orders': typeof AppServiceOrdersRoute
+  '/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
   '/service-orders': typeof AppServiceOrdersRoute
+  '/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -249,6 +257,7 @@ export interface FileRoutesById {
   '/_app/sale': typeof AppSaleRoute
   '/_app/sale-create': typeof AppSaleCreateRoute
   '/_app/service-orders': typeof AppServiceOrdersRoute
+  '/_app/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/_app/supplier': typeof AppSupplierRoute
   '/_app/supplier-create': typeof AppSupplierCreateRoute
   '/_app/upload-xml': typeof AppUploadXmlRoute
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
     | '/sale'
     | '/sale-create'
     | '/service-orders'
+    | '/service-orders-create'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -307,6 +317,7 @@ export interface FileRouteTypes {
     | '/sale'
     | '/sale-create'
     | '/service-orders'
+    | '/service-orders-create'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -337,6 +348,7 @@ export interface FileRouteTypes {
     | '/_app/sale'
     | '/_app/sale-create'
     | '/_app/service-orders'
+    | '/_app/service-orders-create'
     | '/_app/supplier'
     | '/_app/supplier-create'
     | '/_app/upload-xml'
@@ -459,6 +471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppServiceOrdersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/service-orders-create': {
+      id: '/_app/service-orders-create'
+      path: '/service-orders-create'
+      fullPath: '/service-orders-create'
+      preLoaderRoute: typeof AppServiceOrdersCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/supplier': {
       id: '/_app/supplier'
       path: '/supplier'
@@ -572,6 +591,7 @@ interface AppRouteChildren {
   AppSaleRoute: typeof AppSaleRoute
   AppSaleCreateRoute: typeof AppSaleCreateRoute
   AppServiceOrdersRoute: typeof AppServiceOrdersRoute
+  AppServiceOrdersCreateRoute: typeof AppServiceOrdersCreateRoute
   AppSupplierRoute: typeof AppSupplierRoute
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
   AppUploadXmlRoute: typeof AppUploadXmlRoute
@@ -599,6 +619,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSaleRoute: AppSaleRoute,
   AppSaleCreateRoute: AppSaleCreateRoute,
   AppServiceOrdersRoute: AppServiceOrdersRoute,
+  AppServiceOrdersCreateRoute: AppServiceOrdersCreateRoute,
   AppSupplierRoute: AppSupplierRoute,
   AppSupplierCreateRoute: AppSupplierCreateRoute,
   AppUploadXmlRoute: AppUploadXmlRoute,

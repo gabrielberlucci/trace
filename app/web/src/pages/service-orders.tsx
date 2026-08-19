@@ -157,6 +157,11 @@ const ServiceOrdersPage = () => {
             Gerencie e visualize as ordens de serviço.
           </p>
         </div>
+        <Link to="/service-orders-create">
+          <Button className="bg-violet-600 hover:bg-violet-700">
+            Nova Ordem
+          </Button>
+        </Link>
       </div>
 
       <div className="mt-8 space-y-4">
