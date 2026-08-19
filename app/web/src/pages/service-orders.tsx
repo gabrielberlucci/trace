@@ -6,7 +6,8 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getServiceOrders } from '@/api';
 import type { ServiceOrderData } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { toast } from 'sonner';
 
 const columns: ColumnDef<ServiceOrderData>[] = [
   {
@@ -86,11 +87,24 @@ const ServiceOrdersPage = () => {
     return () => clearTimeout(handler);
   }, [localSearch, navigate, q]);
 
-  const { isFetching, data } = useQuery({
+  const toastShownRef = useRef(false);
+
+  const { isFetching, error, data } = useQuery({
     queryKey: ['service-orders', page, q],
     queryFn: () => getServiceOrders(page, q),
     placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (data?.message && !toastShownRef.current) {
+      toast.success(data.message);
+      toastShownRef.current = true;
+    }
+  }, [data]);
+
+  if (error) {
+    console.error('Error fetching service orders:', error);
+  }
 
   const handlePreviousPage = () => {
     if (data?.meta.hasPrevious) {
