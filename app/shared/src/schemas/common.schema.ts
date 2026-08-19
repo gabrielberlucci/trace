@@ -31,6 +31,17 @@ export const commonSchema = z.object({
     .min(2, { error: 'Nome muito curto. Insira pelo menos 3 caracteres' })
     .max(50, { error: 'Nome muito longo. Insira no máximo 50 caracteres' }),
 
+  fantasyName: z
+    .string({ error: 'Insira um nome' })
+    .trim()
+    .min(2, {
+      error: 'Nome fantasia muito curto. Insira pelo menos 3 caracteres',
+    })
+    .max(55, {
+      error: 'Nome fantasia muito longo. Insira no máximo 55 caracteres',
+    })
+    .optional(),
+
   phone: z
     .string({ error: 'Insira um telefone' })
     .trim()
@@ -55,6 +66,13 @@ export const commonSchema = z.object({
     .optional(),
 
   addressNumber: z.int({ error: 'Insira um número' }).optional(),
+
+  neighborhood: z
+    .string({ error: 'Insira um bairro' })
+    .trim()
+    .min(3, { error: 'Bairro muito curto. Insira pelo menos 3 caracteres' })
+    .max(50, { error: 'Bairro muito longo. Insira no máximo 50 caracteres' })
+    .optional(),
 
   complement: z
     .string()

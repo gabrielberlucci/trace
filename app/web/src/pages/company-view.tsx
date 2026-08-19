@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -97,18 +92,22 @@ const CompanyViewPage = () => {
 
   const form = useForm<CompanyFormInput, unknown, CompanyFormOutput>({
     resolver: zodResolver(modifyCompanySchema),
-    values: response?.data ? {
-      name: response.data.name,
-      email: response.data.email || undefined,
-      phone: response.data.phone || undefined,
-      ie: response.data.ie || undefined,
-      zipcode: response.data.zipcode || undefined,
-      address: response.data.address || undefined,
-      addressNumber: response.data.addressNumber || undefined,
-      complement: response.data.complement || undefined,
-      cityId: response.data.cityId || undefined,
-      active: response.data.active ? 'true' : 'false',
-    } : undefined,
+    values: response?.data
+      ? {
+          name: response.data.name,
+          fantasyName: response.data.fantasyName || undefined,
+          email: response.data.email || undefined,
+          phone: response.data.phone || undefined,
+          ie: response.data.ie || undefined,
+          zipcode: response.data.zipcode || undefined,
+          address: response.data.address || undefined,
+          neighborhood: response.data.neighborhood || undefined,
+          addressNumber: response.data.addressNumber || undefined,
+          complement: response.data.complement || undefined,
+          cityId: response.data.cityId || undefined,
+          active: response.data.active ? 'true' : 'false',
+        }
+      : undefined,
   });
 
   const { errors, dirtyFields } = form.formState;
@@ -116,7 +115,9 @@ const CompanyViewPage = () => {
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const resStates = (await getStates()) as { data: Record<string, string> };
+        const resStates = (await getStates()) as {
+          data: Record<string, string>;
+        };
         if (resStates?.data) setStates(resStates.data);
       } catch (e) {
         console.error('Failed to fetch states', e);
@@ -169,9 +170,14 @@ const CompanyViewPage = () => {
       if (isAxiosError(err) && err.response?.data) {
         const data = err.response.data;
         if (data.fieldErrors && Object.keys(data.fieldErrors).length > 0) {
-          Object.entries(data.fieldErrors).forEach(([field, messages]: [string, any]) => {
-            form.setError(field as any, { type: 'server', message: messages[0] });
-          });
+          Object.entries(data.fieldErrors).forEach(
+            ([field, messages]: [string, any]) => {
+              form.setError(field as any, {
+                type: 'server',
+                message: messages[0],
+              });
+            },
+          );
           toast.error('Erro de validação, verifique os campos destacados.');
           return;
         }
@@ -206,16 +212,23 @@ const CompanyViewPage = () => {
     toast.error('Erro de validação, verifique os campos destacados.');
   };
 
-  const getInputClassName = (fieldName: keyof CompanyFormInput, baseClass: string = 'h-11 rounded-lg') =>
+  const getInputClassName = (
+    fieldName: keyof CompanyFormInput,
+    baseClass: string = 'h-11 rounded-lg',
+  ) =>
     cn(
       baseClass,
-      errors[fieldName] && 'border-red-500 focus-visible:ring-red-500'
+      errors[fieldName] && 'border-red-500 focus-visible:ring-red-500',
     );
 
   const renderError = (fieldName: keyof CompanyFormInput) => {
     const error = errors[fieldName];
     if (!error) return null;
-    return <span className="text-red-500 text-xs mt-1 block">{error.message as string}</span>;
+    return (
+      <span className="text-red-500 text-xs mt-1 block">
+        {error.message as string}
+      </span>
+    );
   };
 
   if (isFetching && !response) {
@@ -275,7 +288,8 @@ const CompanyViewPage = () => {
               )}
             </h1>
             <p className="text-sm text-muted-foreground flex items-center gap-2">
-              CNPJ: {company.document} | ID: <span className="font-medium text-foreground">{company.id}</span>
+              CNPJ: {company.document} | ID:{' '}
+              <span className="font-medium text-foreground">{company.id}</span>
             </p>
           </div>
         </div>
@@ -329,29 +343,21 @@ const CompanyViewPage = () => {
             <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-card">
               <CardHeader className="pb-4 pt-6 px-6 border-b border-zinc-100 dark:border-zinc-800/50">
                 <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
-                  <Building2 className="h-5 w-5 text-violet-500" /> Informações Básicas
+                  <Building2 className="h-5 w-5 text-violet-500" /> Informações
+                  Básicas
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 {!isEditing ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                    <InfoItem label="Razão Social" value={company.name} />
                     <InfoItem
-                      label="Nome Fantasia / Razão Social"
-                      value={company.name}
+                      label="Nome Fantasia"
+                      value={company.fantasyName}
                     />
-                    <InfoItem
-                      label="CNPJ"
-                      value={company.document}
-                    />
-                    <InfoItem
-                      label="Inscrição Estadual"
-                      value={company.ie}
-                    />
-                    <InfoItem
-                      label="Email"
-                      value={company.email}
-                      icon={Mail}
-                    />
+                    <InfoItem label="CNPJ" value={company.document} />
+                    <InfoItem label="Inscrição Estadual" value={company.ie} />
+                    <InfoItem label="Email" value={company.email} icon={Mail} />
                     <InfoItem
                       label="Telefone"
                       value={company.phone}
@@ -362,7 +368,7 @@ const CompanyViewPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-3 md:col-span-2">
                       <Label htmlFor="name" className="text-sm font-semibold">
-                        Nome Fantasia / Razão Social <span className="text-red-500">*</span>
+                        Razão Social <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="name"
@@ -371,8 +377,27 @@ const CompanyViewPage = () => {
                       />
                       {renderError('name')}
                     </div>
+                    <div className="space-y-3 md:col-span-2">
+                      <Label
+                        htmlFor="fantasyName"
+                        className="text-sm font-semibold"
+                      >
+                        Nome Fantasia
+                      </Label>
+                      <Input
+                        id="fantasyName"
+                        className={getInputClassName('fantasyName')}
+                        {...form.register('fantasyName', {
+                          setValueAs: (v) => (v === '' ? undefined : v),
+                        })}
+                      />
+                      {renderError('fantasyName')}
+                    </div>
                     <div className="space-y-3">
-                      <Label htmlFor="document" className="text-sm font-semibold text-muted-foreground">
+                      <Label
+                        htmlFor="document"
+                        className="text-sm font-semibold text-muted-foreground"
+                      >
                         CNPJ
                       </Label>
                       <Input
@@ -381,7 +406,9 @@ const CompanyViewPage = () => {
                         disabled
                         className="h-11 rounded-lg bg-zinc-100 dark:bg-zinc-800 cursor-not-allowed"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">O documento não pode ser alterado.</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        O documento não pode ser alterado.
+                      </p>
                     </div>
                     <div className="space-y-3">
                       <Label htmlFor="ie" className="text-sm font-semibold">
@@ -406,7 +433,10 @@ const CompanyViewPage = () => {
                         </div>
                         <Input
                           id="email"
-                          className={getInputClassName('email', 'h-11 rounded-lg pl-12 pr-4')}
+                          className={getInputClassName(
+                            'email',
+                            'h-11 rounded-lg pl-12 pr-4',
+                          )}
                           {...form.register('email', {
                             setValueAs: (v) => (v === '' ? undefined : v),
                           })}
@@ -424,7 +454,10 @@ const CompanyViewPage = () => {
                         </div>
                         <Input
                           id="phone"
-                          className={getInputClassName('phone', 'h-11 rounded-lg pl-12 pr-4')}
+                          className={getInputClassName(
+                            'phone',
+                            'h-11 rounded-lg pl-12 pr-4',
+                          )}
                           {...form.register('phone', {
                             setValueAs: (v) => (v === '' ? undefined : v),
                           })}
@@ -455,6 +488,7 @@ const CompanyViewPage = () => {
                           : null
                       }
                     />
+                    <InfoItem label="Bairro" value={company.neighborhood} />
                     <InfoItem
                       label="Logradouro"
                       value={[
@@ -464,7 +498,6 @@ const CompanyViewPage = () => {
                       ]
                         .filter(Boolean)
                         .join(', ')}
-                      colSpan={2}
                     />
                   </div>
                 ) : (
@@ -552,7 +585,7 @@ const CompanyViewPage = () => {
                       {renderError('cityId')}
                     </div>
                     <div className="space-y-3 md:col-span-2 grid grid-cols-12 gap-4">
-                      <div className="col-span-12 md:col-span-6 space-y-3">
+                      <div className="col-span-12 md:col-span-12 space-y-3">
                         <Label
                           htmlFor="address"
                           className="text-sm font-semibold"
@@ -567,6 +600,22 @@ const CompanyViewPage = () => {
                           })}
                         />
                         {renderError('address')}
+                      </div>
+                      <div className="col-span-12 md:col-span-6 space-y-3">
+                        <Label
+                          htmlFor="neighborhood"
+                          className="text-sm font-semibold"
+                        >
+                          Bairro
+                        </Label>
+                        <Input
+                          id="neighborhood"
+                          className={getInputClassName('neighborhood')}
+                          {...form.register('neighborhood', {
+                            setValueAs: (v) => (v === '' ? undefined : v),
+                          })}
+                        />
+                        {renderError('neighborhood')}
                       </div>
                       <div className="col-span-6 md:col-span-3 space-y-3">
                         <Label
@@ -614,7 +663,8 @@ const CompanyViewPage = () => {
             <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-card">
               <CardHeader className="pb-4 pt-6 px-6 border-b border-zinc-100 dark:border-zinc-800/50">
                 <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-violet-500" /> Permissões e Status
+                  <Settings className="h-5 w-5 text-violet-500" /> Permissões e
+                  Status
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
@@ -649,7 +699,9 @@ const CompanyViewPage = () => {
                             value={field.value as string}
                             onValueChange={field.onChange}
                           >
-                            <SelectTrigger className={getInputClassName('active')}>
+                            <SelectTrigger
+                              className={getInputClassName('active')}
+                            >
                               <SelectValue placeholder="Status" />
                             </SelectTrigger>
                             <SelectContent>

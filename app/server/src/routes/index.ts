@@ -9,6 +9,7 @@ import { localizationRouter } from './localization.route';
 import { roleRouter } from './role.route';
 import { companyRouter } from './company.route';
 import { uploadXMLRouter } from './upload.xml.route';
+import { serviceOrderRouter } from './service.order.route';
 
 const routes: Router = Router();
 
@@ -22,5 +23,6 @@ routes.use('/api/v1/localization', localizationRouter);
 routes.use('/api/v1/roles', roleRouter);
 routes.use('/api/v1/companies', companyRouter);
 routes.use('/api/v1/uploader-xml', uploadXMLRouter);
+routes.use('/api/v1/service-orders', serviceOrderRouter);
 
 export { routes };

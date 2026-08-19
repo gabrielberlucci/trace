@@ -60,3 +60,9 @@ export {
   getPaginatedNfeLogsController,
   getAxiomNfeLogsController,
 } from './upload.xml.controller';
+
+export {
+  createServiceOrderController,
+  getPaginatedServiceOrderController,
+  getServiceOrderController,
+} from './service.order.controller';

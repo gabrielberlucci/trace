@@ -16,4 +16,7 @@ export const UserPermissions = {
   CREATE_CUSTOMER: 'create:customer',
   MODIFY_CUSTOMER: 'modify:customer',
   VIEW_CUSTOMER: 'view:customer',
+  CREATE_SERVICE_ORDER: 'create:service-order',
+  VIEW_SERVICE_ORDER: 'view:service-order',
+  MODIFY_SERVICE_ORDER: 'modify:service-order',
 } as const;
