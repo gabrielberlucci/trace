@@ -9,114 +9,51 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/_auth'
-import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AppUserCreateRouteImport } from './routes/_app/user-create'
-import { Route as AppUserRouteImport } from './routes/_app/user'
-import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
-import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
-import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
-import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
-import { Route as AppSaleRouteImport } from './routes/_app/sale'
-import { Route as AppProductCreateRouteImport } from './routes/_app/product-create'
-import { Route as AppProductRouteImport } from './routes/_app/product'
-import { Route as AppPaymentCreateRouteImport } from './routes/_app/payment-create'
-import { Route as AppPaymentRouteImport } from './routes/_app/payment'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
-import { Route as AppCustomerCreateRouteImport } from './routes/_app/customer-create'
-import { Route as AppCustomerRouteImport } from './routes/_app/customer'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AppCompanyRouteImport } from './routes/_app/company'
-import { Route as AppUserIdRouteImport } from './routes/_app/user_.$id'
-import { Route as AppSupplierIdRouteImport } from './routes/_app/supplier_.$id'
-import { Route as AppSaleIdRouteImport } from './routes/_app/sale_.$id'
-import { Route as AppProductIdRouteImport } from './routes/_app/product_.$id'
-import { Route as AppPaymentIdRouteImport } from './routes/_app/payment_.$id'
-import { Route as AppCustomerIdRouteImport } from './routes/_app/customer_.$id'
+import { Route as AppCustomerRouteImport } from './routes/_app/customer'
+import { Route as AppCustomerCreateRouteImport } from './routes/_app/customer-create'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppPaymentRouteImport } from './routes/_app/payment'
+import { Route as AppPaymentCreateRouteImport } from './routes/_app/payment-create'
+import { Route as AppProductRouteImport } from './routes/_app/product'
+import { Route as AppProductCreateRouteImport } from './routes/_app/product-create'
+import { Route as AppSaleRouteImport } from './routes/_app/sale'
+import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
+import { Route as AppServiceOrdersRouteImport } from './routes/_app/service-orders'
+import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
+import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
+import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
+import { Route as AppUserRouteImport } from './routes/_app/user'
+import { Route as AppUserCreateRouteImport } from './routes/_app/user-create'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppCompanyIdRouteImport } from './routes/_app/company_.$id'
+import { Route as AppCustomerIdRouteImport } from './routes/_app/customer_.$id'
+import { Route as AppPaymentIdRouteImport } from './routes/_app/payment_.$id'
+import { Route as AppProductIdRouteImport } from './routes/_app/product_.$id'
+import { Route as AppSaleIdRouteImport } from './routes/_app/sale_.$id'
+import { Route as AppServiceOrderIdRouteImport } from './routes/_app/service-order_.$id'
+import { Route as AppSupplierIdRouteImport } from './routes/_app/supplier_.$id'
+import { Route as AppUserIdRouteImport } from './routes/_app/user_.$id'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/_auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AppUserCreateRoute = AppUserCreateRouteImport.update({
-  id: '/user-create',
-  path: '/user-create',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppUserRoute = AppUserRouteImport.update({
-  id: '/user',
-  path: '/user',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppUploadXmlRoute = AppUploadXmlRouteImport.update({
-  id: '/upload-xml',
-  path: '/upload-xml',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSupplierCreateRoute = AppSupplierCreateRouteImport.update({
-  id: '/supplier-create',
-  path: '/supplier-create',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSupplierRoute = AppSupplierRouteImport.update({
-  id: '/supplier',
-  path: '/supplier',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSaleCreateRoute = AppSaleCreateRouteImport.update({
-  id: '/sale-create',
-  path: '/sale-create',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSaleRoute = AppSaleRouteImport.update({
-  id: '/sale',
-  path: '/sale',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppProductCreateRoute = AppProductCreateRouteImport.update({
-  id: '/product-create',
-  path: '/product-create',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppProductRoute = AppProductRouteImport.update({
-  id: '/product',
-  path: '/product',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPaymentCreateRoute = AppPaymentCreateRouteImport.update({
-  id: '/payment-create',
-  path: '/payment-create',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPaymentRoute = AppPaymentRouteImport.update({
-  id: '/payment',
-  path: '/payment',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppCustomerCreateRoute = AppCustomerCreateRouteImport.update({
-  id: '/customer-create',
-  path: '/customer-create',
+const AppCompanyRoute = AppCompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCustomerRoute = AppCustomerRouteImport.update({
@@ -124,34 +61,84 @@ const AppCustomerRoute = AppCustomerRouteImport.update({
   path: '/customer',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCompanyRoute = AppCompanyRouteImport.update({
-  id: '/company',
-  path: '/company',
+const AppCustomerCreateRoute = AppCustomerCreateRouteImport.update({
+  id: '/customer-create',
+  path: '/customer-create',
   getParentRoute: () => AppRoute,
 } as any)
-const AppUserIdRoute = AppUserIdRouteImport.update({
-  id: '/user_/$id',
-  path: '/user/$id',
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSupplierIdRoute = AppSupplierIdRouteImport.update({
-  id: '/supplier_/$id',
-  path: '/supplier/$id',
+const AppPaymentRoute = AppPaymentRouteImport.update({
+  id: '/payment',
+  path: '/payment',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSaleIdRoute = AppSaleIdRouteImport.update({
-  id: '/sale_/$id',
-  path: '/sale/$id',
+const AppPaymentCreateRoute = AppPaymentCreateRouteImport.update({
+  id: '/payment-create',
+  path: '/payment-create',
   getParentRoute: () => AppRoute,
 } as any)
-const AppProductIdRoute = AppProductIdRouteImport.update({
-  id: '/product_/$id',
-  path: '/product/$id',
+const AppProductRoute = AppProductRouteImport.update({
+  id: '/product',
+  path: '/product',
   getParentRoute: () => AppRoute,
 } as any)
-const AppPaymentIdRoute = AppPaymentIdRouteImport.update({
-  id: '/payment_/$id',
-  path: '/payment/$id',
+const AppProductCreateRoute = AppProductCreateRouteImport.update({
+  id: '/product-create',
+  path: '/product-create',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSaleRoute = AppSaleRouteImport.update({
+  id: '/sale',
+  path: '/sale',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSaleCreateRoute = AppSaleCreateRouteImport.update({
+  id: '/sale-create',
+  path: '/sale-create',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppServiceOrdersRoute = AppServiceOrdersRouteImport.update({
+  id: '/service-orders',
+  path: '/service-orders',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupplierRoute = AppSupplierRouteImport.update({
+  id: '/supplier',
+  path: '/supplier',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupplierCreateRoute = AppSupplierCreateRouteImport.update({
+  id: '/supplier-create',
+  path: '/supplier-create',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUploadXmlRoute = AppUploadXmlRouteImport.update({
+  id: '/upload-xml',
+  path: '/upload-xml',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUserRoute = AppUserRouteImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUserCreateRoute = AppUserCreateRouteImport.update({
+  id: '/user-create',
+  path: '/user-create',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppCompanyIdRoute = AppCompanyIdRouteImport.update({
+  id: '/company_/$id',
+  path: '/company/$id',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCustomerIdRoute = AppCustomerIdRouteImport.update({
@@ -159,9 +146,34 @@ const AppCustomerIdRoute = AppCustomerIdRouteImport.update({
   path: '/customer/$id',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCompanyIdRoute = AppCompanyIdRouteImport.update({
-  id: '/company_/$id',
-  path: '/company/$id',
+const AppPaymentIdRoute = AppPaymentIdRouteImport.update({
+  id: '/payment_/$id',
+  path: '/payment/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProductIdRoute = AppProductIdRouteImport.update({
+  id: '/product_/$id',
+  path: '/product/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSaleIdRoute = AppSaleIdRouteImport.update({
+  id: '/sale_/$id',
+  path: '/sale/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppServiceOrderIdRoute = AppServiceOrderIdRouteImport.update({
+  id: '/service-order_/$id',
+  path: '/service-order/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupplierIdRoute = AppSupplierIdRouteImport.update({
+  id: '/supplier_/$id',
+  path: '/supplier/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUserIdRoute = AppUserIdRouteImport.update({
+  id: '/user_/$id',
+  path: '/user/$id',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -177,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/product-create': typeof AppProductCreateRoute
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
+  '/service-orders': typeof AppServiceOrdersRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -188,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
   '/sale/$id': typeof AppSaleIdRoute
+  '/service-order/$id': typeof AppServiceOrderIdRoute
   '/supplier/$id': typeof AppSupplierIdRoute
   '/user/$id': typeof AppUserIdRoute
 }
@@ -203,6 +217,7 @@ export interface FileRoutesByTo {
   '/product-create': typeof AppProductCreateRoute
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
+  '/service-orders': typeof AppServiceOrdersRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -214,6 +229,7 @@ export interface FileRoutesByTo {
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
   '/sale/$id': typeof AppSaleIdRoute
+  '/service-order/$id': typeof AppServiceOrderIdRoute
   '/supplier/$id': typeof AppSupplierIdRoute
   '/user/$id': typeof AppUserIdRoute
 }
@@ -232,6 +248,7 @@ export interface FileRoutesById {
   '/_app/product-create': typeof AppProductCreateRoute
   '/_app/sale': typeof AppSaleRoute
   '/_app/sale-create': typeof AppSaleCreateRoute
+  '/_app/service-orders': typeof AppServiceOrdersRoute
   '/_app/supplier': typeof AppSupplierRoute
   '/_app/supplier-create': typeof AppSupplierCreateRoute
   '/_app/upload-xml': typeof AppUploadXmlRoute
@@ -243,6 +260,7 @@ export interface FileRoutesById {
   '/_app/payment_/$id': typeof AppPaymentIdRoute
   '/_app/product_/$id': typeof AppProductIdRoute
   '/_app/sale_/$id': typeof AppSaleIdRoute
+  '/_app/service-order_/$id': typeof AppServiceOrderIdRoute
   '/_app/supplier_/$id': typeof AppSupplierIdRoute
   '/_app/user_/$id': typeof AppUserIdRoute
 }
@@ -260,6 +278,7 @@ export interface FileRouteTypes {
     | '/product-create'
     | '/sale'
     | '/sale-create'
+    | '/service-orders'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -271,6 +290,7 @@ export interface FileRouteTypes {
     | '/payment/$id'
     | '/product/$id'
     | '/sale/$id'
+    | '/service-order/$id'
     | '/supplier/$id'
     | '/user/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -286,6 +306,7 @@ export interface FileRouteTypes {
     | '/product-create'
     | '/sale'
     | '/sale-create'
+    | '/service-orders'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -297,6 +318,7 @@ export interface FileRouteTypes {
     | '/payment/$id'
     | '/product/$id'
     | '/sale/$id'
+    | '/service-order/$id'
     | '/supplier/$id'
     | '/user/$id'
   id:
@@ -314,6 +336,7 @@ export interface FileRouteTypes {
     | '/_app/product-create'
     | '/_app/sale'
     | '/_app/sale-create'
+    | '/_app/service-orders'
     | '/_app/supplier'
     | '/_app/supplier-create'
     | '/_app/upload-xml'
@@ -325,6 +348,7 @@ export interface FileRouteTypes {
     | '/_app/payment_/$id'
     | '/_app/product_/$id'
     | '/_app/sale_/$id'
+    | '/_app/service-order_/$id'
     | '/_app/supplier_/$id'
     | '/_app/user_/$id'
   fileRoutesById: FileRoutesById
@@ -337,11 +361,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_auth': {
-      id: '/_auth'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -351,109 +375,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_app/user-create': {
-      id: '/_app/user-create'
-      path: '/user-create'
-      fullPath: '/user-create'
-      preLoaderRoute: typeof AppUserCreateRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/user': {
-      id: '/_app/user'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof AppUserRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/upload-xml': {
-      id: '/_app/upload-xml'
-      path: '/upload-xml'
-      fullPath: '/upload-xml'
-      preLoaderRoute: typeof AppUploadXmlRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/supplier-create': {
-      id: '/_app/supplier-create'
-      path: '/supplier-create'
-      fullPath: '/supplier-create'
-      preLoaderRoute: typeof AppSupplierCreateRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/supplier': {
-      id: '/_app/supplier'
-      path: '/supplier'
-      fullPath: '/supplier'
-      preLoaderRoute: typeof AppSupplierRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/sale-create': {
-      id: '/_app/sale-create'
-      path: '/sale-create'
-      fullPath: '/sale-create'
-      preLoaderRoute: typeof AppSaleCreateRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/sale': {
-      id: '/_app/sale'
-      path: '/sale'
-      fullPath: '/sale'
-      preLoaderRoute: typeof AppSaleRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/product-create': {
-      id: '/_app/product-create'
-      path: '/product-create'
-      fullPath: '/product-create'
-      preLoaderRoute: typeof AppProductCreateRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/product': {
-      id: '/_app/product'
-      path: '/product'
-      fullPath: '/product'
-      preLoaderRoute: typeof AppProductRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/payment-create': {
-      id: '/_app/payment-create'
-      path: '/payment-create'
-      fullPath: '/payment-create'
-      preLoaderRoute: typeof AppPaymentCreateRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/payment': {
-      id: '/_app/payment'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof AppPaymentRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/customer-create': {
-      id: '/_app/customer-create'
-      path: '/customer-create'
-      fullPath: '/customer-create'
-      preLoaderRoute: typeof AppCustomerCreateRouteImport
+    '/_app/company': {
+      id: '/_app/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof AppCompanyRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/customer': {
@@ -463,46 +396,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomerRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/company': {
-      id: '/_app/company'
-      path: '/company'
-      fullPath: '/company'
-      preLoaderRoute: typeof AppCompanyRouteImport
+    '/_app/customer-create': {
+      id: '/_app/customer-create'
+      path: '/customer-create'
+      fullPath: '/customer-create'
+      preLoaderRoute: typeof AppCustomerCreateRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/user_/$id': {
-      id: '/_app/user_/$id'
-      path: '/user/$id'
-      fullPath: '/user/$id'
-      preLoaderRoute: typeof AppUserIdRouteImport
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/supplier_/$id': {
-      id: '/_app/supplier_/$id'
-      path: '/supplier/$id'
-      fullPath: '/supplier/$id'
-      preLoaderRoute: typeof AppSupplierIdRouteImport
+    '/_app/payment': {
+      id: '/_app/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof AppPaymentRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/sale_/$id': {
-      id: '/_app/sale_/$id'
-      path: '/sale/$id'
-      fullPath: '/sale/$id'
-      preLoaderRoute: typeof AppSaleIdRouteImport
+    '/_app/payment-create': {
+      id: '/_app/payment-create'
+      path: '/payment-create'
+      fullPath: '/payment-create'
+      preLoaderRoute: typeof AppPaymentCreateRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/product_/$id': {
-      id: '/_app/product_/$id'
-      path: '/product/$id'
-      fullPath: '/product/$id'
-      preLoaderRoute: typeof AppProductIdRouteImport
+    '/_app/product': {
+      id: '/_app/product'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof AppProductRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/payment_/$id': {
-      id: '/_app/payment_/$id'
-      path: '/payment/$id'
-      fullPath: '/payment/$id'
-      preLoaderRoute: typeof AppPaymentIdRouteImport
+    '/_app/product-create': {
+      id: '/_app/product-create'
+      path: '/product-create'
+      fullPath: '/product-create'
+      preLoaderRoute: typeof AppProductCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/sale': {
+      id: '/_app/sale'
+      path: '/sale'
+      fullPath: '/sale'
+      preLoaderRoute: typeof AppSaleRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/sale-create': {
+      id: '/_app/sale-create'
+      path: '/sale-create'
+      fullPath: '/sale-create'
+      preLoaderRoute: typeof AppSaleCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/service-orders': {
+      id: '/_app/service-orders'
+      path: '/service-orders'
+      fullPath: '/service-orders'
+      preLoaderRoute: typeof AppServiceOrdersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/supplier': {
+      id: '/_app/supplier'
+      path: '/supplier'
+      fullPath: '/supplier'
+      preLoaderRoute: typeof AppSupplierRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/supplier-create': {
+      id: '/_app/supplier-create'
+      path: '/supplier-create'
+      fullPath: '/supplier-create'
+      preLoaderRoute: typeof AppSupplierCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/upload-xml': {
+      id: '/_app/upload-xml'
+      path: '/upload-xml'
+      fullPath: '/upload-xml'
+      preLoaderRoute: typeof AppUploadXmlRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/user': {
+      id: '/_app/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AppUserRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/user-create': {
+      id: '/_app/user-create'
+      path: '/user-create'
+      fullPath: '/user-create'
+      preLoaderRoute: typeof AppUserCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_app/company_/$id': {
+      id: '/_app/company_/$id'
+      path: '/company/$id'
+      fullPath: '/company/$id'
+      preLoaderRoute: typeof AppCompanyIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/customer_/$id': {
@@ -512,11 +515,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomerIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/company_/$id': {
-      id: '/_app/company_/$id'
-      path: '/company/$id'
-      fullPath: '/company/$id'
-      preLoaderRoute: typeof AppCompanyIdRouteImport
+    '/_app/payment_/$id': {
+      id: '/_app/payment_/$id'
+      path: '/payment/$id'
+      fullPath: '/payment/$id'
+      preLoaderRoute: typeof AppPaymentIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/product_/$id': {
+      id: '/_app/product_/$id'
+      path: '/product/$id'
+      fullPath: '/product/$id'
+      preLoaderRoute: typeof AppProductIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/sale_/$id': {
+      id: '/_app/sale_/$id'
+      path: '/sale/$id'
+      fullPath: '/sale/$id'
+      preLoaderRoute: typeof AppSaleIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/service-order_/$id': {
+      id: '/_app/service-order_/$id'
+      path: '/service-order/$id'
+      fullPath: '/service-order/$id'
+      preLoaderRoute: typeof AppServiceOrderIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/supplier_/$id': {
+      id: '/_app/supplier_/$id'
+      path: '/supplier/$id'
+      fullPath: '/supplier/$id'
+      preLoaderRoute: typeof AppSupplierIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/user_/$id': {
+      id: '/_app/user_/$id'
+      path: '/user/$id'
+      fullPath: '/user/$id'
+      preLoaderRoute: typeof AppUserIdRouteImport
       parentRoute: typeof AppRoute
     }
   }
@@ -533,6 +571,7 @@ interface AppRouteChildren {
   AppProductCreateRoute: typeof AppProductCreateRoute
   AppSaleRoute: typeof AppSaleRoute
   AppSaleCreateRoute: typeof AppSaleCreateRoute
+  AppServiceOrdersRoute: typeof AppServiceOrdersRoute
   AppSupplierRoute: typeof AppSupplierRoute
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
   AppUploadXmlRoute: typeof AppUploadXmlRoute
@@ -543,6 +582,7 @@ interface AppRouteChildren {
   AppPaymentIdRoute: typeof AppPaymentIdRoute
   AppProductIdRoute: typeof AppProductIdRoute
   AppSaleIdRoute: typeof AppSaleIdRoute
+  AppServiceOrderIdRoute: typeof AppServiceOrderIdRoute
   AppSupplierIdRoute: typeof AppSupplierIdRoute
   AppUserIdRoute: typeof AppUserIdRoute
 }
@@ -558,6 +598,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProductCreateRoute: AppProductCreateRoute,
   AppSaleRoute: AppSaleRoute,
   AppSaleCreateRoute: AppSaleCreateRoute,
+  AppServiceOrdersRoute: AppServiceOrdersRoute,
   AppSupplierRoute: AppSupplierRoute,
   AppSupplierCreateRoute: AppSupplierCreateRoute,
   AppUploadXmlRoute: AppUploadXmlRoute,
@@ -568,6 +609,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPaymentIdRoute: AppPaymentIdRoute,
   AppProductIdRoute: AppProductIdRoute,
   AppSaleIdRoute: AppSaleIdRoute,
+  AppServiceOrderIdRoute: AppServiceOrderIdRoute,
   AppSupplierIdRoute: AppSupplierIdRoute,
   AppUserIdRoute: AppUserIdRoute,
 }

@@ -77,3 +77,12 @@ export type {
   PaginatedAxiomErrors,
   AxiomErrorData,
 } from './nfe-log-type';
+
+export type {
+  ServiceOrderData,
+  ServiceOrderItem,
+  ServiceOrderCompany,
+  ServiceOrderCustomer,
+  PaginatedServiceOrders,
+  PaginatedServiceOrderMeta,
+} from './service-order-type';
