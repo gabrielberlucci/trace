@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { ServiceOrderData } from '@/types';
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   tableColHours: { width: '10%', textAlign: 'center' },
   tableColRate: { width: '15%', textAlign: 'right' },
   tableColTotal: { width: '15%', textAlign: 'right' },
-  
+
   tableHeaderText: {
     fontSize: 10,
     fontFamily: 'Helvetica-Bold',
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   mechanicText: {
     fontSize: 10,
-  }
+  },
 });
 
 const formatCurrency = (value: number) => {
@@ -135,9 +135,12 @@ interface Props {
 
 export const ServiceOrderPdf = ({ data }: Props) => {
   const { company, customer, serviceOrderItems, date } = data;
-  
+
   const formattedDate = format(new Date(date), 'dd/MM/yyyy', { locale: ptBR });
-  const totalOs = serviceOrderItems.reduce((acc, item) => acc + Number(item.totalPrice), 0);
+  const totalOs = serviceOrderItems.reduce(
+    (acc, item) => acc + Number(item.totalPrice),
+    0,
+  );
 
   return (
     <Document>
@@ -145,17 +148,16 @@ export const ServiceOrderPdf = ({ data }: Props) => {
         {/* HEADER */}
         <View style={styles.header}>
           <Text style={styles.title}>ORDEM DE SERVIÇO</Text>
-          <Text style={styles.companyName}>{company.name}</Text>
-          <Text style={styles.companySub}>MANGUEIRAS E CONEXÕES HIDRÁULICAS</Text>
-          <Text style={styles.companyText}>
-            Endereço: {company.address}, {company.addressNumber} {company.complement ? `- ${company.complement}` : ''}
+          <Text style={styles.companyName}>
+            {company.fantasyName || company.name}
           </Text>
           <Text style={styles.companyText}>
-            Bairro: {company.city?.name}
+            Endereço: {company.address}, {company.addressNumber}{' '}
+            {company.neighborhood ? `- Bairro: ${company.neighborhood}` : ''}{' '}
+            {company.complement ? `- ${company.complement}` : ''}
           </Text>
-          <Text style={styles.companyText}>
-            Cel: {company.phone || 'N/A'}
-          </Text>
+          <Text style={styles.companyText}>Cidade: {company.city?.name}</Text>
+          <Text style={styles.companyText}>Cel: {company.phone || 'N/A'}</Text>
         </View>
 
         <View style={styles.divider} />
@@ -164,8 +166,11 @@ export const ServiceOrderPdf = ({ data }: Props) => {
         <View style={styles.clientBox}>
           <Text style={styles.clientText}>Cliente: {customer.name}</Text>
           <Text style={styles.clientText}>
-            Endereço: {customer.address}, {customer.addressNumber} {customer.complement ? `- ${customer.complement}` : ''}
+            Endereço: {customer.address}, {customer.addressNumber}{' '}
+            {customer.neighborhood ? `- Bairro: ${customer.neighborhood}` : ''}{' '}
+            {customer.complement ? `- ${customer.complement}` : ''}
           </Text>
+          <Text style={styles.clientText}>Cel: {customer.phone || 'N/A'}</Text>
           <Text style={styles.clientText}>Data: {formattedDate}</Text>
         </View>
 
@@ -207,10 +212,14 @@ export const ServiceOrderPdf = ({ data }: Props) => {
                 <Text style={styles.tableCell}>{item.hours.toString()}</Text>
               </View>
               <View style={styles.tableColRate}>
-                <Text style={styles.tableCell}>{formatCurrency(item.hourlyRate).replace('R$', '').trim()}</Text>
+                <Text style={styles.tableCell}>
+                  {formatCurrency(item.hourlyRate).replace('R$', '').trim()}
+                </Text>
               </View>
               <View style={styles.tableColTotal}>
-                <Text style={styles.tableCell}>{formatCurrency(item.totalPrice).replace('R$', '').trim()}</Text>
+                <Text style={styles.tableCell}>
+                  {formatCurrency(item.totalPrice).replace('R$', '').trim()}
+                </Text>
               </View>
             </View>
           ))}
@@ -221,7 +230,9 @@ export const ServiceOrderPdf = ({ data }: Props) => {
         {/* TOTAL */}
         <View style={styles.totalSection}>
           <Text style={styles.totalText}>Total R$</Text>
-          <Text style={styles.totalValue}>{formatCurrency(totalOs).replace('R$', '').trim()}</Text>
+          <Text style={styles.totalValue}>
+            {formatCurrency(totalOs).replace('R$', '').trim()}
+          </Text>
         </View>
 
         {/* FOOTER / SIGNATURE */}

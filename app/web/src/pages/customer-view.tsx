@@ -110,23 +110,27 @@ const CustomerViewPage = () => {
 
   const form = useForm<CustomerFormInput, unknown, CustomerFormOutput>({
     resolver: zodResolver(modifyCustomerSchema),
-    values: response?.data ? {
-      name: response?.data.name,
-      document: response?.data.document,
-      typePerson: response?.data.typePerson,
-      ie: response?.data.ie || undefined,
-      email: response?.data.email || undefined,
-      phone: response?.data.phone || undefined,
-      zipcode: response?.data.zipcode || undefined,
-      address: response?.data.address || undefined,
-      addressNumber: response?.data.addressNumber || undefined,
-      complement: response?.data.complement || undefined,
-      birthdate: response?.data.birthdate
-        ? new Date(response?.data.birthdate)
-        : undefined,
-      cityId: response?.data.cityId || undefined,
-      active: response?.data.active ? 'true' : 'false',
-    } : undefined,
+    values: response?.data
+      ? {
+          name: response?.data.name,
+          fantasyName: response?.data.fantasyName || undefined,
+          document: response?.data.document,
+          typePerson: response?.data.typePerson,
+          ie: response?.data.ie || undefined,
+          email: response?.data.email || undefined,
+          phone: response?.data.phone || undefined,
+          zipcode: response?.data.zipcode || undefined,
+          address: response?.data.address || undefined,
+          neighborhood: response?.data.neighborhood || undefined,
+          addressNumber: response?.data.addressNumber || undefined,
+          complement: response?.data.complement || undefined,
+          birthdate: response?.data.birthdate
+            ? new Date(response?.data.birthdate)
+            : undefined,
+          cityId: response?.data.cityId || undefined,
+          active: response?.data.active ? 'true' : 'false',
+        }
+      : undefined,
   });
 
   const { errors, dirtyFields } = form.formState;
@@ -190,9 +194,14 @@ const CustomerViewPage = () => {
       if (isAxiosError(err) && err.response?.data) {
         const data = err.response.data;
         if (data.fieldErrors && Object.keys(data.fieldErrors).length > 0) {
-          Object.entries(data.fieldErrors).forEach(([field, messages]: [string, any]) => {
-            form.setError(field as any, { type: 'server', message: messages[0] });
-          });
+          Object.entries(data.fieldErrors).forEach(
+            ([field, messages]: [string, any]) => {
+              form.setError(field as any, {
+                type: 'server',
+                message: messages[0],
+              });
+            },
+          );
           toast.error('Erro de validação, verifique os campos destacados.');
           return;
         }
@@ -264,16 +273,23 @@ const CustomerViewPage = () => {
         .toUpperCase()
     : 'CL';
 
-  const getInputClassName = (fieldName: keyof CustomerFormInput, baseClass: string = 'h-11 rounded-lg') =>
+  const getInputClassName = (
+    fieldName: keyof CustomerFormInput,
+    baseClass: string = 'h-11 rounded-lg',
+  ) =>
     cn(
       baseClass,
-      errors[fieldName] && 'border-red-500 focus-visible:ring-red-500'
+      errors[fieldName] && 'border-red-500 focus-visible:ring-red-500',
     );
 
   const renderError = (fieldName: keyof CustomerFormInput) => {
     const error = errors[fieldName];
     if (!error) return null;
-    return <span className="text-red-500 text-xs mt-1 block">{error.message as string}</span>;
+    return (
+      <span className="text-red-500 text-xs mt-1 block">
+        {error.message as string}
+      </span>
+    );
   };
 
   return (
@@ -399,6 +415,12 @@ const CustomerViewPage = () => {
                       colSpan={2}
                     />
                     <InfoItem
+                      label="Nome Fantasia"
+                      value={customer.fantasyName}
+                      icon={Building}
+                      colSpan={2}
+                    />
+                    <InfoItem
                       label="Tipo de Cadastro"
                       value={
                         customer.typePerson === 'PJ'
@@ -445,6 +467,24 @@ const CustomerViewPage = () => {
                         </span>
                       )}
                     </div>
+                    {customer.typePerson === 'PJ' && (
+                      <div className="space-y-3 md:col-span-2">
+                        <Label
+                          htmlFor="fantasyName"
+                          className="text-sm font-semibold"
+                        >
+                          Nome Fantasia
+                        </Label>
+                        <Input
+                          id="fantasyName"
+                          className={getInputClassName('fantasyName')}
+                          {...form.register('fantasyName', {
+                            setValueAs: (v) => (v === '' ? undefined : v),
+                          })}
+                        />
+                        {renderError('fantasyName')}
+                      </div>
+                    )}
                     <div className="space-y-3">
                       <Label className="text-sm font-semibold">
                         Tipo de Pessoa
@@ -457,7 +497,9 @@ const CustomerViewPage = () => {
                             value={field.value as string}
                             onValueChange={field.onChange}
                           >
-                            <SelectTrigger className={getInputClassName('typePerson')}>
+                            <SelectTrigger
+                              className={getInputClassName('typePerson')}
+                            >
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                             <SelectContent>
@@ -483,7 +525,10 @@ const CustomerViewPage = () => {
                       <Input
                         id="document"
                         disabled
-                        className={getInputClassName('document', 'h-11 rounded-lg bg-muted cursor-not-allowed')}
+                        className={getInputClassName(
+                          'document',
+                          'h-11 rounded-lg bg-muted cursor-not-allowed',
+                        )}
                         {...form.register('document')}
                       />
                       {form.formState.errors.document && (
@@ -520,7 +565,8 @@ const CustomerViewPage = () => {
                                 className={cn(
                                   'w-full h-11 rounded-lg justify-start text-left font-normal',
                                   !field.value && 'text-muted-foreground',
-                                  form.formState.errors.birthdate && 'border-red-500 focus-visible:ring-red-500'
+                                  form.formState.errors.birthdate &&
+                                    'border-red-500 focus-visible:ring-red-500',
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -575,6 +621,7 @@ const CustomerViewPage = () => {
                           : null
                       }
                     />
+                    <InfoItem label="Bairro" value={customer.neighborhood} />
                     <InfoItem
                       label="Logradouro"
                       value={[
@@ -584,7 +631,6 @@ const CustomerViewPage = () => {
                       ]
                         .filter(Boolean)
                         .join(', ')}
-                      colSpan={2}
                     />
                   </div>
                 ) : (
@@ -672,7 +718,7 @@ const CustomerViewPage = () => {
                       {renderError('cityId')}
                     </div>
                     <div className="space-y-3 md:col-span-2 grid grid-cols-12 gap-4">
-                      <div className="col-span-12 md:col-span-6 space-y-3">
+                      <div className="col-span-12 md:col-span-12 space-y-3">
                         <Label
                           htmlFor="address"
                           className="text-sm font-semibold"
@@ -687,6 +733,22 @@ const CustomerViewPage = () => {
                           })}
                         />
                         {renderError('address')}
+                      </div>
+                      <div className="col-span-12 md:col-span-6 space-y-3">
+                        <Label
+                          htmlFor="neighborhood"
+                          className="text-sm font-semibold"
+                        >
+                          Bairro
+                        </Label>
+                        <Input
+                          id="neighborhood"
+                          className={getInputClassName('neighborhood')}
+                          {...form.register('neighborhood', {
+                            setValueAs: (v) => (v === '' ? undefined : v),
+                          })}
+                        />
+                        {renderError('neighborhood')}
                       </div>
                       <div className="col-span-6 md:col-span-3 space-y-3">
                         <Label
@@ -764,7 +826,10 @@ const CustomerViewPage = () => {
                         </div>
                         <Input
                           id="email"
-                          className={getInputClassName('email', 'h-11 rounded-lg pl-10')}
+                          className={getInputClassName(
+                            'email',
+                            'h-11 rounded-lg pl-10',
+                          )}
                           {...form.register('email', {
                             setValueAs: (v) => (v === '' ? undefined : v),
                           })}
@@ -782,7 +847,10 @@ const CustomerViewPage = () => {
                         </div>
                         <Input
                           id="phone"
-                          className={getInputClassName('phone', 'h-11 rounded-lg pl-10')}
+                          className={getInputClassName(
+                            'phone',
+                            'h-11 rounded-lg pl-10',
+                          )}
                           {...form.register('phone', {
                             setValueAs: (v) => (v === '' ? undefined : v),
                           })}
@@ -817,7 +885,9 @@ const CustomerViewPage = () => {
                           value={field.value as string}
                           onValueChange={field.onChange}
                         >
-                          <SelectTrigger className={getInputClassName('active')}>
+                          <SelectTrigger
+                            className={getInputClassName('active')}
+                          >
                             <SelectValue placeholder="Status" />
                           </SelectTrigger>
                           <SelectContent>

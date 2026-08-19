@@ -10,8 +10,10 @@ export interface ServiceOrderItem {
 export interface ServiceOrderCompany {
   document: string;
   name: string;
+  fantasyName: string | null;
   phone: string | null;
   address: string | null;
+  neighborhood: string | null;
   zipcode: string | null;
   addressNumber: number | null;
   complement: string | null;
@@ -28,8 +30,10 @@ export interface ServiceOrderCompany {
 export interface ServiceOrderCustomer {
   document: string;
   name: string;
+  fantasyName: string | null;
   phone: string | null;
   address: string | null;
+  neighborhood: string | null;
   zipcode: string | null;
   addressNumber: number | null;
   complement: string | null;
