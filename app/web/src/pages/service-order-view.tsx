@@ -19,6 +19,9 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ServiceOrderPdf } from '@/components/pdf/ServiceOrderPdf';
+import { Download } from 'lucide-react';
 
 const InfoItem = ({
   label,
@@ -97,6 +100,23 @@ const ServiceOrderViewPage = () => {
             </p>
           </div>
         </div>
+        
+        <PDFDownloadLink 
+          document={<ServiceOrderPdf data={data} />} 
+          fileName={`os-${data.id}.pdf`}
+        >
+          {/* @ts-ignore */}
+          {({ loading }) => (
+            <Button className="bg-violet-600 hover:bg-violet-700" disabled={loading}>
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              {loading ? 'Gerando PDF...' : 'Baixar PDF'}
+            </Button>
+          )}
+        </PDFDownloadLink>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
