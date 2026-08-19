@@ -122,3 +122,54 @@ export const getPaginatedServiceOrder = async (
 
   return result;
 };
+
+export const getServiceOrder = async (id: number) => {
+  const result = await prisma.serviceOrder.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      serviceOrderItems: {
+        omit: {
+          serviceOrderId: true,
+        },
+      },
+
+      company: {
+        omit: {
+          id: true,
+          cityId: true,
+        },
+
+        include: {
+          city: {
+            omit: {
+              id: true,
+            },
+          },
+        },
+      },
+
+      customer: {
+        omit: {
+          id: true,
+          typePerson: true,
+          birthdate: true,
+          cityId: true,
+        },
+        include: {
+          city: {
+            omit: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!result)
+    throw new NotFound(`A ordem de serviço ${id} não foi encontrada`);
+
+  return result;
+};

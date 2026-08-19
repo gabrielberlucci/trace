@@ -1,15 +1,18 @@
 import {
   createServiceOrderController,
   getPaginatedServiceOrderController,
+  getServiceOrderController,
 } from '@/controllers';
 import {
   authMiddleware,
   validateData,
+  validateParam,
   validatePermission,
   validateQuery,
 } from '@/middlewares';
 import {
   queryFilterSchema,
+  reqParamSchema,
   serviceOrderSchema,
   UserPermissions,
 } from '@app/shared';
@@ -31,6 +34,14 @@ serviceOrderRouter.get(
   validateQuery(queryFilterSchema),
   validatePermission(UserPermissions.VIEW_SERVICE_ORDER),
   getPaginatedServiceOrderController,
+);
+
+serviceOrderRouter.get(
+  '/:id',
+  authMiddleware,
+  validateParam(reqParamSchema),
+  validatePermission(UserPermissions.VIEW_SERVICE_ORDER),
+  getServiceOrderController,
 );
 
 export { serviceOrderRouter };

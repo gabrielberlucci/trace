@@ -1,6 +1,10 @@
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import type { Request, Response } from 'express';
-import { createServiceOrder, getPaginatedServiceOrder } from '@/services';
+import {
+  createServiceOrder,
+  getPaginatedServiceOrder,
+  getServiceOrder,
+} from '@/services';
 
 export const createServiceOrderController = async (
   req: Request,
@@ -34,6 +38,21 @@ export const getPaginatedServiceOrderController = async (
       hasPrevious: hasPrevious,
       hasNext: hasNext,
     },
+    data: data,
+  });
+};
+
+export const getServiceOrderController = async (
+  _req: Request,
+  res: Response,
+) => {
+  const id = res.locals.params.id;
+
+  const data = await getServiceOrder(id);
+
+  res.status(StatusCodes.OK).send({
+    status: ReasonPhrases.OK,
+    message: 'Ordem de serviço resgatada com sucesso',
     data: data,
   });
 };

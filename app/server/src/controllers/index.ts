@@ -64,4 +64,5 @@ export {
 export {
   createServiceOrderController,
   getPaginatedServiceOrderController,
+  getServiceOrderController,
 } from './service.order.controller';
