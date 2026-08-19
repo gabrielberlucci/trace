@@ -17,11 +17,13 @@ model Customer {
   document      String         @unique
   typePerson    typePerson
   name          String
+  fantasyName   String?
   birthdate     DateTime?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
+  neighborhood  String?
   complement    String?
   email         String?        @unique
   ie            String?        @unique
@@ -37,11 +39,13 @@ model Supplier {
   document      String     @unique
   typePerson    typePerson @default(PJ) // IDK IF ITS NECESSARY, BUT MAYBE WILL BE BAYED FROM A GUY WITH CPF? WHY NOT.
   name          String
+  fantasyName   String?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
   complement    String?
+  neighborhood  String?
   email         String?    @unique
   ie            String?    @unique
   active        Boolean    @default(true)
@@ -95,6 +99,7 @@ model User {
   zipcode       String?
   addressNumber Int?
   complement    String?
+  neighborhood  String?
   email         String?   @unique
   password      String
   username      String    @unique
@@ -178,11 +183,13 @@ model Company {
   id            Int            @id @default(autoincrement())
   document      String         @unique
   name          String
+  fantasyName   String?
   phone         String?
   address       String?
   zipcode       String?
   addressNumber Int?
   complement    String?
+  neighborhood  String?
   email         String?        @unique
   ie            String?        @unique
   active        Boolean        @default(true)
