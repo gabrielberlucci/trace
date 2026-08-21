@@ -15,8 +15,8 @@ const app: Express = express();
 const swaggerSpec = swaggerJSDoc(swaggerConfigOptions);
 
 app.use(cors(corsOptions));
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(logsMiddleware);
 app.use('/v1/docs', SwaggerUI.serve, SwaggerUI.setup(swaggerSpec));

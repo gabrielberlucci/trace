@@ -22,6 +22,8 @@ import { Route as AppProductRouteImport } from './routes/_app/product'
 import { Route as AppProductCreateRouteImport } from './routes/_app/product-create'
 import { Route as AppSaleRouteImport } from './routes/_app/sale'
 import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
+import { Route as AppServiceOrdersRouteImport } from './routes/_app/service-orders'
+import { Route as AppServiceOrdersCreateRouteImport } from './routes/_app/service-orders-create'
 import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
 import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
 import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
@@ -33,6 +35,7 @@ import { Route as AppCustomerIdRouteImport } from './routes/_app/customer_.$id'
 import { Route as AppPaymentIdRouteImport } from './routes/_app/payment_.$id'
 import { Route as AppProductIdRouteImport } from './routes/_app/product_.$id'
 import { Route as AppSaleIdRouteImport } from './routes/_app/sale_.$id'
+import { Route as AppServiceOrderIdRouteImport } from './routes/_app/service-order_.$id'
 import { Route as AppSupplierIdRouteImport } from './routes/_app/supplier_.$id'
 import { Route as AppUserIdRouteImport } from './routes/_app/user_.$id'
 
@@ -99,6 +102,16 @@ const AppSaleCreateRoute = AppSaleCreateRouteImport.update({
   path: '/sale-create',
   getParentRoute: () => AppRoute,
 } as any)
+const AppServiceOrdersRoute = AppServiceOrdersRouteImport.update({
+  id: '/service-orders',
+  path: '/service-orders',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppServiceOrdersCreateRoute = AppServiceOrdersCreateRouteImport.update({
+  id: '/service-orders-create',
+  path: '/service-orders-create',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSupplierRoute = AppSupplierRouteImport.update({
   id: '/supplier',
   path: '/supplier',
@@ -154,6 +167,11 @@ const AppSaleIdRoute = AppSaleIdRouteImport.update({
   path: '/sale/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppServiceOrderIdRoute = AppServiceOrderIdRouteImport.update({
+  id: '/service-order_/$id',
+  path: '/service-order/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSupplierIdRoute = AppSupplierIdRouteImport.update({
   id: '/supplier_/$id',
   path: '/supplier/$id',
@@ -177,6 +195,8 @@ export interface FileRoutesByFullPath {
   '/product-create': typeof AppProductCreateRoute
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
+  '/service-orders': typeof AppServiceOrdersRoute
+  '/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -188,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
   '/sale/$id': typeof AppSaleIdRoute
+  '/service-order/$id': typeof AppServiceOrderIdRoute
   '/supplier/$id': typeof AppSupplierIdRoute
   '/user/$id': typeof AppUserIdRoute
 }
@@ -203,6 +224,8 @@ export interface FileRoutesByTo {
   '/product-create': typeof AppProductCreateRoute
   '/sale': typeof AppSaleRoute
   '/sale-create': typeof AppSaleCreateRoute
+  '/service-orders': typeof AppServiceOrdersRoute
+  '/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -214,6 +237,7 @@ export interface FileRoutesByTo {
   '/payment/$id': typeof AppPaymentIdRoute
   '/product/$id': typeof AppProductIdRoute
   '/sale/$id': typeof AppSaleIdRoute
+  '/service-order/$id': typeof AppServiceOrderIdRoute
   '/supplier/$id': typeof AppSupplierIdRoute
   '/user/$id': typeof AppUserIdRoute
 }
@@ -232,6 +256,8 @@ export interface FileRoutesById {
   '/_app/product-create': typeof AppProductCreateRoute
   '/_app/sale': typeof AppSaleRoute
   '/_app/sale-create': typeof AppSaleCreateRoute
+  '/_app/service-orders': typeof AppServiceOrdersRoute
+  '/_app/service-orders-create': typeof AppServiceOrdersCreateRoute
   '/_app/supplier': typeof AppSupplierRoute
   '/_app/supplier-create': typeof AppSupplierCreateRoute
   '/_app/upload-xml': typeof AppUploadXmlRoute
@@ -243,6 +269,7 @@ export interface FileRoutesById {
   '/_app/payment_/$id': typeof AppPaymentIdRoute
   '/_app/product_/$id': typeof AppProductIdRoute
   '/_app/sale_/$id': typeof AppSaleIdRoute
+  '/_app/service-order_/$id': typeof AppServiceOrderIdRoute
   '/_app/supplier_/$id': typeof AppSupplierIdRoute
   '/_app/user_/$id': typeof AppUserIdRoute
 }
@@ -260,6 +287,8 @@ export interface FileRouteTypes {
     | '/product-create'
     | '/sale'
     | '/sale-create'
+    | '/service-orders'
+    | '/service-orders-create'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -271,6 +300,7 @@ export interface FileRouteTypes {
     | '/payment/$id'
     | '/product/$id'
     | '/sale/$id'
+    | '/service-order/$id'
     | '/supplier/$id'
     | '/user/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -286,6 +316,8 @@ export interface FileRouteTypes {
     | '/product-create'
     | '/sale'
     | '/sale-create'
+    | '/service-orders'
+    | '/service-orders-create'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -297,6 +329,7 @@ export interface FileRouteTypes {
     | '/payment/$id'
     | '/product/$id'
     | '/sale/$id'
+    | '/service-order/$id'
     | '/supplier/$id'
     | '/user/$id'
   id:
@@ -314,6 +347,8 @@ export interface FileRouteTypes {
     | '/_app/product-create'
     | '/_app/sale'
     | '/_app/sale-create'
+    | '/_app/service-orders'
+    | '/_app/service-orders-create'
     | '/_app/supplier'
     | '/_app/supplier-create'
     | '/_app/upload-xml'
@@ -325,6 +360,7 @@ export interface FileRouteTypes {
     | '/_app/payment_/$id'
     | '/_app/product_/$id'
     | '/_app/sale_/$id'
+    | '/_app/service-order_/$id'
     | '/_app/supplier_/$id'
     | '/_app/user_/$id'
   fileRoutesById: FileRoutesById
@@ -428,6 +464,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSaleCreateRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/service-orders': {
+      id: '/_app/service-orders'
+      path: '/service-orders'
+      fullPath: '/service-orders'
+      preLoaderRoute: typeof AppServiceOrdersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/service-orders-create': {
+      id: '/_app/service-orders-create'
+      path: '/service-orders-create'
+      fullPath: '/service-orders-create'
+      preLoaderRoute: typeof AppServiceOrdersCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/supplier': {
       id: '/_app/supplier'
       path: '/supplier'
@@ -505,6 +555,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSaleIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/service-order_/$id': {
+      id: '/_app/service-order_/$id'
+      path: '/service-order/$id'
+      fullPath: '/service-order/$id'
+      preLoaderRoute: typeof AppServiceOrderIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/supplier_/$id': {
       id: '/_app/supplier_/$id'
       path: '/supplier/$id'
@@ -533,6 +590,8 @@ interface AppRouteChildren {
   AppProductCreateRoute: typeof AppProductCreateRoute
   AppSaleRoute: typeof AppSaleRoute
   AppSaleCreateRoute: typeof AppSaleCreateRoute
+  AppServiceOrdersRoute: typeof AppServiceOrdersRoute
+  AppServiceOrdersCreateRoute: typeof AppServiceOrdersCreateRoute
   AppSupplierRoute: typeof AppSupplierRoute
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
   AppUploadXmlRoute: typeof AppUploadXmlRoute
@@ -543,6 +602,7 @@ interface AppRouteChildren {
   AppPaymentIdRoute: typeof AppPaymentIdRoute
   AppProductIdRoute: typeof AppProductIdRoute
   AppSaleIdRoute: typeof AppSaleIdRoute
+  AppServiceOrderIdRoute: typeof AppServiceOrderIdRoute
   AppSupplierIdRoute: typeof AppSupplierIdRoute
   AppUserIdRoute: typeof AppUserIdRoute
 }
@@ -558,6 +618,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppProductCreateRoute: AppProductCreateRoute,
   AppSaleRoute: AppSaleRoute,
   AppSaleCreateRoute: AppSaleCreateRoute,
+  AppServiceOrdersRoute: AppServiceOrdersRoute,
+  AppServiceOrdersCreateRoute: AppServiceOrdersCreateRoute,
   AppSupplierRoute: AppSupplierRoute,
   AppSupplierCreateRoute: AppSupplierCreateRoute,
   AppUploadXmlRoute: AppUploadXmlRoute,
@@ -568,6 +630,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPaymentIdRoute: AppPaymentIdRoute,
   AppProductIdRoute: AppProductIdRoute,
   AppSaleIdRoute: AppSaleIdRoute,
+  AppServiceOrderIdRoute: AppServiceOrderIdRoute,
   AppSupplierIdRoute: AppSupplierIdRoute,
   AppUserIdRoute: AppUserIdRoute,
 }

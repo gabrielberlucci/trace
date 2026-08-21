@@ -46,6 +46,7 @@ const SuppliersCreatePage = () => {
     handleSubmit,
     setValue,
     control,
+    watch,
     formState: { errors },
   } = useForm<FormInput, undefined, FormOutput>({
     resolver: zodResolver(createSupplierSchema),
@@ -53,6 +54,8 @@ const SuppliersCreatePage = () => {
       typePerson: 'PJ',
     },
   });
+
+  const isPJ = watch('typePerson') === 'PJ';
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -164,6 +167,28 @@ const SuppliersCreatePage = () => {
                     </span>
                   )}
                 </div>
+
+                {isPJ && (
+                  <div className="space-y-3 md:col-span-2">
+                    <Label
+                      htmlFor="fantasyName"
+                      className="text-sm font-semibold text-foreground"
+                    >
+                      Nome Fantasia
+                    </Label>
+                    <Input
+                      id="fantasyName"
+                      {...register('fantasyName')}
+                      placeholder="Ex: Logística Silva"
+                      className="h-11 rounded-lg"
+                    />
+                    {errors.fantasyName && (
+                      <span className="text-xs text-red-500">
+                        {errors.fantasyName.message}
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-3">
                   <Label
@@ -352,7 +377,7 @@ const SuppliersCreatePage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="space-y-3 md:col-span-8">
+                <div className="space-y-3 md:col-span-12">
                   <Label
                     htmlFor="address"
                     className="text-sm font-semibold text-foreground"
@@ -370,6 +395,28 @@ const SuppliersCreatePage = () => {
                   {errors.address && (
                     <span className="text-xs text-red-500">
                       {errors.address.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className="space-y-3 md:col-span-8">
+                  <Label
+                    htmlFor="neighborhood"
+                    className="text-sm font-semibold text-foreground"
+                  >
+                    Bairro
+                  </Label>
+                  <Input
+                    id="neighborhood"
+                    {...register('neighborhood', {
+                      setValueAs: (v) => (v === '' ? undefined : v),
+                    })}
+                    placeholder="Bairro"
+                    className="h-11 rounded-lg"
+                  />
+                  {errors.neighborhood && (
+                    <span className="text-xs text-red-500">
+                      {errors.neighborhood.message}
                     </span>
                   )}
                 </div>

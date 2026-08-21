@@ -30,8 +30,10 @@ export interface CreateSupplierDataResponse {
     document: string;
     typePerson: string;
     name: string;
+    fantasyName: string | null;
     phone: string;
     address: string;
+    neighborhood: string | null;
     zipcode: string;
     addressNumber: number;
     complement: string;
@@ -46,8 +48,10 @@ export interface CreateSupplierData {
   document: string;
   typePerson?: string;
   name: string;
+  fantasyName?: string;
   phone?: string;
   address?: string;
+  neighborhood?: string;
   zipcode?: string;
   addressNumber?: number;
   complement?: string;
