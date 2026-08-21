@@ -6,7 +6,7 @@ import { Mail, Lock, EyeOff, ArrowRight } from 'lucide-react';
 import bgImage from '@/assets/login-bg.png';
 import { TraceLogo } from '@/components/trace-logo';
 import { loginUser } from '@/api/users/login';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import axios from 'axios';
@@ -30,13 +30,17 @@ const LoginPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate({ to: '/dashboard' });
+    }
+  }, [auth.isAuthenticated, navigate]);
+
   const mutation = useMutation({
     mutationFn: loginUser,
 
     onSuccess: () => {
       auth.login();
-
-      navigate({ to: '/dashboard' });
     },
 
     onError: (error: Error) => {
