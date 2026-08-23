@@ -33,3 +33,4 @@ export { serviceOrderSchema } from './src/schemas/service.order.schema';
 export * from './src/constants/enums';
 export * from './src/utils/index';
 export { UserPermissions } from './src/constants/permissions';
+export { dashboardQueryFilterSchema } from './src/schemas/dashboard.schema';
