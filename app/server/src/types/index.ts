@@ -31,5 +31,5 @@ export type {
 
 export type {
   DashboardQueryParams,
-  DashboardAverageTicketData,
+  HighestSalesProducts,
 } from './dashboard.type';
