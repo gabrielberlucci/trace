@@ -59,4 +59,4 @@ export {
   getServiceOrder,
 } from './service.order.service';
 
-export { getAverageTicket } from './dashboard.service';
+export { dashboardService } from './dashboard.service';
