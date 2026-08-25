@@ -18,3 +18,4 @@ export { reqParamSchema } from './req.param.schema';
 
 export { companySchema, modifyCompanySchema } from './company.schema';
 export { serviceOrderSchema } from './service.order.schema';
+export { dashboardQueryFilterSchema } from './dashboard.schema';

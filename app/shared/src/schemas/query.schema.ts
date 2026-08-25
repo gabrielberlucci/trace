@@ -34,8 +34,12 @@ export const queryFilterSchema = z.object({
 
   description: z
     .string({ error: 'Insira uma descrição' })
-    .min(2, { error: 'Descriçao muito curta. Insira pelo menos 3 caracteres' })
-    .max(50, { error: 'Descriçao muito longa. Insira no máximo 50 caracteres' })
+    .min(2, {
+      error: 'Descriçao muito curta. Insira pelo menos 3 caracteres',
+    })
+    .max(50, {
+      error: 'Descriçao muito longa. Insira no máximo 50 caracteres',
+    })
     .optional(),
 
   barcode: z.string({ error: 'Insira um código de barras' }).trim().optional(),

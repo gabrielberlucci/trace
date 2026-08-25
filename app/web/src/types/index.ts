@@ -86,3 +86,10 @@ export type {
   PaginatedServiceOrders,
   PaginatedServiceOrderMeta,
 } from './service-order-type';
+
+export type {
+  HighestSalesProduct,
+  DashboardData,
+  DashboardResponse,
+  GetDashboardParams,
+} from './dashboard-type';
