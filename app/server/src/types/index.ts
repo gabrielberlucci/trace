@@ -28,3 +28,8 @@ export type {
   ServiceOrder,
   ServiceOrderQueryParamsFilters,
 } from './service.type';
+
+export type {
+  DashboardQueryParams,
+  HighestSalesProducts,
+} from './dashboard.type';

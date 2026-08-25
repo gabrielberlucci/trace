@@ -58,3 +58,5 @@ export {
   getPaginatedServiceOrder,
   getServiceOrder,
 } from './service.order.service';
+
+export { dashboardService } from './dashboard.service';

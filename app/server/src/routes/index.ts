@@ -10,6 +10,7 @@ import { roleRouter } from './role.route';
 import { companyRouter } from './company.route';
 import { uploadXMLRouter } from './upload.xml.route';
 import { serviceOrderRouter } from './service.order.route';
+import { dashboardRouter } from './dashboard.route';
 
 const routes: Router = Router();
 
@@ -24,5 +25,6 @@ routes.use('/api/v1/roles', roleRouter);
 routes.use('/api/v1/companies', companyRouter);
 routes.use('/api/v1/uploader-xml', uploadXMLRouter);
 routes.use('/api/v1/service-orders', serviceOrderRouter);
+routes.use('/api/v1/dashboard', dashboardRouter);
 
 export { routes };
