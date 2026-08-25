@@ -52,6 +52,7 @@ const DashboardPage = () => {
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ['dashboard', startDate, endDate],
     queryFn: () => getDashboard({ startDate, endDate }),
+    staleTime: 1000 * 60 * 5, // 5 minutos de cache
   });
 
   const formatCurrency = (value: string | number) => {
