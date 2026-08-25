@@ -66,3 +66,5 @@ export {
   getPaginatedServiceOrderController,
   getServiceOrderController,
 } from './service.order.controller';
+
+export { dashboardController } from './dashboard.controller';
