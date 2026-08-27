@@ -233,16 +233,35 @@ export const getSale = async (id: number) => {
     where: {
       id: id,
     },
-    omit: {
+
+    select: {
+      date: true,
       id: true,
-      customerId: true,
-      paymentMethodId: true,
-    },
-    include: {
+
+      company: {
+        select: {
+          fantasyName: true,
+          phone: true,
+          address: true,
+          neighborhood: true,
+          addressNumber: true,
+          email: true,
+        },
+      },
       customer: {
         select: {
           name: true,
-          email: true,
+          phone: true,
+          address: true,
+          neighborhood: true,
+          addressNumber: true,
+
+          city: {
+            select: {
+              name: true,
+              state: true,
+            },
+          },
         },
       },
       paymentMethod: {
@@ -251,13 +270,24 @@ export const getSale = async (id: number) => {
         },
       },
       saleItem: {
-        omit: {
-          costPrice: true,
+        select: {
+          barcode: true,
+          description: true,
+          quantity: true,
+          salePrice: true,
+          totalPrice: true,
+        },
+      },
+      user: {
+        select: {
+          name: true,
         },
       },
     },
   });
+
   if (!result)
-    throw new NotFound(`Não foi possível encontrar uma venda com o id ${id}`);
+    throw new NotFound(`Não foi possível encontrar a venda com o id: ${id}`);
+
   return result;
 };
