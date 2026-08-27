@@ -1,5 +1,5 @@
 import { apiClient } from '../api.client';
-import { type PaginatedSales } from '@/types';
+import { type PaginatedSales, type SingleSaleResponse } from '@/types';
 
 export const getSales = async (
   page: number = 1,
@@ -12,6 +12,14 @@ export const getSales = async (
   }
 
   const result = await apiClient.get<PaginatedSales>(url);
+
+  return result.data;
+};
+
+export const getSingleSale = async (
+  id: number,
+): Promise<SingleSaleResponse> => {
+  const result = await apiClient.get<SingleSaleResponse>(`/sales/${id}`);
 
   return result.data;
 };

@@ -9,7 +9,50 @@ import type { PaginatedSalesData } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-const columns: ColumnDef<PaginatedSalesData>[] = [
+import { pdf } from '@react-pdf/renderer';
+import { ReceiptPDF } from '@/components/receipt-pdf';
+import { getSingleSale } from '@/api';
+import { Printer } from 'lucide-react';
+
+const PrintAction = ({ id }: { id: number }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handlePrint = async () => {
+    setLoading(true);
+    try {
+      const response = await getSingleSale(id);
+      if (response && response.data) {
+        const blob = await pdf(<ReceiptPDF sale={response.data} saleId={id} />).toBlob();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } else {
+        toast.error('Erro ao buscar dados da venda.');
+      }
+    } catch (error) {
+      toast.error('Erro ao gerar PDF.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
+      onClick={handlePrint}
+      disabled={loading}
+    >
+      {loading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Printer className="h-4 w-4" />
+      )}
+    </Button>
+  );
+};
+
+export const columns: ColumnDef<PaginatedSalesData>[] = [
   {
     accessorKey: 'id',
     header: 'ID Venda',
@@ -51,7 +94,8 @@ const columns: ColumnDef<PaginatedSalesData>[] = [
   {
     id: 'actions',
     cell: ({ row }) => (
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <PrintAction id={Number(row.getValue('id'))} />
         <Link to="/sale/$id" params={{ id: String(row.getValue('id')) }}>
           <Button
             variant="ghost"
