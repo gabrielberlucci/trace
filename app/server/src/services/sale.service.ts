@@ -74,6 +74,20 @@ export const createSale = async (saleData: SaleCart) => {
         `O pagamento ${paymentMethod.description} está inativo`,
       );
 
+    const company = await tx.company.findFirst({
+      select: {
+        id: true,
+        active: true,
+        document: true,
+      },
+    });
+
+    if (!company) throw new NotFound(`A Empresa não foi encontrada`);
+    if (company.active === false)
+      throw new BadRequest(
+        `Empresa com o CNPJ: ${company.document} está inativa`,
+      );
+
     /**
      * TODO: refactor
      * i hate this chunk of code, it's ugly
@@ -162,6 +176,7 @@ export const createSale = async (saleData: SaleCart) => {
         customerId: customer.id,
         paymentMethodId: paymentMethod.id,
         userId: cashier.id,
+        companyId: company.id,
 
         saleItem: {
           create: validatedCart,
@@ -218,13 +233,11 @@ export const getSale = async (id: number) => {
     where: {
       id: id,
     },
-
     omit: {
       id: true,
       customerId: true,
       paymentMethodId: true,
     },
-
     include: {
       customer: {
         select: {
@@ -244,9 +257,7 @@ export const getSale = async (id: number) => {
       },
     },
   });
-
   if (!result)
     throw new NotFound(`Não foi possível encontrar uma venda com o id ${id}`);
-
   return result;
 };
