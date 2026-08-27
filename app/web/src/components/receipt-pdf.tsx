@@ -191,7 +191,10 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
   };
 
   const totalSale =
-    sale.saleItem?.reduce((acc, item: any) => acc + Number(item.totalPrice), 0) || 0;
+    sale.saleItem?.reduce(
+      (acc, item: any) => acc + Number(item.totalPrice),
+      0,
+    ) || 0;
 
   // Use the ID from the payload if available, fallback to the route param
   const displaySaleId = sale.id || saleId;
@@ -305,11 +308,19 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
           <Text style={styles.sectionTitle}>Itens da Venda</Text>
           <View style={styles.table}>
             <View style={styles.tableHeader}>
-              <Text style={[styles.tableHeaderCell, styles.colCode]}>Código</Text>
-              <Text style={[styles.tableHeaderCell, styles.colDesc]}>Descrição</Text>
-              <Text style={[styles.tableHeaderCell, styles.colUn]}>V. Unit</Text>
+              <Text style={[styles.tableHeaderCell, styles.colCode]}>
+                Código
+              </Text>
+              <Text style={[styles.tableHeaderCell, styles.colDesc]}>
+                Descrição
+              </Text>
+              <Text style={[styles.tableHeaderCell, styles.colUn]}>
+                V. Unit
+              </Text>
               <Text style={[styles.tableHeaderCell, styles.colQtd]}>Qtd</Text>
-              <Text style={[styles.tableHeaderCell, styles.colTotal]}>Total</Text>
+              <Text style={[styles.tableHeaderCell, styles.colTotal]}>
+                Total
+              </Text>
             </View>
 
             {sale.saleItem && sale.saleItem.length > 0 ? (
@@ -353,7 +364,7 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
               {sale.user?.name || 'Não informado'}
             </Text>
             <Text style={[styles.textLine, { marginTop: 4 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Pagamentos:</Text>{' '}
+              <Text style={{ fontWeight: 'bold' }}>Pagamento:</Text>{' '}
               {sale.paymentMethod?.description || 'Não informado'}
             </Text>
           </View>
