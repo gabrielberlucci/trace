@@ -6,7 +6,7 @@ export const productSchema = z.object({
     .string({ error: 'Descrição inválida' })
     .trim()
     .min(1, { error: 'Descrição muito curta. Use pelo menos 1 caractere' })
-    .max(50, { error: 'Descrição muito longa. Use no máximo 50 caracteres' }),
+    .max(100, { error: 'Descrição muito longa. Use no máximo 50 caracteres' }),
 
   barcode: z
     .string({ error: 'Código de barras inválido' })
@@ -15,7 +15,7 @@ export const productSchema = z.object({
       z
         .string()
         .min(5, { error: 'Insira pelo menos 5 caracteres no código de barras' })
-        .max(13, {
+        .max(15, {
           error: 'Insira no máximo 13 caracteres no código de barras',
         }),
     ),

@@ -34,7 +34,7 @@ export const userSchema = commonSchema
       .string({ error: 'Insira um username' })
       .trim()
       .min(3, { error: 'Username muito curto. Use no minimo 3 caracteres' })
-      .max(8, { error: 'Username muito longo. Use no maximo 8 caracteres' }),
+      .max(15, { error: 'Username muito longo. Use no maximo 15 caracteres' }),
   })
   .refine(
     (data: { password: string; confirmedPassword: string }) =>
