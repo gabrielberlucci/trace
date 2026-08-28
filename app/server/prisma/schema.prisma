@@ -226,6 +226,7 @@ model ServiceOrderItem {
   hours          Decimal      @db.Decimal(9, 2)
   hourlyRate     Decimal      @db.Decimal(9, 2)
   totalPrice     Decimal      @db.Decimal(9, 2)
+  note           String?
   order          ServiceOrder @relation(fields: [serviceOrderId], references: [id])
   serviceOrderId Int
 }
