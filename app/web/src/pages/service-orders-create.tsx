@@ -358,6 +358,16 @@ const ServiceOrdersCreatePage = () => {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
+
+                    <div className="md:col-span-12 space-y-2">
+                      <Label>Observação (Opcional)</Label>
+                      <Input 
+                        placeholder="Ex: Serviço executado na sede do cliente..." 
+                        className="h-9"
+                        {...form.register(`items.${index}.note`)} 
+                      />
+                      {errors.items?.[index]?.note && <p className="text-xs text-red-500">{errors.items[index]?.note?.message}</p>}
+                    </div>
                   </div>
                 ))}
               </div>
