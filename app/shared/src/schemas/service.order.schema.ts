@@ -27,13 +27,18 @@ export const serviceOrderSchema = z.object({
           .number({ error: 'Insira o valor hora' })
           .gte(0, { error: 'O valor hora deve ser igual ou maior que 0' }),
         note: z
-          .string({ error: 'Insira uma observação' })
-          .min(1, {
-            error: 'Observação muito curta. Insira pelo menos 1 caractere',
-          })
-          .max(50, {
-            error: 'Observação muito longa. Insira no máximo 50 caracteres',
-          })
+          .union([
+            z
+              .string()
+              .min(1, {
+                error: 'Observação muito curta. Insira pelo menos 1 caractere',
+              })
+              .max(50, {
+                error: 'Observação muito longa. Insira no máximo 50 caracteres',
+              }),
+            z.literal(''),
+            z.undefined(),
+          ])
           .optional(),
       }),
     )
