@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Svg, Defs, LinearGradient, Stop, Path, Circle } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { ServiceOrderData } from '@/types';
@@ -143,6 +143,37 @@ interface Props {
   data: ServiceOrderData;
 }
 
+const TraceLogoPdf = () => (
+  <Svg viewBox="0 0 100 100" width="40" height="40" style={{ position: 'absolute', top: 0, right: 0 }}>
+    <Defs>
+      <LinearGradient id="violet-gradient" x1="0" y1="0" x2="1" y2="1">
+        <Stop offset="0%" stopColor="#a78bfa" />
+        <Stop offset="50%" stopColor="#7c3aed" />
+        <Stop offset="100%" stopColor="#4c1d95" />
+      </LinearGradient>
+    </Defs>
+    <Path
+      d="M 20 70 L 35 50 M 80 70 L 65 50 M 35 50 L 65 50"
+      stroke="url(#violet-gradient)"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.4"
+    />
+    <Path
+      d="M 15 30 L 85 30 L 65 50 L 50 50 L 50 85"
+      stroke="url(#violet-gradient)"
+      strokeWidth="8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Circle cx="15" cy="30" r="7" fill="#a78bfa" />
+    <Circle cx="85" cy="30" r="7" fill="#a78bfa" />
+    <Circle cx="50" cy="50" r="6" fill="#7c3aed" />
+    <Circle cx="50" cy="85" r="8" fill="#4c1d95" />
+  </Svg>
+);
+
 const ServiceOrderVia = ({
   data,
   totalOs,
@@ -158,6 +189,7 @@ const ServiceOrderVia = ({
     <View style={styles.via}>
       {/* HEADER */}
       <View style={styles.header}>
+        <TraceLogoPdf />
         <Text style={styles.title}>ORDEM DE SERVIÇO</Text>
         <Text style={styles.companyName}>
           {company.fantasyName || company.name}
@@ -218,18 +250,23 @@ const ServiceOrderVia = ({
             </View>
             <View style={styles.tableColService}>
               <Text style={styles.tableCell}>{item.description}</Text>
+              {item.note && (
+                <Text style={{ fontSize: 8, color: '#555555', marginTop: 2, fontStyle: 'italic' }}>
+                  Obs: {item.note}
+                </Text>
+              )}
             </View>
             <View style={styles.tableColHours}>
               <Text style={styles.tableCell}>{item.hours.toString()}</Text>
             </View>
             <View style={styles.tableColRate}>
               <Text style={styles.tableCell}>
-                {formatCurrency(item.hourlyRate).replace('R$', '').trim()}
+                {formatCurrency(Number(item.hourlyRate)).replace('R$', '').trim()}
               </Text>
             </View>
             <View style={styles.tableColTotal}>
               <Text style={styles.tableCell}>
-                {formatCurrency(item.totalPrice).replace('R$', '').trim()}
+                {formatCurrency(Number(item.totalPrice)).replace('R$', '').trim()}
               </Text>
             </View>
           </View>

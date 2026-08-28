@@ -5,44 +5,47 @@ export interface ServiceOrderItem {
   hours: number;
   hourlyRate: number;
   totalPrice: number;
+  note: string | null;
 }
 
 export interface ServiceOrderCompany {
-  document: string;
-  name: string;
+  document?: string;
+  name?: string;
   fantasyName: string | null;
   phone: string | null;
   address: string | null;
   neighborhood: string | null;
-  zipcode: string | null;
+  zipcode?: string | null;
   addressNumber: number | null;
-  complement: string | null;
-  email: string | null;
-  ie: string | null;
-  active: boolean;
+  complement?: string | null;
+  email?: string | null;
+  ie?: string | null;
+  active?: boolean;
   city: {
     name: string;
-    ibge: string;
-    stateId: number;
+    ibge?: string;
+    stateId?: number;
+    state?: string;
   } | null;
 }
 
 export interface ServiceOrderCustomer {
-  document: string;
+  document?: string;
   name: string;
-  fantasyName: string | null;
+  fantasyName?: string | null;
   phone: string | null;
   address: string | null;
   neighborhood: string | null;
-  zipcode: string | null;
+  zipcode?: string | null;
   addressNumber: number | null;
-  complement: string | null;
-  email: string | null;
-  active: boolean;
+  complement?: string | null;
+  email?: string | null;
+  active?: boolean;
   city: {
     name: string;
-    ibge: string;
-    stateId: number;
+    ibge?: string;
+    stateId?: number;
+    state?: string;
   } | null;
 }
 

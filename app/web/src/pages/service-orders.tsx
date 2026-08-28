@@ -1,13 +1,58 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
-import { Loader2, Eye } from 'lucide-react';
+import { Loader2, Eye, Pencil, Edit } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { getServiceOrders } from '@/api';
+import { getServiceOrders, getSingleServiceOrder } from '@/api';
 import type { ServiceOrderData } from '@/types';
 import { useEffect, useState, useRef } from 'react';
 import { toast } from 'sonner';
+
+const ActionCell = ({ id }: { id: number }) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGeneratePdf = async () => {
+    setIsGenerating(true);
+    try {
+      const res = await getSingleServiceOrder(id);
+      const { pdf } = await import('@react-pdf/renderer');
+      const { ServiceOrderPdf } = await import('@/components/pdf/ServiceOrderPdf');
+      const blob = await pdf(<ServiceOrderPdf data={res.data} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch (err) {
+      toast.error('Erro ao gerar PDF');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-end gap-1">
+      <Link to="/service-order/$id" params={{ id: String(id) }}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
+          title="Ver Ordem de Serviço"
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      </Link>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
+        title="Gerar e Abrir PDF"
+        onClick={handleGeneratePdf}
+        disabled={isGenerating}
+      >
+        {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+      </Button>
+    </div>
+  );
+};
 
 const columns: ColumnDef<ServiceOrderData>[] = [
   {
@@ -24,9 +69,11 @@ const columns: ColumnDef<ServiceOrderData>[] = [
     header: 'Data',
     cell: ({ row }) => {
       const date = new Date(row.getValue('date'));
+      const formattedDate = date.toLocaleDateString('pt-BR');
+      const formattedTime = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       return (
         <span className="text-sm font-medium text-foreground">
-          {date.toLocaleString()}
+          {`${formattedDate} às ${formattedTime}`}
         </span>
       );
     },
@@ -51,19 +98,7 @@ const columns: ColumnDef<ServiceOrderData>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Link to="/service-order/$id" params={{ id: row.getValue('id') as string }}>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-violet-600 transition-colors"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-        </Link>
-      </div>
-    ),
+    cell: ({ row }) => <ActionCell id={row.getValue('id') as number} />,
   },
 ];
 

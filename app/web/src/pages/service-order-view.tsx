@@ -78,7 +78,7 @@ const ServiceOrderViewPage = () => {
   const items = data.serviceOrderItems;
 
   const calculateTotal = () => {
-    return items.reduce((acc, item) => acc + item.totalPrice, 0);
+    return items.reduce((acc, item) => acc + Number(item.totalPrice), 0);
   };
 
   return (
@@ -147,7 +147,7 @@ const ServiceOrderViewPage = () => {
                   <InfoItem label="Número" value={customer.addressNumber?.toString()} />
                   <InfoItem label="Complemento" value={customer.complement} />
                   {customer.city && (
-                    <InfoItem label="Cidade/Estado" value={`${customer.city.name}`} />
+                    <InfoItem label="Cidade/Estado" value={`${customer.city.name} - ${customer.city.state || ''}`} />
                   )}
                 </div>
               </div>
@@ -166,7 +166,7 @@ const ServiceOrderViewPage = () => {
           </CardHeader>
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-              <InfoItem label="Razão Social" value={company.name} icon={Building} colSpan={2} />
+              <InfoItem label="Nome / Razão Social" value={company.fantasyName || company.name} icon={Building} colSpan={2} />
               <InfoItem label="CNPJ" value={company.document} icon={Fingerprint} />
               <InfoItem label="Inscrição Estadual" value={company.ie} icon={FileText} />
               <InfoItem label="Email" value={company.email} icon={Mail} />
@@ -183,7 +183,7 @@ const ServiceOrderViewPage = () => {
                   <InfoItem label="Número" value={company.addressNumber?.toString()} />
                   <InfoItem label="Complemento" value={company.complement} />
                   {company.city && (
-                    <InfoItem label="Cidade/Estado" value={`${company.city.name}`} />
+                    <InfoItem label="Cidade/Estado" value={`${company.city.name} - ${company.city.state || ''}`} />
                   )}
                 </div>
               </div>
@@ -232,19 +232,26 @@ const ServiceOrderViewPage = () => {
                       <td className="p-4 align-middle whitespace-nowrap">
                         {format(new Date(item.date), 'dd/MM/yyyy')}
                       </td>
-                      <td className="p-4 align-middle">{item.description}</td>
+                      <td className="p-4 align-middle">
+                        <div>{item.description}</div>
+                        {item.note && (
+                          <div className="text-xs text-muted-foreground mt-1 italic">
+                            Obs: {item.note}
+                          </div>
+                        )}
+                      </td>
                       <td className="p-4 align-middle text-right">{item.hours}</td>
                       <td className="p-4 align-middle text-right">
                         {new Intl.NumberFormat('pt-BR', {
                           style: 'currency',
                           currency: 'BRL',
-                        }).format(item.hourlyRate)}
+                        }).format(Number(item.hourlyRate))}
                       </td>
                       <td className="p-4 align-middle text-right font-medium">
                         {new Intl.NumberFormat('pt-BR', {
                           style: 'currency',
                           currency: 'BRL',
-                        }).format(item.totalPrice)}
+                        }).format(Number(item.totalPrice))}
                       </td>
                     </tr>
                   ))
