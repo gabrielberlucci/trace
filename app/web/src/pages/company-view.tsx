@@ -524,7 +524,7 @@ const CompanyViewPage = () => {
                         value={selectedState}
                         onValueChange={(val) => {
                           setSelectedState(val);
-                          form.setValue('cityId', undefined as any);
+                          form.setValue('cityId', undefined as any, { shouldDirty: true });
                           setCitySearch('');
                         }}
                       >
@@ -556,7 +556,7 @@ const CompanyViewPage = () => {
                         onChange={(e) => {
                           setCitySearch(e.target.value);
                           setShowCitiesDropdown(true);
-                          form.setValue('cityId', undefined as any);
+                          form.setValue('cityId', undefined as any, { shouldDirty: true });
                         }}
                         onFocus={() => {
                           if (selectedState) setShowCitiesDropdown(true);
@@ -573,7 +573,7 @@ const CompanyViewPage = () => {
                               className="px-4 py-2 cursor-pointer hover:bg-muted text-sm"
                               onClick={() => {
                                 setCitySearch(c.name);
-                                form.setValue('cityId', c.id);
+                                form.setValue('cityId', c.id, { shouldDirty: true });
                                 setShowCitiesDropdown(false);
                               }}
                             >
