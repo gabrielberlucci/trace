@@ -11,6 +11,7 @@ interface ServiceOrderItem {
   description: string;
   hours: number;
   hourlyRate: number;
+  note?: string;
 }
 
 export interface ServiceOrderQueryParamsFilters extends PaginationQueryParams {

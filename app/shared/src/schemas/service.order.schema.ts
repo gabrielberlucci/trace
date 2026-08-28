@@ -26,6 +26,20 @@ export const serviceOrderSchema = z.object({
         hourlyRate: z
           .number({ error: 'Insira o valor hora' })
           .gte(0, { error: 'O valor hora deve ser igual ou maior que 0' }),
+        note: z
+          .union([
+            z
+              .string()
+              .min(1, {
+                error: 'Observação muito curta. Insira pelo menos 1 caractere',
+              })
+              .max(50, {
+                error: 'Observação muito longa. Insira no máximo 50 caracteres',
+              }),
+            z.literal(''),
+            z.undefined(),
+          ])
+          .optional(),
       }),
     )
     .min(1, { error: 'A ordem de serviço deve conter pelo menos 1 item' }),
