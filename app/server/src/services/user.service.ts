@@ -105,7 +105,7 @@ export const loginUser = async (userData: UserLogin) => {
 
   if (validatedPassword) {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: '1h',
+      expiresIn: '8h',
     });
 
     return token;
