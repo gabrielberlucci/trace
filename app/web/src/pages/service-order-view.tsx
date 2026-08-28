@@ -234,11 +234,6 @@ const ServiceOrderViewPage = () => {
                       </td>
                       <td className="p-4 align-middle">
                         <div>{item.description}</div>
-                        {item.note && (
-                          <div className="text-xs text-muted-foreground mt-1 italic">
-                            Obs: {item.note}
-                          </div>
-                        )}
                       </td>
                       <td className="p-4 align-middle text-right">{item.hours}</td>
                       <td className="p-4 align-middle text-right">
@@ -260,7 +255,10 @@ const ServiceOrderViewPage = () => {
               {items.length > 0 && (
                 <tfoot className="bg-muted/30 border-t">
                   <tr>
-                    <td colSpan={4} className="p-4 text-right font-bold">Total Geral</td>
+                    <td colSpan={3} className="p-4 text-left text-muted-foreground text-xs italic">
+                      {items.some(i => i.note) && `Obs: ${items.map(i => i.note).filter(Boolean).join(' | ')}`}
+                    </td>
+                    <td className="p-4 text-right font-bold">Total Geral</td>
                     <td className="p-4 text-right font-bold text-violet-600">
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',

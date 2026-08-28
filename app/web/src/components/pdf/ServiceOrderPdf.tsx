@@ -1,4 +1,16 @@
-import { Document, Page, Text, View, StyleSheet, Svg, Defs, LinearGradient, Stop, Path, Circle } from '@react-pdf/renderer';
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Svg,
+  Defs,
+  LinearGradient,
+  Stop,
+  Path,
+  Circle,
+} from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { ServiceOrderData } from '@/types';
@@ -144,7 +156,12 @@ interface Props {
 }
 
 const TraceLogoPdf = () => (
-  <Svg viewBox="0 0 100 100" width="40" height="40" style={{ position: 'absolute', top: 0, right: 0 }}>
+  <Svg
+    viewBox="0 0 100 100"
+    width="40"
+    height="40"
+    style={{ position: 'absolute', top: 0, right: 0 }}
+  >
     <Defs>
       <LinearGradient id="violet-gradient" x1="0" y1="0" x2="1" y2="1">
         <Stop offset="0%" stopColor="#a78bfa" />
@@ -250,23 +267,22 @@ const ServiceOrderVia = ({
             </View>
             <View style={styles.tableColService}>
               <Text style={styles.tableCell}>{item.description}</Text>
-              {item.note && (
-                <Text style={{ fontSize: 8, color: '#555555', marginTop: 2, fontStyle: 'italic' }}>
-                  Obs: {item.note}
-                </Text>
-              )}
             </View>
             <View style={styles.tableColHours}>
               <Text style={styles.tableCell}>{item.hours.toString()}</Text>
             </View>
             <View style={styles.tableColRate}>
               <Text style={styles.tableCell}>
-                {formatCurrency(Number(item.hourlyRate)).replace('R$', '').trim()}
+                {formatCurrency(Number(item.hourlyRate))
+                  .replace('R$', '')
+                  .trim()}
               </Text>
             </View>
             <View style={styles.tableColTotal}>
               <Text style={styles.tableCell}>
-                {formatCurrency(Number(item.totalPrice)).replace('R$', '').trim()}
+                {formatCurrency(Number(item.totalPrice))
+                  .replace('R$', '')
+                  .trim()}
               </Text>
             </View>
           </View>
@@ -276,11 +292,31 @@ const ServiceOrderVia = ({
       <View style={styles.divider} />
 
       {/* TOTAL */}
-      <View style={styles.totalSection}>
-        <Text style={styles.totalText}>Total R$</Text>
-        <Text style={styles.totalValue}>
-          {formatCurrency(totalOs).replace('R$', '').trim()}
-        </Text>
+      <View style={[styles.totalSection, { justifyContent: 'space-between' }]}>
+        <View style={{ flex: 1, paddingRight: 10 }}>
+          {serviceOrderItems.some((i) => i.note) && (
+            <Text
+              style={{ fontSize: 9, fontStyle: 'italic', color: '#555555' }}
+            >
+              {serviceOrderItems
+                .map((i) => i.note)
+                .filter(Boolean)
+                .join(' | ')}
+            </Text>
+          )}
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: '40%',
+          }}
+        >
+          <Text style={styles.totalText}>Total R$</Text>
+          <Text style={styles.totalValue}>
+            {formatCurrency(totalOs).replace('R$', '').trim()}
+          </Text>
+        </View>
       </View>
 
       {/* FOOTER / SIGNATURE */}
