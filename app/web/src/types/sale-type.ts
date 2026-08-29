@@ -64,3 +64,46 @@ export interface PaginatedSalesData {
     description: string;
   };
 }
+
+export interface SingleSaleResponse {
+  status: string;
+  message: string;
+  data: SingleSaleData;
+}
+
+export interface SingleSaleData {
+  id: number;
+  date: string;
+  company: {
+    fantasyName: string | null;
+    phone: string | null;
+    address: string | null;
+    neighborhood: string | null;
+    addressNumber: number | null;
+    email: string | null;
+  } | null;
+  customer: {
+    name: string | null;
+    phone: string | null;
+    address: string | null;
+    neighborhood: string | null;
+    addressNumber: number | null;
+    city: {
+      name: string;
+      state: string;
+    } | null;
+  } | null;
+  paymentMethod: {
+    description: string | null;
+  } | null;
+  saleItem: {
+    barcode: string;
+    description: string | null;
+    quantity: number;
+    salePrice: string;
+    totalPrice: string;
+  }[] | null;
+  user: {
+    name: string | null;
+  } | null;
+}

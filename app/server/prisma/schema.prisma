@@ -121,6 +121,8 @@ model Sale {
   user            User          @relation(fields: [userId], references: [id])
   userId          Int
   date            DateTime      @default(now())
+  company         Company?      @relation(fields: [companyId], references: [id])
+  companyId       Int?
 }
 
 model SaleItem {
@@ -197,6 +199,7 @@ model Company {
   city          City?          @relation(fields: [cityId], references: [id])
   cityId        Int?
   serviceOrders ServiceOrder[]
+  sale          Sale[]
 }
 
 model NfeUploadControl {
@@ -226,6 +229,7 @@ model ServiceOrderItem {
   hours          Decimal      @db.Decimal(9, 2)
   hourlyRate     Decimal      @db.Decimal(9, 2)
   totalPrice     Decimal      @db.Decimal(9, 2)
+  note           String?
   order          ServiceOrder @relation(fields: [serviceOrderId], references: [id])
   serviceOrderId Int
 }

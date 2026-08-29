@@ -42,7 +42,7 @@ export const loginUserController = async (req: Request, res: Response) => {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 8000,
     })
     .status(StatusCodes.OK)
     .send({

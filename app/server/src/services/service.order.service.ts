@@ -98,7 +98,11 @@ export const getServiceOrder = async (id: number) => {
     where: {
       id: id,
     },
-    include: {
+
+    select: {
+      id: true,
+      date: true,
+
       serviceOrderItems: {
         omit: {
           serviceOrderId: true,
@@ -106,31 +110,40 @@ export const getServiceOrder = async (id: number) => {
       },
 
       company: {
-        omit: {
-          id: true,
-          cityId: true,
-        },
+        select: {
+          fantasyName: true,
+          address: true,
+          addressNumber: true,
+          neighborhood: true,
+          phone: true,
+          document: true,
+          email: true,
+          complement: true,
 
-        include: {
           city: {
-            omit: {
-              id: true,
+            select: {
+              name: true,
+              state: true,
             },
           },
         },
       },
 
       customer: {
-        omit: {
-          id: true,
-          typePerson: true,
-          birthdate: true,
-          cityId: true,
-        },
-        include: {
+        select: {
+          name: true,
+          address: true,
+          addressNumber: true,
+          neighborhood: true,
+          phone: true,
+          document: true,
+          email: true,
+          complement: true,
+
           city: {
-            omit: {
-              id: true,
+            select: {
+              name: true,
+              state: true,
             },
           },
         },

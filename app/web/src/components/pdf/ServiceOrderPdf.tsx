@@ -1,4 +1,16 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Svg,
+  Defs,
+  LinearGradient,
+  Stop,
+  Path,
+  Circle,
+} from '@react-pdf/renderer';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { ServiceOrderData } from '@/types';
@@ -143,6 +155,42 @@ interface Props {
   data: ServiceOrderData;
 }
 
+const TraceLogoPdf = () => (
+  <Svg
+    viewBox="0 0 100 100"
+    width="40"
+    height="40"
+    style={{ position: 'absolute', top: 0, right: 0 }}
+  >
+    <Defs>
+      <LinearGradient id="violet-gradient" x1="0" y1="0" x2="1" y2="1">
+        <Stop offset="0%" stopColor="#a78bfa" />
+        <Stop offset="50%" stopColor="#7c3aed" />
+        <Stop offset="100%" stopColor="#4c1d95" />
+      </LinearGradient>
+    </Defs>
+    <Path
+      d="M 20 70 L 35 50 M 80 70 L 65 50 M 35 50 L 65 50"
+      stroke="url(#violet-gradient)"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.4"
+    />
+    <Path
+      d="M 15 30 L 85 30 L 65 50 L 50 50 L 50 85"
+      stroke="url(#violet-gradient)"
+      strokeWidth="8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Circle cx="15" cy="30" r="7" fill="#a78bfa" />
+    <Circle cx="85" cy="30" r="7" fill="#a78bfa" />
+    <Circle cx="50" cy="50" r="6" fill="#7c3aed" />
+    <Circle cx="50" cy="85" r="8" fill="#4c1d95" />
+  </Svg>
+);
+
 const ServiceOrderVia = ({
   data,
   totalOs,
@@ -158,6 +206,7 @@ const ServiceOrderVia = ({
     <View style={styles.via}>
       {/* HEADER */}
       <View style={styles.header}>
+        <TraceLogoPdf />
         <Text style={styles.title}>ORDEM DE SERVIÇO</Text>
         <Text style={styles.companyName}>
           {company.fantasyName || company.name}
@@ -167,7 +216,9 @@ const ServiceOrderVia = ({
           {company.neighborhood ? `- Bairro: ${company.neighborhood}` : ''}{' '}
           {company.complement ? `- ${company.complement}` : ''}
         </Text>
-        <Text style={styles.companyText}>Cidade: {company.city?.name}</Text>
+        <Text style={styles.companyText}>
+          Cidade: {company.city?.name}{company.city?.state ? ` - ${company.city.state}` : ''}
+        </Text>
         <Text style={styles.companyText}>Cel: {company.phone || 'N/A'}</Text>
       </View>
 
@@ -181,6 +232,11 @@ const ServiceOrderVia = ({
           {customer.neighborhood ? `- Bairro: ${customer.neighborhood}` : ''}{' '}
           {customer.complement ? `- ${customer.complement}` : ''}
         </Text>
+        {customer.city && (
+          <Text style={styles.clientText}>
+            Cidade: {customer.city.name}{customer.city.state ? ` - ${customer.city.state}` : ''}
+          </Text>
+        )}
         <Text style={styles.clientText}>Cel: {customer.phone || 'N/A'}</Text>
         <Text style={styles.clientText}>Data: {formattedDate}</Text>
       </View>
@@ -224,12 +280,16 @@ const ServiceOrderVia = ({
             </View>
             <View style={styles.tableColRate}>
               <Text style={styles.tableCell}>
-                {formatCurrency(item.hourlyRate).replace('R$', '').trim()}
+                {formatCurrency(Number(item.hourlyRate))
+                  .replace('R$', '')
+                  .trim()}
               </Text>
             </View>
             <View style={styles.tableColTotal}>
               <Text style={styles.tableCell}>
-                {formatCurrency(item.totalPrice).replace('R$', '').trim()}
+                {formatCurrency(Number(item.totalPrice))
+                  .replace('R$', '')
+                  .trim()}
               </Text>
             </View>
           </View>
@@ -239,11 +299,31 @@ const ServiceOrderVia = ({
       <View style={styles.divider} />
 
       {/* TOTAL */}
-      <View style={styles.totalSection}>
-        <Text style={styles.totalText}>Total R$</Text>
-        <Text style={styles.totalValue}>
-          {formatCurrency(totalOs).replace('R$', '').trim()}
-        </Text>
+      <View style={[styles.totalSection, { justifyContent: 'space-between' }]}>
+        <View style={{ flex: 1, paddingRight: 10 }}>
+          {serviceOrderItems.some((i) => i.note) && (
+            <Text
+              style={{ fontSize: 9, fontStyle: 'italic', color: '#555555' }}
+            >
+              {serviceOrderItems
+                .map((i) => i.note)
+                .filter(Boolean)
+                .join(' | ')}
+            </Text>
+          )}
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: '40%',
+          }}
+        >
+          <Text style={styles.totalText}>Total R$</Text>
+          <Text style={styles.totalValue}>
+            {formatCurrency(totalOs).replace('R$', '').trim()}
+          </Text>
+        </View>
       </View>
 
       {/* FOOTER / SIGNATURE */}
