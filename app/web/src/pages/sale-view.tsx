@@ -201,6 +201,14 @@ const SaleViewPage = () => {
                 icon={User}
               />
               <InfoItem
+                label="Documento"
+                value={sale.customer?.document}
+              />
+              <InfoItem
+                label="E-mail"
+                value={sale.customer?.email}
+              />
+              <InfoItem
                 label="Telefone"
                 value={sale.customer?.phone}
               />
@@ -209,6 +217,10 @@ const SaleViewPage = () => {
                 value={
                   sale.customer?.address
                     ? `${sale.customer.address}, ${sale.customer.addressNumber || 'S/N'}${
+                        sale.customer.complement
+                          ? ` - ${sale.customer.complement}`
+                          : ''
+                      }${
                         sale.customer.neighborhood
                           ? ` - ${sale.customer.neighborhood}`
                           : ''
@@ -242,6 +254,10 @@ const SaleViewPage = () => {
                 icon={Building2}
               />
               <InfoItem
+                label="CNPJ"
+                value={sale.company?.document}
+              />
+              <InfoItem
                 label="E-mail"
                 value={sale.company?.email}
               />
@@ -253,7 +269,7 @@ const SaleViewPage = () => {
                 label="Endereço"
                 value={
                   sale.company?.address
-                    ? `${sale.company.address}, ${sale.company.addressNumber || 'S/N'}`
+                    ? `${sale.company.address}, ${sale.company.addressNumber || 'S/N'}${sale.company.complement ? ` - ${sale.company.complement}` : ''}`
                     : null
                 }
                 colSpan={2}
