@@ -112,16 +112,22 @@ const styles = StyleSheet.create({
   colTotal: { width: '15%', textAlign: 'right' },
   totalsContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    width: '100%',
     marginTop: 10,
     paddingTop: 10,
     borderTopWidth: 2,
     borderTopColor: '#d4d4d8',
   },
+  totalLabelContainer: {
+    width: '85%',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 20,
+  },
   totalLabel: {
     fontSize: 11,
     fontWeight: 'bold',
-    marginRight: 20,
     color: '#52525b',
   },
   totalValue: {
@@ -371,7 +377,9 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
             )}
 
             <View style={styles.totalsContainer}>
-              <Text style={styles.totalLabel}>TOTAL A PAGAR:</Text>
+              <View style={styles.totalLabelContainer}>
+                <Text style={styles.totalLabel}>TOTAL A PAGAR:</Text>
+              </View>
               <Text style={styles.totalValue}>{formatCurrency(totalSale)}</Text>
             </View>
           </View>
