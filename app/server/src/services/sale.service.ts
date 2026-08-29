@@ -246,6 +246,8 @@ export const getSale = async (id: number) => {
           neighborhood: true,
           addressNumber: true,
           email: true,
+          complement: true,
+          document: true,
 
           city: {
             select: {
@@ -262,6 +264,9 @@ export const getSale = async (id: number) => {
           address: true,
           neighborhood: true,
           addressNumber: true,
+          email: true,
+          complement: true,
+          document: true,
 
           city: {
             select: {
