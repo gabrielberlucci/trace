@@ -216,7 +216,9 @@ const ServiceOrderVia = ({
           {company.neighborhood ? `- Bairro: ${company.neighborhood}` : ''}{' '}
           {company.complement ? `- ${company.complement}` : ''}
         </Text>
-        <Text style={styles.companyText}>Cidade: {company.city?.name}</Text>
+        <Text style={styles.companyText}>
+          Cidade: {company.city?.name}{company.city?.state ? ` - ${company.city.state}` : ''}
+        </Text>
         <Text style={styles.companyText}>Cel: {company.phone || 'N/A'}</Text>
       </View>
 
@@ -230,6 +232,11 @@ const ServiceOrderVia = ({
           {customer.neighborhood ? `- Bairro: ${customer.neighborhood}` : ''}{' '}
           {customer.complement ? `- ${customer.complement}` : ''}
         </Text>
+        {customer.city && (
+          <Text style={styles.clientText}>
+            Cidade: {customer.city.name}{customer.city.state ? ` - ${customer.city.state}` : ''}
+          </Text>
+        )}
         <Text style={styles.clientText}>Cel: {customer.phone || 'N/A'}</Text>
         <Text style={styles.clientText}>Data: {formattedDate}</Text>
       </View>
