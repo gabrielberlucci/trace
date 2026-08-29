@@ -270,6 +270,14 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
                 : 'Não informado'}
             </Text>
           </View>
+          {sale.company?.city && (
+            <View style={styles.row}>
+              <Text style={styles.label}>Cidade:</Text>
+              <Text style={styles.value}>
+                {sale.company.city.name} - {sale.company.city.state}
+              </Text>
+            </View>
+          )}
           <View style={styles.row}>
             <Text style={styles.label}>Contato:</Text>
             <Text style={styles.value}>

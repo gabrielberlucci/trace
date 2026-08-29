@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
-import { Loader2, Eye, Pencil, Edit } from 'lucide-react';
+import { Loader2, Eye, Pencil, Edit, Printer } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getServiceOrders, getSingleServiceOrder } from '@/api';
@@ -48,7 +48,7 @@ const ActionCell = ({ id }: { id: number }) => {
         onClick={handleGeneratePdf}
         disabled={isGenerating}
       >
-        {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+        {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Printer className="h-4 w-4" />}
       </Button>
     </div>
   );

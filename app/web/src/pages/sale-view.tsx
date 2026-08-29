@@ -216,6 +216,12 @@ const SaleViewPage = () => {
                     : null
                 }
               />
+              {sale.customer?.city && (
+                <InfoItem
+                  label="Cidade"
+                  value={`${sale.customer.city.name} - ${sale.customer.city.state}`}
+                />
+              )}
             </div>
           </CardContent>
         </Card>
@@ -256,6 +262,12 @@ const SaleViewPage = () => {
                 label="Bairro"
                 value={sale.company?.neighborhood}
               />
+              {sale.company?.city && (
+                <InfoItem
+                  label="Cidade"
+                  value={`${sale.company.city.name} - ${sale.company.city.state}`}
+                />
+              )}
             </div>
           </CardContent>
         </Card>

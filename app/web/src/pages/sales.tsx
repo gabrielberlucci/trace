@@ -63,6 +63,20 @@ export const columns: ColumnDef<PaginatedSalesData>[] = [
     ),
   },
   {
+    accessorKey: 'date',
+    header: 'Data',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('date'));
+      const formattedDate = date.toLocaleDateString('pt-BR');
+      const formattedTime = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      return (
+        <span className="text-sm font-medium text-foreground">
+          {`${formattedDate} às ${formattedTime}`}
+        </span>
+      );
+    },
+  },
+  {
     id: 'customer',
     accessorFn: (row) => row.customer.name,
     header: 'Cliente',
@@ -95,7 +109,6 @@ export const columns: ColumnDef<PaginatedSalesData>[] = [
     id: 'actions',
     cell: ({ row }) => (
       <div className="flex justify-end gap-2">
-        <PrintAction id={Number(row.getValue('id'))} />
         <Link to="/sale/$id" params={{ id: String(row.getValue('id')) }}>
           <Button
             variant="ghost"
@@ -105,6 +118,7 @@ export const columns: ColumnDef<PaginatedSalesData>[] = [
             <Edit className="h-4 w-4" />
           </Button>
         </Link>
+        <PrintAction id={Number(row.getValue('id'))} />
       </div>
     ),
   },
