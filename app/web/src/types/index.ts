@@ -61,6 +61,8 @@ export type {
   SaleDataItem,
   PaginatedSales,
   PaginatedSalesData,
+  SingleSaleResponse,
+  SingleSaleData,
 } from './sale-type';
 
 export type {

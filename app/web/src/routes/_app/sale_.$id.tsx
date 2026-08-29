@@ -1,14 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import SaleViewPage from '@/pages/sale-view';
 
 export const Route = createFileRoute('/_app/sale_/$id')({
-  component: RouteComponent,
+  component: SaleViewPage,
 });
-
-function RouteComponent() {
-  const { id } = Route.useParams();
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Visualizando Venda: {id}</h1>
-    </div>
-  );
-}

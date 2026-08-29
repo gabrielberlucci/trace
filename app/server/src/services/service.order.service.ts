@@ -116,6 +116,9 @@ export const getServiceOrder = async (id: number) => {
           addressNumber: true,
           neighborhood: true,
           phone: true,
+          document: true,
+          email: true,
+          complement: true,
 
           city: {
             select: {
@@ -133,6 +136,9 @@ export const getServiceOrder = async (id: number) => {
           addressNumber: true,
           neighborhood: true,
           phone: true,
+          document: true,
+          email: true,
+          complement: true,
 
           city: {
             select: {
