@@ -217,16 +217,16 @@ const SaleViewPage = () => {
                 value={
                   sale.customer?.address
                     ? `${sale.customer.address}, ${sale.customer.addressNumber || 'S/N'}${
-                        sale.customer.complement
-                          ? ` - ${sale.customer.complement}`
-                          : ''
-                      }${
                         sale.customer.neighborhood
                           ? ` - ${sale.customer.neighborhood}`
                           : ''
                       }`
                     : null
                 }
+              />
+              <InfoItem
+                label="Complemento"
+                value={sale.customer?.complement}
               />
               {sale.customer?.city && (
                 <InfoItem
@@ -269,10 +269,14 @@ const SaleViewPage = () => {
                 label="Endereço"
                 value={
                   sale.company?.address
-                    ? `${sale.company.address}, ${sale.company.addressNumber || 'S/N'}${sale.company.complement ? ` - ${sale.company.complement}` : ''}`
+                    ? `${sale.company.address}, ${sale.company.addressNumber || 'S/N'}`
                     : null
                 }
                 colSpan={2}
+              />
+              <InfoItem
+                label="Complemento"
+                value={sale.company?.complement}
               />
               <InfoItem
                 label="Bairro"
