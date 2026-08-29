@@ -246,6 +246,13 @@ export const getSale = async (id: number) => {
           neighborhood: true,
           addressNumber: true,
           email: true,
+
+          city: {
+            select: {
+              name: true,
+              state: true,
+            },
+          },
         },
       },
       customer: {
