@@ -78,6 +78,8 @@ model StockMovement {
   productId  Int
   saleItem   SaleItem? @relation(fields: [saleItemId], references: [id])
   saleItemId Int?
+
+  @@index([typeMovement, date])
 }
 
 model City {
