@@ -2,6 +2,7 @@ import type { HighestSalesProducts } from '@/types';
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { Movement } from '@app/shared';
+import { Decimal } from '@prisma/client/runtime/client';
 
 const MAX_SALES = 5;
 const CRITICAL_STOCK = 10;
@@ -26,9 +27,7 @@ export const dashboardService = async (startDate: string, endDate: string) => {
       },
     });
 
-    if (saleIncome._sum.salePrice === null) return 1;
-
-    const countSales = await prisma.sale.count({
+    const countSales = await tx.sale.count({
       where: {
         date: {
           gte: isoStartDate,
@@ -37,9 +36,10 @@ export const dashboardService = async (startDate: string, endDate: string) => {
       },
     });
 
-    const totalSaleIncome = saleIncome._sum.salePrice || 1;
-    const totalSales = countSales || 1;
-    const avgTicket = totalSaleIncome.div(totalSales);
+    const totalSaleIncome = saleIncome._sum.salePrice || Decimal(0);
+    const totalSales = countSales;
+    const avgTicket =
+      totalSales === 0 ? Decimal(0) : totalSaleIncome.div(totalSales);
 
     const highestSalesProducts: HighestSalesProducts[] = await tx.$queryRaw`
       SELECT p.barcode,
@@ -67,7 +67,7 @@ export const dashboardService = async (startDate: string, endDate: string) => {
       },
     });
 
-    const totalOSIncome = osIncome._sum.totalPrice || 1;
+    const totalOSIncome = osIncome._sum.totalPrice || Decimal(0);
 
     return { avgTicket, highestSalesProducts, totalSaleIncome, totalOSIncome };
   });
