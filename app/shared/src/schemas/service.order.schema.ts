@@ -17,8 +17,8 @@ export const serviceOrderSchema = z.object({
         description: z
           .string({ error: 'Insira uma descrição' })
           .min(1, { error: 'A descrição deve conter pelo menos 1 caracteres' })
-          .max(100, {
-            error: 'A descrição deve conter no máximo 100 caracteres',
+          .max(1000, {
+            error: 'A descrição deve conter no máximo 1000 caracteres',
           }),
         hours: z
           .number({ error: 'Insira a quantia de horas' })
