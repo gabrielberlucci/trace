@@ -97,6 +97,7 @@ export interface SingleSaleData {
     description: string | null;
   } | null;
   saleItem: {
+    productId: number;
     barcode: string;
     description: string | null;
     quantity: number;

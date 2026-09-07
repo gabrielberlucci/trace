@@ -105,8 +105,9 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#27272a',
   },
+  colId: { width: '10%' },
   colCode: { width: '15%' },
-  colDesc: { width: '45%' },
+  colDesc: { width: '35%' },
   colUn: { width: '15%', textAlign: 'right' },
   colQtd: { width: '10%', textAlign: 'right' },
   colTotal: { width: '15%', textAlign: 'right' },
@@ -219,7 +220,13 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
             <View style={styles.logoContainer}>
               <Svg viewBox="0 0 100 100">
                 <Defs>
-                  <LinearGradient id="violet-gradient" x1="0" y1="0" x2="1" y2="1">
+                  <LinearGradient
+                    id="violet-gradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
                     <Stop offset="0%" stopColor="#a78bfa" />
                     <Stop offset="50%" stopColor="#7c3aed" />
                     <Stop offset="100%" stopColor="#4c1d95" />
@@ -335,8 +342,9 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
           <Text style={styles.sectionTitle}>Itens da Venda</Text>
           <View style={styles.table}>
             <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderCell, styles.colId]}>Código</Text>
               <Text style={[styles.tableHeaderCell, styles.colCode]}>
-                Código
+                Cód. Fábrica
               </Text>
               <Text style={[styles.tableHeaderCell, styles.colDesc]}>
                 Descrição
@@ -353,6 +361,9 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
             {sale.saleItem && sale.saleItem.length > 0 ? (
               sale.saleItem.map((item: any, i: number) => (
                 <View key={i} style={styles.tableRow}>
+                  <Text style={[styles.tableCell, styles.colId]}>
+                    {item.productId}
+                  </Text>
                   <Text style={[styles.tableCell, styles.colCode]}>
                     {item.barcode}
                   </Text>

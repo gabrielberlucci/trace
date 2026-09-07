@@ -305,6 +305,7 @@ const SaleViewPage = () => {
               <table className="w-full text-sm text-left">
                 <thead className="text-xs uppercase bg-muted/50 border-b border-border/50">
                   <tr>
+                    <th className="px-6 py-4 font-semibold text-muted-foreground w-20">ID</th>
                     <th className="px-6 py-4 font-semibold text-muted-foreground">Código de Barras</th>
                     <th className="px-6 py-4 font-semibold text-muted-foreground text-center">Quantidade</th>
                     <th className="px-6 py-4 font-semibold text-muted-foreground text-right">Preço Unitário</th>
@@ -314,6 +315,7 @@ const SaleViewPage = () => {
                 <tbody className="divide-y divide-border/50">
                   {sale.saleItem?.map((item: any, index: number) => (
                     <tr key={index} className="hover:bg-muted/20 transition-colors">
+                      <td className="px-6 py-4 text-center">{item.productId}</td>
                       <td className="px-6 py-4 font-medium flex items-center gap-2">
                         <Barcode className="h-4 w-4 text-muted-foreground" />
                         {item.barcode}
@@ -329,7 +331,7 @@ const SaleViewPage = () => {
                   ))}
                   {(!sale.saleItem || sale.saleItem.length === 0) && (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground italic">
+                      <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground italic">
                         Nenhum item encontrado para esta venda.
                       </td>
                     </tr>
@@ -338,7 +340,7 @@ const SaleViewPage = () => {
                 {sale.saleItem && sale.saleItem.length > 0 && (
                   <tfoot className="bg-muted/30 font-semibold border-t-2 border-border/50">
                     <tr>
-                      <td colSpan={3} className="px-6 py-4 text-right uppercase text-xs tracking-wider">
+                      <td colSpan={4} className="px-6 py-4 text-right uppercase text-xs tracking-wider">
                         Total da Venda:
                       </td>
                       <td className="px-6 py-4 text-right text-lg text-violet-600">
