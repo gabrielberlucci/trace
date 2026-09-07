@@ -11,7 +11,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { formatPrismaError } from '@/utils';
 import type { NextFunction, Request, Response } from 'express';
 import z, { ZodError } from 'zod';
-import { loggerStorage } from '@/logger';
+import { logger, loggerStorage } from '@/logger';
 import jwt from 'jsonwebtoken';
 
 const { JsonWebTokenError } = jwt;
@@ -106,7 +106,7 @@ export const validateError = (
       message: 'Provavelmente o erro aconteceu por conta do objeto do JSON',
     });
   }
-  console.error(error);
+  logger.error(error);
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
     error: ReasonPhrases.INTERNAL_SERVER_ERROR,
   });
