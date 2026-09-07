@@ -288,6 +288,8 @@ export const getSale = async (id: number) => {
           quantity: true,
           salePrice: true,
           totalPrice: true,
+
+          productId: true,
         },
       },
       user: {
