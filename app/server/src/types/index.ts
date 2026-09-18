@@ -33,3 +33,5 @@ export type {
   DashboardQueryParams,
   HighestSalesProducts,
 } from './dashboard.type';
+
+export type { KardexQueryParams } from './kardex.type';
