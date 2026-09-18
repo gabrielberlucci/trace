@@ -152,7 +152,7 @@ export const createSale = async (saleData: SaleCart) => {
 
         movement: {
           create: {
-            quantity: requestQuantity,
+            quantity: requestQuantity * -1,
             typeMovement: 'VENDAS',
             productId: dbProductId,
           },
