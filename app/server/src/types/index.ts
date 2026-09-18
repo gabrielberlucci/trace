@@ -34,4 +34,4 @@ export type {
   HighestSalesProducts,
 } from './dashboard.type';
 
-export type { KardexQueryParams } from './kardex.type';
+export type { KardexQueryParams, KardexResult } from './kardex.type';
