@@ -74,10 +74,12 @@ model StockMovement {
   date         DateTime @default(now())
   typeMovement Movement
 
-  product    Product   @relation(fields: [productId], references: [id])
-  productId  Int
-  saleItem   SaleItem? @relation(fields: [saleItemId], references: [id])
-  saleItemId Int?
+  product            Product           @relation(fields: [productId], references: [id])
+  productId          Int
+  saleItem           SaleItem?         @relation(fields: [saleItemId], references: [id])
+  saleItemId         Int?
+  nfeUploadControl   NfeUploadControl? @relation(fields: [nfeUploadControlId], references: [id])
+  nfeUploadControlId Int?
 
   @@index([typeMovement, date])
 }
@@ -205,12 +207,13 @@ model Company {
 }
 
 model NfeUploadControl {
-  id           Int      @id @default(autoincrement())
-  nfeAccessKey String   @unique
+  id           Int             @id @default(autoincrement())
+  nfeAccessKey String          @unique
   numNf        String
   serieNf      String
   processedAt  DateTime
-  createdAt    DateTime @default(now())
+  createdAt    DateTime        @default(now())
+  movement     StockMovement[]
 }
 
 model ServiceOrder {

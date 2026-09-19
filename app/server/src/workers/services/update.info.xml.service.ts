@@ -70,6 +70,15 @@ export const updateInfoFromXML = async (
       );
     }
 
+    const nfeUpload = await tx.nfeUploadControl.create({
+      data: {
+        nfeAccessKey: nfeKey,
+        processedAt: new Date(),
+        numNf: numnf,
+        serieNf: serienf,
+      },
+    });
+
     await Promise.all(
       products.map((item) =>
         tx.product.update({
@@ -85,20 +94,12 @@ export const updateInfoFromXML = async (
               create: {
                 quantity: Number(item.qCom),
                 typeMovement: 'IMPORTACAO',
+                nfeUploadControlId: nfeUpload.id,
               },
             },
           },
         }),
       ),
     );
-
-    await tx.nfeUploadControl.create({
-      data: {
-        nfeAccessKey: nfeKey,
-        processedAt: new Date(),
-        numNf: numnf,
-        serieNf: serienf,
-      },
-    });
   });
 };

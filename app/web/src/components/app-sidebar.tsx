@@ -85,6 +85,11 @@ const data: { navMain: NavGroup[] } = {
           url: '/service-orders',
           icon: ClipboardList,
         },
+        {
+          title: 'Kardex (Estoque)',
+          url: '/kardex' as ValidPath,
+          icon: Database,
+        },
       ],
     },
     {
