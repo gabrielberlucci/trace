@@ -16,6 +16,7 @@ import { Route as AppCompanyRouteImport } from './routes/_app/company'
 import { Route as AppCustomerRouteImport } from './routes/_app/customer'
 import { Route as AppCustomerCreateRouteImport } from './routes/_app/customer-create'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppKardexRouteImport } from './routes/_app/kardex'
 import { Route as AppPaymentRouteImport } from './routes/_app/payment'
 import { Route as AppPaymentCreateRouteImport } from './routes/_app/payment-create'
 import { Route as AppProductRouteImport } from './routes/_app/product'
@@ -70,6 +71,11 @@ const AppCustomerCreateRoute = AppCustomerCreateRouteImport.update({
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKardexRoute = AppKardexRouteImport.update({
+  id: '/kardex',
+  path: '/kardex',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPaymentRoute = AppPaymentRouteImport.update({
@@ -189,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/customer': typeof AppCustomerRoute
   '/customer-create': typeof AppCustomerCreateRoute
   '/dashboard': typeof AppDashboardRoute
+  '/kardex': typeof AppKardexRoute
   '/payment': typeof AppPaymentRoute
   '/payment-create': typeof AppPaymentCreateRoute
   '/product': typeof AppProductRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/customer': typeof AppCustomerRoute
   '/customer-create': typeof AppCustomerCreateRoute
   '/dashboard': typeof AppDashboardRoute
+  '/kardex': typeof AppKardexRoute
   '/payment': typeof AppPaymentRoute
   '/payment-create': typeof AppPaymentCreateRoute
   '/product': typeof AppProductRoute
@@ -250,6 +258,7 @@ export interface FileRoutesById {
   '/_app/customer': typeof AppCustomerRoute
   '/_app/customer-create': typeof AppCustomerCreateRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/kardex': typeof AppKardexRoute
   '/_app/payment': typeof AppPaymentRoute
   '/_app/payment-create': typeof AppPaymentCreateRoute
   '/_app/product': typeof AppProductRoute
@@ -281,6 +290,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/customer-create'
     | '/dashboard'
+    | '/kardex'
     | '/payment'
     | '/payment-create'
     | '/product'
@@ -310,6 +320,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/customer-create'
     | '/dashboard'
+    | '/kardex'
     | '/payment'
     | '/payment-create'
     | '/product'
@@ -341,6 +352,7 @@ export interface FileRouteTypes {
     | '/_app/customer'
     | '/_app/customer-create'
     | '/_app/dashboard'
+    | '/_app/kardex'
     | '/_app/payment'
     | '/_app/payment-create'
     | '/_app/product'
@@ -420,6 +432,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/kardex': {
+      id: '/_app/kardex'
+      path: '/kardex'
+      fullPath: '/kardex'
+      preLoaderRoute: typeof AppKardexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/payment': {
@@ -584,6 +603,7 @@ interface AppRouteChildren {
   AppCustomerRoute: typeof AppCustomerRoute
   AppCustomerCreateRoute: typeof AppCustomerCreateRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppKardexRoute: typeof AppKardexRoute
   AppPaymentRoute: typeof AppPaymentRoute
   AppPaymentCreateRoute: typeof AppPaymentCreateRoute
   AppProductRoute: typeof AppProductRoute
@@ -612,6 +632,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCustomerRoute: AppCustomerRoute,
   AppCustomerCreateRoute: AppCustomerCreateRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppKardexRoute: AppKardexRoute,
   AppPaymentRoute: AppPaymentRoute,
   AppPaymentCreateRoute: AppPaymentCreateRoute,
   AppProductRoute: AppProductRoute,

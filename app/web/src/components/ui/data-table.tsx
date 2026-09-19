@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
 import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -13,8 +13,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { Download, Funnel, Search } from "lucide-react"
+} from '@tanstack/react-table';
+import { Download, Funnel, Search } from 'lucide-react';
 
 import {
   Table,
@@ -23,29 +23,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchPlaceholder?: string
-  exportFileName?: string
-  filterColumn?: string
-  toolbarActions?: React.ReactNode
-  showPagination?: boolean
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  activeFilterValue?: string
-  onActiveFilterChange?: (value: string) => void
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  searchPlaceholder?: string;
+  exportFileName?: string;
+  filterColumn?: string;
+  toolbarActions?: React.ReactNode;
+  showPagination?: boolean;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  activeFilterValue?: string;
+  onActiveFilterChange?: (value: string) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchPlaceholder = "Buscar...",
-  exportFileName = "export.csv",
+  searchPlaceholder = 'Buscar...',
+  exportFileName = 'export.csv',
   filterColumn,
   toolbarActions,
   showPagination = true,
@@ -54,9 +54,11 @@ export function DataTable<TData, TValue>({
   activeFilterValue,
   onActiveFilterChange,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [globalFilter, setGlobalFilter] = React.useState("")
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [globalFilter, setGlobalFilter] = React.useState('');
 
   const table = useReactTable({
     data,
@@ -74,28 +76,34 @@ export function DataTable<TData, TValue>({
       columnFilters,
       globalFilter,
     },
-  })
+  });
 
   const exportData = () => {
-    const rowsToExport = table.getFilteredRowModel().rows.map(row => row.original)
-    if (rowsToExport.length === 0) return
+    const rowsToExport = table
+      .getFilteredRowModel()
+      .rows.map((row) => row.original);
+    if (rowsToExport.length === 0) return;
 
-    const headers = Object.keys(rowsToExport[0] as object)
+    const headers = Object.keys(rowsToExport[0] as object);
     const csvContent = [
       headers,
-      ...rowsToExport.map(item => headers.map(header => (item as any)[header]))
-    ].map(e => e.join(",")).join("\n")
-    
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement("a")
-    const url = URL.createObjectURL(blob)
-    link.setAttribute("href", url)
-    link.setAttribute("download", exportFileName)
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+      ...rowsToExport.map((item) =>
+        headers.map((header) => (item as Record<string, unknown>)[header]),
+      ),
+    ]
+      .map((e) => e.join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', exportFileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="w-full space-y-4">
@@ -104,39 +112,58 @@ export function DataTable<TData, TValue>({
         <div className="p-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
+            <Input
               placeholder={searchPlaceholder}
-              value={searchValue !== undefined ? searchValue : (globalFilter ?? "")}
+              value={
+                searchValue !== undefined ? searchValue : (globalFilter ?? '')
+              }
               onChange={(event) => {
                 if (onSearchChange) {
-                  onSearchChange(event.target.value)
+                  onSearchChange(event.target.value);
                 } else {
-                  setGlobalFilter(event.target.value)
+                  setGlobalFilter(event.target.value);
                 }
               }}
               className="pl-9 h-10 border-zinc-200 dark:border-zinc-800"
             />
           </div>
-          
+
           <div className="flex items-center gap-2">
-            {filterColumn && (table.getColumn(filterColumn) || onActiveFilterChange) && (
-              <Button variant="outline" size="sm" onClick={() => {
-                if (onActiveFilterChange) {
-                  const currentFilter = activeFilterValue;
-                  if (!currentFilter) onActiveFilterChange("Ativo");
-                  else if (currentFilter === "Ativo") onActiveFilterChange("Inativo");
-                  else onActiveFilterChange("");
-                } else {
-                  const currentFilter = table.getColumn(filterColumn)?.getFilterValue() as string
-                  if (!currentFilter) table.getColumn(filterColumn)?.setFilterValue("Ativo")
-                  else if (currentFilter === "Ativo") table.getColumn(filterColumn)?.setFilterValue("Inativo")
-                  else table.getColumn(filterColumn)?.setFilterValue("")
-                }
-              }}>
-                <Funnel className="mr-2 h-4 w-4" /> 
-                Status: {onActiveFilterChange ? (activeFilterValue || "Todos") : (table.getColumn(filterColumn)?.getFilterValue() as string || "Todos")}
-              </Button>
-            )}
+            {filterColumn &&
+              (table.getColumn(filterColumn) || onActiveFilterChange) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (onActiveFilterChange) {
+                      const currentFilter = activeFilterValue;
+                      if (!currentFilter) onActiveFilterChange('Ativo');
+                      else if (currentFilter === 'Ativo')
+                        onActiveFilterChange('Inativo');
+                      else onActiveFilterChange('');
+                    } else {
+                      const currentFilter = table
+                        .getColumn(filterColumn)
+                        ?.getFilterValue() as string;
+                      if (!currentFilter)
+                        table.getColumn(filterColumn)?.setFilterValue('Ativo');
+                      else if (currentFilter === 'Ativo')
+                        table
+                          .getColumn(filterColumn)
+                          ?.setFilterValue('Inativo');
+                      else table.getColumn(filterColumn)?.setFilterValue('');
+                    }
+                  }}
+                >
+                  <Funnel className="mr-2 h-4 w-4" />
+                  Status:{' '}
+                  {onActiveFilterChange
+                    ? activeFilterValue || 'Todos'
+                    : (table
+                        .getColumn(filterColumn)
+                        ?.getFilterValue() as string) || 'Todos'}
+                </Button>
+              )}
 
             {toolbarActions}
 
@@ -152,18 +179,24 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-zinc-100 dark:border-zinc-800">
+              <TableRow
+                key={headerGroup.id}
+                className="hover:bg-transparent border-b border-zinc-100 dark:border-zinc-800"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-bold text-[11px] uppercase tracking-wider text-muted-foreground py-4 px-6">
+                    <TableHead
+                      key={header.id}
+                      className="font-bold text-[11px] uppercase tracking-wider text-muted-foreground py-4 px-6"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -173,14 +206,14 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="hover:bg-muted/30 border-b border-zinc-100 dark:border-zinc-800/50 transition-colors group"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="px-6 py-5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -221,5 +254,5 @@ export function DataTable<TData, TValue>({
         </div>
       )}
     </div>
-  )
+  );
 }
