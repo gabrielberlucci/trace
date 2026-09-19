@@ -68,3 +68,5 @@ export {
 } from './service.order.controller';
 
 export { dashboardController } from './dashboard.controller';
+
+export { getKardexController } from './kardex.controller';
