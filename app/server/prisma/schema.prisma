@@ -251,6 +251,8 @@ enum Unity {
   CM
   MT
   MM
+  BALDE
+  LITRO
 }
 
 enum Movement {
