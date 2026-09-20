@@ -60,3 +60,5 @@ export {
 } from './service.order.service';
 
 export { dashboardService } from './dashboard.service';
+
+export { getKardex } from './kardex.service';

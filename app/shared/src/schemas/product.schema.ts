@@ -15,7 +15,7 @@ export const productSchema = z.object({
       z
         .string()
         .min(5, { error: 'Insira pelo menos 5 caracteres no código de barras' })
-        .max(15, {
+        .max(60, {
           error: 'Insira no máximo 13 caracteres no código de barras',
         }),
     ),
