@@ -3,19 +3,16 @@ import { prisma } from '../../lib/prisma';
 
 export const getKardex = async (query: KardexQueryParams) => {
   const PAGE_SIZE = 50;
-  const skip = (query.page - 1) * PAGE_SIZE;
+  const skip = (Math.max(query.page || 1, 1) - 1) * PAGE_SIZE;
+  const currentPage = Math.max(Number(query.page) || 1, 1);
 
-  const response = await prisma.$transaction(async (tx) => {
-    const totalCount = await tx.stockMovement.count({
-      where: {
-        product: {
-          barcode: query.barcode,
-        },
-      },
-    });
-
-    const result: KardexResult[] = await tx.$queryRaw`
-  WITH kardex AS (SELECT sm.id                                                              as "movementId",
+  const [totalCount, result] = await Promise.all([
+    prisma.stockMovement.count({
+      where: { product: { barcode: query.barcode } },
+    }),
+    prisma.$queryRaw<
+      KardexResult[]
+    >`WITH kardex AS (SELECT sm.id                                                              as "movementId",
                        sm.quantity,
                        sm.date,
                        sm."typeMovement",
@@ -23,7 +20,7 @@ export const getKardex = async (query: KardexQueryParams) => {
                        nfc."serieNf",
                        s.id                                                               as "saleId",
                        p.barcode,
-                       SUM(sm.quantity) OVER (PARTITION BY sm."productId" ORDER BY sm.id) as total
+                       SUM(sm.quantity) OVER (PARTITION BY sm."productId" ORDER BY sm.date, sm.id ASC) as total
                 FROM "StockMovement" sm
                          JOIN "Product" p ON p.id = sm."productId"
                          LEFT JOIN "NfeUploadControl" nfc ON nfc.id = sm."nfeUploadControlId"
@@ -32,16 +29,14 @@ export const getKardex = async (query: KardexQueryParams) => {
                 WHERE p.barcode = ${query.barcode})
 SELECT *
 FROM kardex
-LIMIT ${PAGE_SIZE} OFFSET ${skip};`;
+LIMIT ${PAGE_SIZE} OFFSET ${skip};`,
+  ]);
 
-    return { totalCount, result };
-  });
-
-  const total = response.totalCount;
+  const total = totalCount;
   const totalPages = Math.ceil(total / PAGE_SIZE);
-  const hasPrevious: boolean = query.page > 1;
-  const hasNext: boolean = query.page < totalPages;
-  const data = response.result.map((item) => item);
+  const hasPrevious: boolean = currentPage > 1;
+  const hasNext: boolean = currentPage < totalPages;
+  const data = result;
 
   return {
     total,
