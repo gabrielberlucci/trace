@@ -33,3 +33,8 @@ export const RoleType = {
   ADMIN: 'ADMIN',
   CAIXA: 'CAIXA',
 } as const;
+
+export const AdjustMovement = {
+  AJUSTE_ENTRADA: Movement.AJUSTE_ENTRADA,
+  AJUSTE_SAIDA: Movement.AJUSTE_SAIDA,
+} as const;
