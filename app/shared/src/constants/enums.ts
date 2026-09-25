@@ -8,13 +8,16 @@ export const Unity = {
   CM: 'CM',
   MT: 'MT',
   MM: 'MM',
+  BALDE: 'BALDE',
+  LITRO: 'LITRO',
 } as const;
 
 export const Movement = {
   VENDAS: 'VENDAS',
   SERVICO: 'SERVICO',
-  AJUSTE: 'AJUSTE',
   PERDA: 'PERDA',
+  AJUSTE_ENTRADA: 'AJUSTE_ENTRADA',
+  AJUSTE_SAIDA: 'AJUSTE_SAIDA',
 } as const;
 
 export const PaymentType = {
