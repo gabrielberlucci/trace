@@ -70,3 +70,5 @@ export {
 export { dashboardController } from './dashboard.controller';
 
 export { getKardexController } from './kardex.controller';
+
+export { createStockAdjustmentController } from './stock.adjustment.controller';
