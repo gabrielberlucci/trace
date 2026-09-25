@@ -258,9 +258,10 @@ enum Unity {
 enum Movement {
   VENDAS
   SERVICO
-  AJUSTE
   PERDA
   IMPORTACAO
+  AJUSTE_ENTRADA
+  AJUSTE_SAIDA
 }
 
 enum PaymentType {
