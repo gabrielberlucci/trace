@@ -35,3 +35,5 @@ export type {
 } from './dashboard.type';
 
 export type { KardexQueryParams, KardexResult } from './kardex.type';
+
+export type { StockAdjustmentData } from './stock.adjustment.type';
