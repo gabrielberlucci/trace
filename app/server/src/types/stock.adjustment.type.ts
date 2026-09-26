@@ -6,3 +6,15 @@ export interface StockAdjustmentData {
     quantity: number;
   }[];
 }
+
+export interface ValidatedStockAdjustmentData {
+  barcode: string;
+  quantity: number;
+  type: string;
+}
+
+export interface Product {
+  id: number;
+  barcode: string;
+  currentStock: number;
+}
