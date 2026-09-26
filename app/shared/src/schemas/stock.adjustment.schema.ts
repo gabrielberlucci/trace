@@ -10,6 +10,9 @@ export const stockAdjustmentSchema = z.object({
       type: z.enum(AdjustMovement, {
         error: 'Insira o tipo de movimento correto',
       }),
+      quantity: z
+        .number()
+        .check(z.gte(1, { error: 'Insira uma quantidade acima de zero' })),
     }),
   ),
 });
