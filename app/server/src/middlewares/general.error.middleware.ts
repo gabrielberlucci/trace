@@ -37,6 +37,7 @@ export const validateError = (
     return res.status(error.statusCode).send({
       errorName: error.name,
       message: error.message,
+      details: error.details,
     });
   }
 

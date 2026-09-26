@@ -7,6 +7,7 @@ export class BadRequest extends Error {
     message: string,
     statusCode = StatusCodes.BAD_REQUEST,
     reasonPhrases = ReasonPhrases.BAD_REQUEST,
+    public details?: string[],
   ) {
     super(message);
     this.statusCode = statusCode;
