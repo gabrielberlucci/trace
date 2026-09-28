@@ -1,12 +1,14 @@
 import type {
   Product,
   StockAdjustmentData,
+  StockAdjustmentQueryParamsFilters,
   ValidatedStockAdjustmentData,
 } from '@/types';
 import { prisma } from '../../lib/prisma';
 import { BadRequest } from '@/error';
 import { Prisma } from '../../generated/prisma/client';
 import { Movement } from '@app/shared';
+import { getPaginatedData } from '@/repositories';
 
 export const createStockAdjustment = async (data: StockAdjustmentData) => {
   const products = data.items.map((p) => p.barcode);
@@ -78,4 +80,31 @@ export const createStockAdjustment = async (data: StockAdjustmentData) => {
       });
     }
   });
+};
+
+export const getPaginatedStockAdjustment = async (
+  queryFilters: StockAdjustmentQueryParamsFilters,
+) => {
+  const where: Prisma.StockMovementWhereInput = {
+    product: {
+      barcode: queryFilters.barcode,
+    },
+    typeMovement: {
+      in: [Movement.AJUSTE_ENTRADA, Movement.AJUSTE_SAIDA],
+    },
+  };
+
+  const result = await getPaginatedData(
+    prisma,
+    prisma.stockMovement,
+    where,
+    queryFilters.page,
+    'StockMovement',
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  );
+
+  return result;
 };

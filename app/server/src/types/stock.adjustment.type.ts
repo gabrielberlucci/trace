@@ -1,3 +1,5 @@
+import type { PaginationQueryParams } from './common.pagination.type';
+
 export interface StockAdjustmentData {
   date: Date;
   items: {
@@ -17,4 +19,8 @@ export interface Product {
   id: number;
   barcode: string;
   currentStock: number;
+}
+
+export interface StockAdjustmentQueryParamsFilters extends PaginationQueryParams {
+  barcode: string;
 }
