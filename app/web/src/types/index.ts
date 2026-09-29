@@ -95,3 +95,12 @@ export type {
   DashboardResponse,
   GetDashboardParams,
 } from './dashboard-type';
+
+export type {
+  StockAdjustmentItem,
+  StockAdjustmentData,
+  StockAdjustmentResponse,
+  PaginatedStockAdjustments,
+  StockAdjustmentPaginatedItem,
+} from './stock-adjustment-type';
+

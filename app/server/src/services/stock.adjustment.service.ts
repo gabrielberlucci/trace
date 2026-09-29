@@ -101,7 +101,7 @@ export const getPaginatedStockAdjustment = async (
     queryFilters.page,
     'StockMovement',
     undefined,
-    undefined,
+    { product: true },
     undefined,
     undefined,
   );

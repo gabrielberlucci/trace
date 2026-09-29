@@ -32,3 +32,5 @@ export {
   getSingleServiceOrder,
 } from './service-orders/get-service-orders';
 export { createServiceOrder } from './service-orders/post-service-orders';
+export { createStockAdjustment } from './stock-adjustment/post-stock-adjustment';
+export { getPaginatedStockAdjustments } from './stock-adjustment/get-stock-adjustments';
