@@ -21,7 +21,7 @@ export const productSchema = z.object({
     ),
 
   unity: z.enum(Unity, {
-    error: 'Unidades de medida devem ser UN, CM, MT ou MM',
+    error: 'Unidades de medida devem ser UN, CM, MT, MM, BALDE ou LITRO',
   }),
 
   currentStock: z.float32({ error: 'Insira um valor para o estoque' }),
