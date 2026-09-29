@@ -219,12 +219,11 @@ const ProductsCreatePage = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="UN">Unidade (UN)</SelectItem>
-                          <SelectItem value="CX">Caixa (CX)</SelectItem>
-                          <SelectItem value="KG">Quilograma (KG)</SelectItem>
-                          <SelectItem value="MT">Metro (MT)</SelectItem>
-                          <SelectItem value="PC">Peça (PC)</SelectItem>
                           <SelectItem value="CM">Centímetro (CM)</SelectItem>
+                          <SelectItem value="MT">Metro (MT)</SelectItem>
                           <SelectItem value="MM">Milímetro (MM)</SelectItem>
+                          <SelectItem value="BALDE">Balde (BALDE)</SelectItem>
+                          <SelectItem value="LITRO">Litro (LITRO)</SelectItem>
                         </SelectContent>
                       </Select>
                     )}
