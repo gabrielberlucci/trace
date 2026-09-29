@@ -12,6 +12,7 @@ import { uploadXMLRouter } from './upload.xml.route';
 import { serviceOrderRouter } from './service.order.route';
 import { dashboardRouter } from './dashboard.route';
 import { kardexRouter } from './kardex.route';
+import { stockAdjustmentRouter } from './stock.adjustment.route';
 
 const routes: Router = Router();
 
@@ -28,5 +29,6 @@ routes.use('/api/v1/uploader-xml', uploadXMLRouter);
 routes.use('/api/v1/service-orders', serviceOrderRouter);
 routes.use('/api/v1/dashboard', dashboardRouter);
 routes.use('/api/v1/kardex', kardexRouter);
+routes.use('/api/v1/stock-adjustment', stockAdjustmentRouter);
 
 export { routes };
