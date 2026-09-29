@@ -34,3 +34,4 @@ export * from './src/constants/enums';
 export * from './src/utils/index';
 export { UserPermissions } from './src/constants/permissions';
 export { dashboardQueryFilterSchema } from './src/schemas/dashboard.schema';
+export { stockAdjustmentSchema } from './src/schemas/stock.adjustment.schema';

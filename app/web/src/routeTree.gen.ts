@@ -25,6 +25,8 @@ import { Route as AppSaleRouteImport } from './routes/_app/sale'
 import { Route as AppSaleCreateRouteImport } from './routes/_app/sale-create'
 import { Route as AppServiceOrdersRouteImport } from './routes/_app/service-orders'
 import { Route as AppServiceOrdersCreateRouteImport } from './routes/_app/service-orders-create'
+import { Route as AppStockAdjustmentCreateRouteImport } from './routes/_app/stock-adjustment-create'
+import { Route as AppStockAdjustmentsRouteImport } from './routes/_app/stock-adjustments'
 import { Route as AppSupplierRouteImport } from './routes/_app/supplier'
 import { Route as AppSupplierCreateRouteImport } from './routes/_app/supplier-create'
 import { Route as AppUploadXmlRouteImport } from './routes/_app/upload-xml'
@@ -118,6 +120,17 @@ const AppServiceOrdersCreateRoute = AppServiceOrdersCreateRouteImport.update({
   path: '/service-orders-create',
   getParentRoute: () => AppRoute,
 } as any)
+const AppStockAdjustmentCreateRoute =
+  AppStockAdjustmentCreateRouteImport.update({
+    id: '/stock-adjustment-create',
+    path: '/stock-adjustment-create',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppStockAdjustmentsRoute = AppStockAdjustmentsRouteImport.update({
+  id: '/stock-adjustments',
+  path: '/stock-adjustments',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSupplierRoute = AppSupplierRouteImport.update({
   id: '/supplier',
   path: '/supplier',
@@ -204,6 +217,8 @@ export interface FileRoutesByFullPath {
   '/sale-create': typeof AppSaleCreateRoute
   '/service-orders': typeof AppServiceOrdersRoute
   '/service-orders-create': typeof AppServiceOrdersCreateRoute
+  '/stock-adjustment-create': typeof AppStockAdjustmentCreateRoute
+  '/stock-adjustments': typeof AppStockAdjustmentsRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -234,6 +249,8 @@ export interface FileRoutesByTo {
   '/sale-create': typeof AppSaleCreateRoute
   '/service-orders': typeof AppServiceOrdersRoute
   '/service-orders-create': typeof AppServiceOrdersCreateRoute
+  '/stock-adjustment-create': typeof AppStockAdjustmentCreateRoute
+  '/stock-adjustments': typeof AppStockAdjustmentsRoute
   '/supplier': typeof AppSupplierRoute
   '/supplier-create': typeof AppSupplierCreateRoute
   '/upload-xml': typeof AppUploadXmlRoute
@@ -267,6 +284,8 @@ export interface FileRoutesById {
   '/_app/sale-create': typeof AppSaleCreateRoute
   '/_app/service-orders': typeof AppServiceOrdersRoute
   '/_app/service-orders-create': typeof AppServiceOrdersCreateRoute
+  '/_app/stock-adjustment-create': typeof AppStockAdjustmentCreateRoute
+  '/_app/stock-adjustments': typeof AppStockAdjustmentsRoute
   '/_app/supplier': typeof AppSupplierRoute
   '/_app/supplier-create': typeof AppSupplierCreateRoute
   '/_app/upload-xml': typeof AppUploadXmlRoute
@@ -299,6 +318,8 @@ export interface FileRouteTypes {
     | '/sale-create'
     | '/service-orders'
     | '/service-orders-create'
+    | '/stock-adjustment-create'
+    | '/stock-adjustments'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -329,6 +350,8 @@ export interface FileRouteTypes {
     | '/sale-create'
     | '/service-orders'
     | '/service-orders-create'
+    | '/stock-adjustment-create'
+    | '/stock-adjustments'
     | '/supplier'
     | '/supplier-create'
     | '/upload-xml'
@@ -361,6 +384,8 @@ export interface FileRouteTypes {
     | '/_app/sale-create'
     | '/_app/service-orders'
     | '/_app/service-orders-create'
+    | '/_app/stock-adjustment-create'
+    | '/_app/stock-adjustments'
     | '/_app/supplier'
     | '/_app/supplier-create'
     | '/_app/upload-xml'
@@ -497,6 +522,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppServiceOrdersCreateRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/stock-adjustment-create': {
+      id: '/_app/stock-adjustment-create'
+      path: '/stock-adjustment-create'
+      fullPath: '/stock-adjustment-create'
+      preLoaderRoute: typeof AppStockAdjustmentCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/stock-adjustments': {
+      id: '/_app/stock-adjustments'
+      path: '/stock-adjustments'
+      fullPath: '/stock-adjustments'
+      preLoaderRoute: typeof AppStockAdjustmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/supplier': {
       id: '/_app/supplier'
       path: '/supplier'
@@ -612,6 +651,8 @@ interface AppRouteChildren {
   AppSaleCreateRoute: typeof AppSaleCreateRoute
   AppServiceOrdersRoute: typeof AppServiceOrdersRoute
   AppServiceOrdersCreateRoute: typeof AppServiceOrdersCreateRoute
+  AppStockAdjustmentCreateRoute: typeof AppStockAdjustmentCreateRoute
+  AppStockAdjustmentsRoute: typeof AppStockAdjustmentsRoute
   AppSupplierRoute: typeof AppSupplierRoute
   AppSupplierCreateRoute: typeof AppSupplierCreateRoute
   AppUploadXmlRoute: typeof AppUploadXmlRoute
@@ -641,6 +682,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppSaleCreateRoute: AppSaleCreateRoute,
   AppServiceOrdersRoute: AppServiceOrdersRoute,
   AppServiceOrdersCreateRoute: AppServiceOrdersCreateRoute,
+  AppStockAdjustmentCreateRoute: AppStockAdjustmentCreateRoute,
+  AppStockAdjustmentsRoute: AppStockAdjustmentsRoute,
   AppSupplierRoute: AppSupplierRoute,
   AppSupplierCreateRoute: AppSupplierCreateRoute,
   AppUploadXmlRoute: AppUploadXmlRoute,

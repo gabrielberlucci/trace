@@ -62,3 +62,8 @@ export {
 export { dashboardService } from './dashboard.service';
 
 export { getKardex } from './kardex.service';
+
+export {
+  createStockAdjustment,
+  getPaginatedStockAdjustment,
+} from './stock.adjustment.service';
