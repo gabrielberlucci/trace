@@ -16,7 +16,7 @@ export const createSale = async (saleData: SaleCart) => {
 
       const customer = await tx.customer.findUnique({
         where: {
-          document: saleData.document,
+          document: saleData.document || '',
         },
 
         select: {
@@ -133,10 +133,7 @@ export const createSale = async (saleData: SaleCart) => {
             `O produto ${requestBarcode} não pode ter a quantidade 0`,
           );
 
-        if (
-          dbProductUnity === 'UN' ||
-          (dbProductUnity === 'BALDE' && !Number.isInteger(requestQuantity))
-        )
+        if (dbProductUnity === 'UN' && !Number.isInteger(requestQuantity))
           throw new BadRequest(
             `O produto ${dbBarcode} tem o tipo ${dbProductUnity} e não pode ser vendido fracionado`,
           );

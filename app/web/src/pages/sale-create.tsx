@@ -157,7 +157,9 @@ const SalesCreatePage = () => {
     if (existing) {
       setCartItems(
         cartItems.map((item) =>
-          item.id === product.id ? { ...item, qty: String(parseQty(item.qty) + 1).replace('.', ',') } : item,
+          item.id === product.id
+            ? { ...item, qty: String(parseQty(item.qty) + 1).replace('.', ',') }
+            : item,
         ),
       );
     } else {
@@ -201,10 +203,6 @@ const SalesCreatePage = () => {
       toast.error('O carrinho está vazio');
       return;
     }
-    if (!selectedCustomer) {
-      toast.error('Selecione um cliente para a venda');
-      return;
-    }
     if (!selectedPayment) {
       toast.error('Selecione uma forma de pagamento');
       return;
@@ -213,7 +211,7 @@ const SalesCreatePage = () => {
     try {
       setIsSubmitting(true);
       const payload = {
-        document: selectedCustomer?.document || null,
+        document: selectedCustomer?.document || '',
         cashier: cashier?.id || 1, // Fallback para 1 caso o getMe falhe
         payment: selectedPayment,
         items: cartItems.map((item) => ({
@@ -500,15 +498,18 @@ const SalesCreatePage = () => {
                               className="flex-1 text-center font-bold text-sm h-8 p-0 border-0 bg-transparent focus-visible:ring-0 shadow-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
                               value={item.qty}
                               onChange={(e) => {
-                                let val = e.target.value.replace(/[^0-9,.]/g, '').replace('.', ',');
+                                let val = e.target.value
+                                  .replace(/[^0-9,.]/g, '')
+                                  .replace('.', ',');
                                 const parts = val.split(',');
                                 if (parts.length > 2) {
-                                  val = parts[0] + ',' + parts.slice(1).join('');
+                                  val =
+                                    parts[0] + ',' + parts.slice(1).join('');
                                 }
                                 setCartItems(
                                   cartItems.map((c) =>
-                                    c.id === item.id ? { ...c, qty: val } : c
-                                  )
+                                    c.id === item.id ? { ...c, qty: val } : c,
+                                  ),
                                 );
                               }}
                               onBlur={(e) => {
@@ -516,8 +517,13 @@ const SalesCreatePage = () => {
                                 if (val <= 0 || isNaN(val)) val = 1;
                                 setCartItems(
                                   cartItems.map((c) =>
-                                    c.id === item.id ? { ...c, qty: String(val).replace('.', ',') } : c
-                                  )
+                                    c.id === item.id
+                                      ? {
+                                          ...c,
+                                          qty: String(val).replace('.', ','),
+                                        }
+                                      : c,
+                                  ),
                                 );
                               }}
                             />
@@ -541,10 +547,11 @@ const SalesCreatePage = () => {
                         <div className="col-span-2 flex items-center justify-end gap-2 text-right font-bold text-sm text-foreground">
                           <span>
                             R${' '}
-                            {(item.salePrice * parseQty(item.qty)).toLocaleString(
-                              'pt-BR',
-                              { minimumFractionDigits: 2 },
-                            )}
+                            {(
+                              item.salePrice * parseQty(item.qty)
+                            ).toLocaleString('pt-BR', {
+                              minimumFractionDigits: 2,
+                            })}
                           </span>
                           <button
                             type="button"
