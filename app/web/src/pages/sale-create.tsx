@@ -203,6 +203,10 @@ const SalesCreatePage = () => {
       toast.error('O carrinho está vazio');
       return;
     }
+    if (!selectedCustomer) {
+      toast.error('Selecione um cliente para a venda');
+      return;
+    }
     if (!selectedPayment) {
       toast.error('Selecione uma forma de pagamento');
       return;
