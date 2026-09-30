@@ -374,7 +374,8 @@ export const ReceiptPDF = ({ sale, saleId }: ReceiptPDFProps) => {
                     {formatCurrency(item.salePrice)}
                   </Text>
                   <Text style={[styles.tableCell, styles.colQtd]}>
-                    {item.quantity}
+                    {String(item.quantity).replace('.', ',')}
+                    {item.product?.unity ? ` ${item.product.unity}` : ''}
                   </Text>
                   <Text style={[styles.tableCell, styles.colTotal]}>
                     {formatCurrency(item.totalPrice)}

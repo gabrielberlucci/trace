@@ -103,6 +103,9 @@ export interface SingleSaleData {
     quantity: number;
     salePrice: string;
     totalPrice: string;
+    product?: {
+      unity: string;
+    };
   }[] | null;
   user: {
     name: string | null;

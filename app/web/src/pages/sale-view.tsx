@@ -320,7 +320,10 @@ const SaleViewPage = () => {
                         <Barcode className="h-4 w-4 text-muted-foreground" />
                         {item.barcode}
                       </td>
-                      <td className="px-6 py-4 text-center">{item.quantity}</td>
+                      <td className="px-6 py-4 text-center">
+                        {String(item.quantity).replace('.', ',')}
+                        {item.product?.unity ? ` ${item.product.unity}` : ''}
+                      </td>
                       <td className="px-6 py-4 text-right">
                         {formatCurrency(item.salePrice)}
                       </td>

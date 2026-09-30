@@ -11,7 +11,7 @@ export const saleCartSchema = z.object({
       ...productSchema.pick({ barcode: true }).shape,
       quantity: z
         .number()
-        .check(z.gte(1, { error: 'Insira uma quantidade acima de zero' })),
+        .check(z.gte(0.01, { error: 'Insira uma quantidade acima de zero' })),
     }),
   ),
 });

@@ -111,6 +111,7 @@ export const createSale = async (saleData: SaleCart) => {
         const dbCostPrice = product.at(0)?.costPrice;
         const dbDescription = product.at(0)?.description;
         const dbProductId = product.at(0)?.id;
+        const dbProductUnity = product.at(0)?.unity;
 
         // i mean, not a good way to throw error, but....
         if (
@@ -130,6 +131,14 @@ export const createSale = async (saleData: SaleCart) => {
         if (requestQuantity === 0)
           throw new BadRequest(
             `O produto ${requestBarcode} não pode ter a quantidade 0`,
+          );
+
+        if (
+          dbProductUnity === 'UN' ||
+          (dbProductUnity === 'BALDE' && !Number.isInteger(requestQuantity))
+        )
+          throw new BadRequest(
+            `O produto ${dbBarcode} tem o tipo ${dbProductUnity} e não pode ser vendido fracionado`,
           );
 
         if (dbQuantity < requestQuantity)
@@ -297,6 +306,12 @@ export const getSale = async (id: number) => {
           totalPrice: true,
 
           productId: true,
+
+          product: {
+            select: {
+              unity: true,
+            },
+          },
         },
       },
       user: {

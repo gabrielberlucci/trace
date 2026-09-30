@@ -44,7 +44,14 @@ const PaymentIcons: Record<string, React.ElementType> = {
   OUTRO: Banknote,
 };
 
-type CartItem = PaginatedProductsData & { qty: number };
+type CartItem = PaginatedProductsData & { qty: number | string };
+
+const parseQty = (val: string | number): number => {
+  if (typeof val === 'number') return val;
+  if (!val) return 0;
+  const parsed = Number(val.replace(',', '.'));
+  return isNaN(parsed) ? 0 : parsed;
+};
 
 const SalesCreatePage = () => {
   const navigate = useNavigate();
@@ -150,11 +157,11 @@ const SalesCreatePage = () => {
     if (existing) {
       setCartItems(
         cartItems.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item,
+          item.id === product.id ? { ...item, qty: String(parseQty(item.qty) + 1).replace('.', ',') } : item,
         ),
       );
     } else {
-      setCartItems([...cartItems, { ...product, qty: 1 }]);
+      setCartItems([...cartItems, { ...product, qty: '1' }]);
     }
     setProductSearch('');
     setSearchFocused(false);
@@ -164,8 +171,10 @@ const SalesCreatePage = () => {
     setCartItems(
       cartItems.map((item) => {
         if (item.id === id) {
-          const newQty = Math.max(1, item.qty + delta);
-          return { ...item, qty: newQty };
+          const currentQty = parseQty(item.qty);
+          const newQty = Math.max(0.001, currentQty + delta);
+          const rounded = Math.round(newQty * 1000) / 1000;
+          return { ...item, qty: String(rounded).replace('.', ',') };
         }
         return item;
       }),
@@ -209,7 +218,7 @@ const SalesCreatePage = () => {
         payment: selectedPayment,
         items: cartItems.map((item) => ({
           barcode: item.barcode,
-          quantity: item.qty,
+          quantity: parseQty(item.qty) || 1,
         })),
       };
 
@@ -230,7 +239,7 @@ const SalesCreatePage = () => {
   };
 
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.salePrice * item.qty,
+    (acc, item) => acc + item.salePrice * parseQty(item.qty),
     0,
   );
 
@@ -485,9 +494,33 @@ const SalesCreatePage = () => {
                             >
                               <Minus className="w-4 h-4" />
                             </button>
-                            <span className="flex-1 text-center font-bold text-sm">
-                              {item.qty}
-                            </span>
+                            <Input
+                              type="text"
+                              inputMode="decimal"
+                              className="flex-1 text-center font-bold text-sm h-8 p-0 border-0 bg-transparent focus-visible:ring-0 shadow-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
+                              value={item.qty}
+                              onChange={(e) => {
+                                let val = e.target.value.replace(/[^0-9,.]/g, '').replace('.', ',');
+                                const parts = val.split(',');
+                                if (parts.length > 2) {
+                                  val = parts[0] + ',' + parts.slice(1).join('');
+                                }
+                                setCartItems(
+                                  cartItems.map((c) =>
+                                    c.id === item.id ? { ...c, qty: val } : c
+                                  )
+                                );
+                              }}
+                              onBlur={(e) => {
+                                let val = parseQty(e.target.value);
+                                if (val <= 0 || isNaN(val)) val = 1;
+                                setCartItems(
+                                  cartItems.map((c) =>
+                                    c.id === item.id ? { ...c, qty: String(val).replace('.', ',') } : c
+                                  )
+                                );
+                              }}
+                            />
                             <button
                               type="button"
                               className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-muted transition-colors text-muted-foreground"
@@ -508,7 +541,7 @@ const SalesCreatePage = () => {
                         <div className="col-span-2 flex items-center justify-end gap-2 text-right font-bold text-sm text-foreground">
                           <span>
                             R${' '}
-                            {(item.salePrice * item.qty).toLocaleString(
+                            {(item.salePrice * parseQty(item.qty)).toLocaleString(
                               'pt-BR',
                               { minimumFractionDigits: 2 },
                             )}
