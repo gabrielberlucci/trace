@@ -66,6 +66,8 @@ model Product {
   supplierId   Int?
   movement     StockMovement[]
   item         SaleItem[]
+  categories   Categories?     @relation(fields: [categoriesId], references: [id])
+  categoriesId Int?
 }
 
 model StockMovement {
@@ -237,6 +239,16 @@ model ServiceOrderItem {
   note           String?
   order          ServiceOrder @relation(fields: [serviceOrderId], references: [id])
   serviceOrderId Int
+}
+
+/**
+ * i could make a enum, but idk all the categories that can have
+ */
+
+model Categories {
+  id      Int       @id @default(autoincrement())
+  name    String
+  product Product[]
 }
 
 // MAKE SERVICE MODEL
