@@ -37,3 +37,5 @@ export type {
 export type { KardexQueryParams, KardexResult } from './kardex.type';
 
 export type * from './stock.adjustment.type';
+
+export type * from './common.pagination.type';
