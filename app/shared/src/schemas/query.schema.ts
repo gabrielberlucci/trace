@@ -17,8 +17,8 @@ export const queryFilterSchema = z.object({
   name: z
     .string({ error: 'Insira um nome' })
     .trim()
-    .min(2, { error: 'Nome muito curto. Insira pelo menos 3 caracteres' })
-    .max(50, { error: 'Nome muito longo. Insira no máximo 50 caracteres' })
+    .min(1, { error: 'Nome muito curto. Insira pelo menos 1 caracteres' })
+    .max(100, { error: 'Nome muito longo. Insira no máximo 100 caracteres' })
     .optional(),
 
   document: z
