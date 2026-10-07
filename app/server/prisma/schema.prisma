@@ -52,6 +52,7 @@ model Supplier {
   city             City?             @relation(fields: [cityId], references: [id])
   cityId           Int?
   supplierProducts SupplierProduct[]
+  pendingProducts  PendingProduct[]
 }
 
 model Product {
@@ -273,6 +274,7 @@ model Notification {
 }
 
 model SupplierProduct {
+  id           Int      @default(autoincrement())
   productId    Int
   product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   supplierId   Int
@@ -284,6 +286,24 @@ model SupplierProduct {
   conversionFactor Float @default(1)
 
   @@id([productId, supplierId])
+  @@unique([supplierId, supplierCode])
+}
+
+model PendingProduct {
+  id Int @id @default(autoincrement())
+
+  supplierId Int
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  supplierCode String
+  supplierDesc String
+  barcode      String
+  unity        String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  resolved  Boolean  @default(false)
+
   @@unique([supplierId, supplierCode])
 }
 
