@@ -9,8 +9,9 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 export const createCategoryController = async (req: Request, res: Response) => {
   const body = req.body;
+  const userId = res.locals.user.id;
 
-  await createCategory(body);
+  await createCategory(body, userId);
 
   res.status(StatusCodes.CREATED).send({
     status: ReasonPhrases.CREATED,
@@ -55,8 +56,9 @@ export const findCategoryController = async (_req: Request, res: Response) => {
 export const updateCategoryController = async (req: Request, res: Response) => {
   const id = res.locals.params.id;
   const body = req.body;
+  const userId = res.locals.user.id;
 
-  await updateCategory(id, body);
+  await updateCategory(id, body, userId);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,

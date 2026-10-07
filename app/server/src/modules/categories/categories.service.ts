@@ -3,14 +3,20 @@ import { prisma } from '../../../lib/prisma';
 import { getPaginatedData } from '@/repositories';
 import type { Prisma } from '../../../generated/prisma/client';
 
-export const createCategory = async (createCategoryDto: CreateCategoryDto) => {
-  await prisma.categories.create({
-    data: createCategoryDto,
+export const createCategory = async (
+  createCategoryDto: CreateCategoryDto,
+  createdById: number,
+) => {
+  await prisma.category.create({
+    data: {
+      name: createCategoryDto.name,
+      createdById: createdById,
+    },
   });
 };
 
 export const findAllCategory = async (queryFilters: any) => {
-  const where: Prisma.CategoriesWhereInput = {
+  const where: Prisma.CategoryWhereInput = {
     name: queryFilters.name
       ? { contains: queryFilters.name, mode: 'insensitive' }
       : undefined,
@@ -19,10 +25,10 @@ export const findAllCategory = async (queryFilters: any) => {
   const { total, data, totalPages, hasPrevious, hasNext } =
     await getPaginatedData(
       prisma,
-      prisma.categories,
+      prisma.category,
       where,
       queryFilters.page,
-      'Categories',
+      'Category',
       undefined,
       undefined,
       undefined,
@@ -39,7 +45,7 @@ export const findAllCategory = async (queryFilters: any) => {
 };
 
 export const findCategory = async (id: number) => {
-  const result = await prisma.categories.findUnique({
+  const result = await prisma.category.findUnique({
     where: {
       id: id,
     },
@@ -51,9 +57,13 @@ export const findCategory = async (id: number) => {
 export const updateCategory = async (
   id: number,
   updateCategoryDto: UpdateCategoryDto,
+  updatedById: number,
 ) => {
-  await prisma.categories.update({
-    data: updateCategoryDto,
+  await prisma.category.update({
+    data: {
+      name: updateCategoryDto.name,
+      updatedById: updatedById,
+    },
     where: {
       id: id,
     },
