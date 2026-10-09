@@ -1,6 +1,5 @@
 export type { CustomerQueryParamsFilters } from './customer.type';
 export type { PaymentMethodQueryParamsFilters } from './payment.methods.type';
-export type { ProductQueryParamsFilters } from './product.type';
 export type {
   SaleCart,
   ValidatedSaleCart,
