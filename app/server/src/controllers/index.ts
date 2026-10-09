@@ -13,13 +13,6 @@ export {
 } from './supplier.controller';
 
 export {
-  createProductController,
-  getPaginatedProductsController,
-  modifyProductController,
-  getProductController,
-} from './product.controller';
-
-export {
   registerUserController,
   loginUserController,
   getPaginatedUsersController,
