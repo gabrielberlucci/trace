@@ -4,7 +4,7 @@ import { getPaginatedData } from '@/repositories';
 import type { Prisma } from '../../../generated/prisma/client';
 
 export const createCategory = async (
-  createCategoryDto: CreateCategoryDto,
+  createCategoryDto: Prisma.CategoryCreateInput,
   createdById: number,
 ) => {
   await prisma.category.create({
