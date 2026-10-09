@@ -2,6 +2,7 @@ import type { CreateCategoryDto, UpdateCategoryDto } from '@app/shared';
 import { prisma } from '../../../lib/prisma';
 import { getPaginatedData } from '@/repositories';
 import type { Prisma } from '../../../generated/prisma/client';
+import type { CategoriesQueryFilter } from './dto/query-filters.dto';
 
 export const createCategory = async (
   createCategoryDto: Prisma.CategoryCreateInput,
@@ -15,7 +16,7 @@ export const createCategory = async (
   });
 };
 
-export const findAllCategory = async (queryFilters: any) => {
+export const findAllCategory = async (queryFilters: CategoriesQueryFilter) => {
   const where: Prisma.CategoryWhereInput = {
     name: queryFilters.name
       ? { contains: queryFilters.name, mode: 'insensitive' }
