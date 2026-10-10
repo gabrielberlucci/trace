@@ -70,4 +70,5 @@ export const queryFilterSchema = z.object({
     .min(1, { error: 'Insira uma numeração' })
     .max(9, { error: 'Numeração máxima deve conter 9 digitos' })
     .optional(),
+  id: z.string({ error: 'Insira o ID' }).optional(),
 });
