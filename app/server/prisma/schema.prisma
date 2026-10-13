@@ -59,7 +59,7 @@ model Product {
   id               Int               @id @default(autoincrement())
   description      String
   barcode          String            @unique
-  unity            Unity
+  unit             Unit
   currentStock     Float             @default(0)
   costPrice        Decimal           @db.Decimal(9, 2)
   salePrice        Decimal           @db.Decimal(9, 2)
@@ -314,7 +314,7 @@ enum typePerson {
   PJ
 }
 
-enum Unity {
+enum Unit {
   UN
   CM
   MT
