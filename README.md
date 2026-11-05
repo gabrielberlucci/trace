@@ -153,7 +153,7 @@ Para rodar os seeds iniciais do banco dentro do container da API:
 ```bash
 cd app
 pnpm dev:docker:seed
-# ou: docker compose -f docker-compose.dev.yml exec api pnpm run seed:all
+# ou: docker compose -f docker-compose.dev.yml exec api pnpm --filter server run seed:all
 ```
 
 ---

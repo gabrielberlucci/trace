@@ -10,12 +10,13 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_dev_data:/var/lib/postgresql/data
+      - postgres_dev_data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U trace -d trace_dev']
       interval: 3s
       timeout: 3s
       retries: 10
+      start_period: 10s
 
   redis:
     image: redis:8-alpine
@@ -30,6 +31,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 10
+      start_period: 5s
 
   api:
     build:
@@ -37,7 +39,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: trace-api-dev
     restart: unless-stopped
-    command: sh -c "cd server && npx prisma generate && npx prisma migrate deploy && pnpm dev"
+    command: sh -c "pnpm --filter @app/shared build && cd server && npx prisma generate && npx prisma migrate deploy && pnpm dev"
     ports:
       - '3000:3000'
     environment:
@@ -69,7 +71,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: trace-worker-dev
     restart: unless-stopped
-    command: sh -c "cd server && npx prisma generate && pnpm run worker:upload-xml"
+    command: sh -c "pnpm --filter @app/shared build && cd server && npx prisma generate && pnpm run worker:upload-xml"
     environment:
       - DATABASE_URL=postgresql://trace:trace_dev_password@postgres:5432/trace_dev?schema=public
       - NODE_ENV=development
