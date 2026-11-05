@@ -1,0 +1,23 @@
+FROM node:24.13.0-alpine
+
+WORKDIR /usr/src/app
+
+RUN corepack enable && corepack prepare pnpm@11.17.0 --activate
+
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY server/package.json ./server/
+COPY shared/package.json ./shared/
+
+RUN pnpm install --no-frozen-lockfile
+
+COPY shared ./shared
+COPY server/prisma ./server/prisma
+COPY server/prisma.config.ts ./server/
+
+RUN cd server && npx prisma generate
+
+COPY server ./server
+
+RUN mkdir -p server/uploads-xml/pending server/uploads-xml/error server/uploads-xml/processed
+
+EXPOSE 3000
