@@ -127,27 +127,40 @@ flowchart TD
 
 ## Como Rodar o Projeto
 
-### Pré-requisitos
-- Node.js >= 22 (recomendado 24+)
-- pnpm >= 10
-- PostgreSQL e Redis (ou Docker instalado)
+### Opção 1: Backend Completo via Docker (Recomendado)
 
----
-
-### 1. Rodando a infraestrutura com Docker
-
-Se preferir rodar o banco de dados e o Redis via Docker Compose:
+Sobe PostgreSQL, Redis, API Express e Worker de processamento de XML em containers integrados, com hot-reload no código, migrações automáticas e compartilhamento da pasta `uploads-xml` entre API e Worker:
 
 ```bash
 cd app
-docker compose up -d postgres redis
+
+# Sobe PostgreSQL, Redis, API e Worker
+docker compose -f docker-compose.dev.yml up
+
+# Ou via atalho configurado no package.json:
+# pnpm dev:docker
+```
+
+Em outro terminal, execute o frontend no host:
+
+```bash
+cd app/web
+pnpm dev
+```
+
+Para rodar os seeds iniciais do banco dentro do container da API:
+
+```bash
+cd app
+pnpm dev:docker:seed
+# ou: docker compose -f docker-compose.dev.yml exec api pnpm run seed:all
 ```
 
 ---
 
-### 2. Configuração local
+### Opção 2: Execução Manual dos Serviços
 
-#### Passo 1: Instalar dependências
+#### 1. Instalar dependências
 
 A partir da pasta `app`:
 
@@ -156,9 +169,9 @@ cd app
 pnpm install
 ```
 
-#### Passo 2: Configurar variáveis de ambiente
+#### 2. Configurar variáveis de ambiente
 
-Crie o arquivo `app/server/.env` com base no exemplo abaixo:
+Crie o arquivo `app/server/.env`:
 
 ```env
 DATABASE_URL="postgresql://trace:password@localhost:5432/trace?schema=public"
@@ -178,7 +191,7 @@ REDIS_HOST="127.0.0.1"
 REDIS_PORT=6379
 ```
 
-#### Passo 3: Executar migrations e seeds
+#### 3. Executar migrations e seeds
 
 ```bash
 cd app/server
@@ -186,9 +199,7 @@ npx prisma migrate dev && npx prisma generate
 pnpm run seed:all
 ```
 
-O comando `seed:all` popula tabelas iniciais, cidades, permissões, perfis e o usuário inicial.
-
-#### Passo 4: Iniciar os serviços
+#### 4. Iniciar os serviços
 
 Em terminais separados:
 

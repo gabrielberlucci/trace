@@ -8,6 +8,10 @@
     "dev:all": "concurrently -n shared,server,web --raw \"pnpm --filter @app/shared dev\" \"pnpm --filter server dev\" \"pnpm --filter web dev\"",
     "dev:server": "concurrently -n shared,server --raw \"pnpm --filter @app/shared dev\" \"pnpm --filter server dev\"",
     "dev:web": "concurrently \"pnpm --filter web dev\"",
+    "dev:docker": "docker compose -f docker-compose.dev.yml up",
+    "dev:docker:build": "docker compose -f docker-compose.dev.yml up --build",
+    "dev:docker:down": "docker compose -f docker-compose.dev.yml down",
+    "dev:docker:seed": "docker compose -f docker-compose.dev.yml exec api pnpm run seed:all",
     "worker:upload-xml": "concurrently -n --raw \"pnpm --filter server worker:upload-xml\""
   },
   "keywords": [],
