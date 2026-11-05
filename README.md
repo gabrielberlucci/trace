@@ -72,17 +72,17 @@ O projeto utiliza `pnpm workspaces` dividido em três pacotes principais:
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Frontend (app/web)"]
-        UI["React 19 + TanStack Router / Query"]
+    subgraph Client ["Frontend - app/web"]
+        UI["React 19 + TanStack Router e Query"]
     end
 
-    subgraph Backend ["Backend (app/server)"]
+    subgraph Backend ["Backend - app/server"]
         API["Express 5 REST API"]
-        Shared["@app/shared (Schemas Zod e DTOs)"]
-        Worker["Worker BullMQ (Processamento XML)"]
+        Shared["@app/shared - Schemas Zod e DTOs"]
+        Worker["Worker BullMQ - Ingestao XML"]
     end
 
-    subgraph Infra ["Dados e Filas"]
+    subgraph Infra ["Banco de Dados e Filas"]
         DB[("PostgreSQL 18")]
         Redis[("Redis 8")]
     end
@@ -91,14 +91,15 @@ flowchart TD
         Axiom["Axiom HQ"]
     end
 
-    UI -->|HTTP / REST| API
+    UI --> API
     UI -.-> Shared
     API -.-> Shared
-    API -->|Persistência| DB
-    API -->|Enfileira Jobs| Redis
-    Worker -->|Consome Jobs| Redis
-    Worker -->|Atualiza Dados| DB
-    API & Worker -->|Pino Logs| Axiom
+    API --> DB
+    API --> Redis
+    Worker --> Redis
+    Worker --> DB
+    API --> Axiom
+    Worker --> Axiom
 ```
 
 ---
