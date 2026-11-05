@@ -27,7 +27,7 @@ O foco da aplicação é garantir integridade dos dados operacionais: cada movim
 - Registro auditável de movimentações (`VENDAS`, `SERVICO`, `PERDA`, `IMPORTACAO`, `AJUSTE_ENTRADA`, `AJUSTE_SAIDA`).
 - Visualização de Kardex por produto, com saldo anterior, movimentação e saldo atual.
 - Suporte a unidades de medida fracionadas e inteiras (`UN`, `CM`, `MT`, `MM`, `BALDE`, `LITRO`).
-- Mapeamento entre código do produto no fornecedor e SKU interno (`SupplierProduct`), incluindo fator de conversão de quantidade.
+- Vínculo entre o código do produto no fornecedor e o produto interno (`SupplierProduct`).
 
 ### Processamento de NF-e (XML)
 - Upload de arquivos XML com processamento assíncrono via filas (BullMQ e Redis).
