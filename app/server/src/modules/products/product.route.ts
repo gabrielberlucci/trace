@@ -1,10 +1,10 @@
 import { UserPermissions } from '@app/shared';
 import {
   createProductController,
-  getPaginatedProductsController,
-  getProductController,
-  modifyProductController,
-} from '@/controllers';
+  findAllProductController,
+  findProductController,
+  updateProductController,
+} from './product.controller';
 import {
   authMiddleware,
   validateData,
@@ -101,7 +101,7 @@ productRouter.patch(
   validatePermission(UserPermissions.MODIFY_PRODUCT),
   validateData(modifyProductSchema),
   validateParam(reqParamSchema),
-  modifyProductController,
+  updateProductController,
 );
 
 productRouter.get(
@@ -109,7 +109,7 @@ productRouter.get(
   authMiddleware,
   validatePermission(UserPermissions.VIEW_PRODUCT),
   validateQuery(queryFilterSchema),
-  getPaginatedProductsController,
+  findAllProductController,
 );
 
 productRouter.get(
@@ -117,7 +117,7 @@ productRouter.get(
   authMiddleware,
   validatePermission(UserPermissions.VIEW_PRODUCT),
   validateParam(reqParamSchema),
-  getProductController,
+  findProductController,
 );
 
 export { productRouter };

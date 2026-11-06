@@ -51,19 +51,33 @@ export const updateInfoFromXML = async (
         `Empresa com o CNPJ: ${destCNPJ} está inativo. Ative a empresa para importar o XML`,
       );
 
-    const prd = await tx.product.findMany({
+    // const prd = await tx.product.findMany({
+    //   where: {
+    //     barcode: { in: products.map((product) => product.cProd) },
+    //   },
+    //   select: {
+    //     barcode: true,
+    //     id: true,
+    //   },
+    // });
+
+    const prd = await tx.supplierProduct.findMany({
       where: {
-        barcode: { in: products.map((product) => product.cProd) },
-      },
-      select: {
-        barcode: true,
-        id: true,
+        supplierCode: { in: products.map((p) => p.cProd) },
       },
     });
 
+    /**
+     * this case is when the product is not found
+     * what we will do iin here is
+     * still found the missing products
+     * after recording the missing products in a table
+     */
     if (prd.length !== products.length) {
-      const foundBarcodes = new Set(prd.map((p) => p.barcode));
+      const foundBarcodes = new Set(prd.map((p) => p.supplierCode));
       const missing = products.filter((item) => !foundBarcodes.has(item.cProd));
+
+      console.log(missing);
 
       throw new Error(
         `Os produtos ${missing.map((item) => item.cProd).join(', ')} não foram encontrados.`,

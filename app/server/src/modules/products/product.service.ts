@@ -1,16 +1,19 @@
-import { prisma } from '../../lib/prisma';
-import { Prisma } from '../../generated/prisma/client';
+import { prisma } from '../../../lib/prisma';
+import { Prisma } from '../../../generated/prisma/client';
 import { getPaginatedData } from '@/repositories';
-import type { ProductQueryParamsFilters } from '@/types';
+import type { ProductQueryFilters } from './dto/query-filters.dto';
 import { NotFound } from '@/error';
 
 export const createProduct = async (productData: Prisma.ProductCreateInput) => {
-  const product = await prisma.product.create({ data: productData });
-
-  return product;
+  await prisma.product.create({
+    data: {
+      ...productData,
+      supplierProducts: {},
+    },
+  });
 };
 
-export const modifyProduct = async (
+export const updateProduct = async (
   productId: number,
   productData: Prisma.ProductUpdateInput,
 ) => {
@@ -25,14 +28,13 @@ export const modifyProduct = async (
   return modifiedProduct;
 };
 
-export const getPaginatedProducts = async (
-  queryFilters: ProductQueryParamsFilters,
-) => {
+export const findAllProduct = async (queryFilters: ProductQueryFilters) => {
   const where: Prisma.ProductWhereInput = {
     barcode: queryFilters.barcode,
     description: queryFilters.description
       ? { contains: queryFilters.description, mode: 'insensitive' }
       : undefined,
+    id: queryFilters.id ? Number(queryFilters.id) : undefined,
   };
 
   const select: Prisma.ProductSelect = {
@@ -40,7 +42,7 @@ export const getPaginatedProducts = async (
     description: true,
     barcode: true,
     currentStock: true,
-    unity: true,
+    unit: true,
     salePrice: true,
   };
 
@@ -51,8 +53,8 @@ export const getPaginatedProducts = async (
       where,
       queryFilters.page,
       'Product',
-      null,
-      null,
+      undefined,
+      undefined,
       undefined,
       select,
     );
@@ -66,7 +68,7 @@ export const getPaginatedProducts = async (
   };
 };
 
-export const getProduct = async (productId: number) => {
+export const findProduct = async (productId: number) => {
   const result = await prisma.product.findUnique({
     where: { id: productId },
   });

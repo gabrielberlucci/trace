@@ -249,7 +249,7 @@ const ProductsPage = () => {
         <DataTable
           columns={productsColumns}
           data={data?.data || []}
-          searchPlaceholder="Buscar por descrição ou código..."
+          searchPlaceholder="Buscar por descrição, código ou ID..."
           toolbarActions={toolbarActions}
           showPagination={false}
           searchValue={localSearch}

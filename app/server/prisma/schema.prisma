@@ -35,37 +35,39 @@ model Customer {
 }
 
 model Supplier {
-  id            Int        @id @default(autoincrement())
-  document      String     @unique
-  typePerson    typePerson @default(PJ) // IDK IF ITS NECESSARY, BUT MAYBE WILL BE BAYED FROM A GUY WITH CPF? WHY NOT.
-  name          String
-  fantasyName   String?
-  phone         String?
-  address       String?
-  zipcode       String?
-  addressNumber Int?
-  complement    String?
-  neighborhood  String?
-  email         String?    @unique
-  ie            String?    @unique
-  active        Boolean    @default(true)
-  city          City?      @relation(fields: [cityId], references: [id])
-  cityId        Int?
-  products      Product[]
+  id               Int               @id @default(autoincrement())
+  document         String            @unique
+  typePerson       typePerson        @default(PJ) // IDK IF ITS NECESSARY, BUT MAYBE WILL BE BAYED FROM A GUY WITH CPF? WHY NOT.
+  name             String
+  fantasyName      String?
+  phone            String?
+  address          String?
+  zipcode          String?
+  addressNumber    Int?
+  complement       String?
+  neighborhood     String?
+  email            String?           @unique
+  ie               String?           @unique
+  active           Boolean           @default(true)
+  city             City?             @relation(fields: [cityId], references: [id])
+  cityId           Int?
+  supplierProducts SupplierProduct[]
+  pendingProducts  PendingProduct[]
 }
 
 model Product {
-  id           Int             @id @default(autoincrement())
-  description  String
-  barcode      String          @unique
-  unity        Unity
-  currentStock Float           @default(0)
-  costPrice    Decimal         @db.Decimal(9, 2)
-  salePrice    Decimal         @db.Decimal(9, 2)
-  supplier     Supplier?       @relation(fields: [supplierId], references: [id])
-  supplierId   Int?
-  movement     StockMovement[]
-  item         SaleItem[]
+  id               Int               @id @default(autoincrement())
+  description      String
+  barcode          String            @unique
+  unit             Unit
+  currentStock     Float             @default(0)
+  costPrice        Decimal           @db.Decimal(9, 2)
+  salePrice        Decimal           @db.Decimal(9, 2)
+  movement         StockMovement[]
+  item             SaleItem[]
+  categories       Category?         @relation(fields: [categoriesId], references: [id])
+  categoriesId     Int?
+  supplierProducts SupplierProduct[]
 }
 
 model StockMovement {
@@ -95,24 +97,27 @@ model City {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String
-  birthdate     DateTime?
-  phone         String?
-  address       String?
-  zipcode       String?
-  addressNumber Int?
-  complement    String?
-  neighborhood  String?
-  email         String?   @unique
-  password      String
-  username      String    @unique
-  active        Boolean   @default(true)
-  role          Role      @relation(fields: [roleId], references: [id])
-  city          City?     @relation(fields: [cityId], references: [id])
-  cityId        Int?
-  roleId        Int
-  sale          Sale[]
+  id                Int            @id @default(autoincrement())
+  name              String
+  birthdate         DateTime?
+  phone             String?
+  address           String?
+  zipcode           String?
+  addressNumber     Int?
+  complement        String?
+  neighborhood      String?
+  email             String?        @unique
+  password          String
+  username          String         @unique
+  active            Boolean        @default(true)
+  role              Role           @relation(fields: [roleId], references: [id])
+  city              City?          @relation(fields: [cityId], references: [id])
+  cityId            Int?
+  roleId            Int
+  sale              Sale[]
+  createdCategories Category[]     @relation("CategoryCreatedBy")
+  updatedCategories Category[]     @relation("CategoryUpdatedBy")
+  notifications     Notification[]
 }
 
 model Sale {
@@ -239,6 +244,69 @@ model ServiceOrderItem {
   serviceOrderId Int
 }
 
+/**
+ * i could make a enum, but idk all the categories that can have
+ */
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  product   Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  createdById Int
+  createdBy   User @relation("CategoryCreatedBy", fields: [createdById], references: [id])
+
+  updatedById Int?
+  updatedBy   User? @relation("CategoryUpdatedBy", fields: [updatedById], references: [id])
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  message   String
+  isRead    Boolean
+  type      NotificationType
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User?            @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model SupplierProduct {
+  id           Int      @default(autoincrement())
+  productId    Int
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplierId   Int
+  supplier     Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  supplierCode String
+
+  supplierDesc String?
+
+  conversionFactor Float @default(1)
+
+  @@id([productId, supplierId])
+  @@unique([supplierId, supplierCode])
+}
+
+model PendingProduct {
+  id Int @id @default(autoincrement())
+
+  supplierId Int
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  supplierCode String
+  supplierDesc String
+  barcode      String
+  unity        String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  resolved  Boolean  @default(false)
+
+  @@unique([supplierId, supplierCode])
+}
+
 // MAKE SERVICE MODEL
 
 enum typePerson {
@@ -246,7 +314,7 @@ enum typePerson {
   PJ
 }
 
-enum Unity {
+enum Unit {
   UN
   CM
   MT
@@ -276,4 +344,8 @@ enum PaymentType {
 enum RoleType {
   ADMIN
   CAIXA
+}
+
+enum NotificationType {
+  IMPORTACAO_XML
 }

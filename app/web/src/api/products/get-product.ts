@@ -9,11 +9,19 @@ export const getProducts = async (
   let url = `/products?page=${page}`;
 
   if (search && search.trim()) {
-    const isBarcode = /^\d+$/.test(search.trim());
-    if (isBarcode) {
-      url += `&barcode=${encodeURIComponent(search.trim())}`;
-    } else if (search.trim().length >= 2) {
-      url += `&description=${encodeURIComponent(search.trim())}`;
+    const searchTerm = search.trim();
+    const isNumber = /^\d+$/.test(searchTerm);
+    
+    if (isNumber) {
+      // Se tiver 7 dígitos ou menos, assumimos que é um ID. 
+      // Se tiver 8 ou mais (ex: EAN-13), assumimos que é código de barras.
+      if (searchTerm.length >= 8) {
+        url += `&barcode=${encodeURIComponent(searchTerm)}`;
+      } else {
+        url += `&id=${encodeURIComponent(searchTerm)}`;
+      }
+    } else if (searchTerm.length >= 2) {
+      url += `&description=${encodeURIComponent(searchTerm)}`;
     }
   }
 

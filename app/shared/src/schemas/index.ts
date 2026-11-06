@@ -20,3 +20,4 @@ export { companySchema, modifyCompanySchema } from './company.schema';
 export { serviceOrderSchema } from './service.order.schema';
 export { dashboardQueryFilterSchema } from './dashboard.schema';
 export { stockAdjustmentSchema } from './stock.adjustment.schema';
+export * from './categories.schema';

@@ -5,13 +5,6 @@ export {
 } from './customer.service';
 
 export {
-  createProduct,
-  modifyProduct,
-  getPaginatedProducts,
-  getProduct,
-} from './product.service';
-
-export {
   createSupplier,
   modifySupplier,
   getPaginatedSuppliers,

@@ -1,6 +1,5 @@
 export type { CustomerQueryParamsFilters } from './customer.type';
 export type { PaymentMethodQueryParamsFilters } from './payment.methods.type';
-export type { ProductQueryParamsFilters } from './product.type';
 export type {
   SaleCart,
   ValidatedSaleCart,
@@ -37,3 +36,5 @@ export type {
 export type { KardexQueryParams, KardexResult } from './kardex.type';
 
 export type * from './stock.adjustment.type';
+
+export type * from './common.pagination.type';

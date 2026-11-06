@@ -1,30 +1,29 @@
 import { BadRequest } from '@/error';
 import {
   createProduct,
-  getPaginatedProducts,
-  modifyProduct,
-  getProduct,
-} from '@/services';
+  findAllProduct,
+  findProduct,
+  updateProduct,
+} from './product.service';
 import { type Request, type Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 export const createProductController = async (req: Request, res: Response) => {
   const productData = req.body;
 
-  const product = await createProduct(productData);
+  await createProduct(productData);
 
   res.status(StatusCodes.CREATED).send({
     status: ReasonPhrases.CREATED,
     message: 'Produto cadastrado com sucesso',
-    data: product,
   });
 };
 
-export const modifyProductController = async (req: Request, res: Response) => {
+export const updateProductController = async (req: Request, res: Response) => {
   const id = res.locals.params.id;
   const productData = req.body;
 
-  const modifiedProduct = await modifyProduct(id, productData);
+  const modifiedProduct = await updateProduct(id, productData);
 
   res.status(StatusCodes.OK).send({
     message: 'Produto modificado com sucesso',
@@ -32,14 +31,14 @@ export const modifyProductController = async (req: Request, res: Response) => {
   });
 };
 
-export const getPaginatedProductsController = async (
+export const findAllProductController = async (
   _req: Request,
   res: Response,
 ) => {
   const query = res.locals.query;
 
   const { total, data, hasPrevious, hasNext, totalPages } =
-    await getPaginatedProducts(query);
+    await findAllProduct(query);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
@@ -55,10 +54,10 @@ export const getPaginatedProductsController = async (
   });
 };
 
-export const getProductController = async (_req: Request, res: Response) => {
+export const findProductController = async (_req: Request, res: Response) => {
   const id = res.locals.params.id;
 
-  const data = await getProduct(id);
+  const data = await findProduct(id);
 
   res.status(StatusCodes.OK).send({
     status: ReasonPhrases.OK,
