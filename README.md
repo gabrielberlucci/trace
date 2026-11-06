@@ -36,7 +36,7 @@ Histórico cronológico de movimentações com saldo acumulado por SKU, tipo de 
 ### Gestão de Ordens de Serviço (OS)
 Controle e histórico de atendimentos e serviços técnicos prestados.
 
-![Ordens de Serviço](docs/screenshots/service-orders.jpg)
+![Ordens de Serviço](docs/screenshots/service-orders.gif)
 
 ---
 
