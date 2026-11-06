@@ -21,6 +21,25 @@ O Trace unifica esse fluxo: OS com cálculo de horas técnicas, peças e taxas, 
 
 ---
 
+## Screenshots
+
+### Dashboard Operacional
+Visão consolidada com métricas de vendas, ordens de serviço e produtos com estoque crítico.
+
+![Dashboard Operacional](docs/screenshots/dashboard.png)
+
+### Trilha de Auditoria de Estoque (Kardex)
+Histórico cronológico de movimentações com saldo acumulado por SKU, tipo de operação e código de venda/importação.
+
+![Kardex - Auditoria de Estoque](docs/screenshots/kardex.png)
+
+### Gestão de Ordens de Serviço (OS)
+Controle e histórico de atendimentos e serviços técnicos prestados.
+
+![Ordens de Serviço](docs/screenshots/service-orders.jpg)
+
+---
+
 ## Arquitetura (Monorepo)
 
 O projeto utiliza `pnpm workspaces` dividido em três pacotes principais:
@@ -210,17 +229,6 @@ pnpm test
 - **Migração de produtos do sistema legado em andamento:** inventário manual, com sistema antigo em paralelo até conclusão.
 - **Sem testes E2E de frontend:** cobertura atual focada em integração de backend.
 - **Sem CI/CD configurado:** deploy manual via Docker Compose.
-
----
-
-## Screenshots
-
-*(Substitua os links abaixo pelas imagens ou GIFs reais da sua aplicação)*
-
-- `[GIF do fluxo de OS e geração de PDF]`
-- `[Screenshot da trilha auditável do Kardex]`
-- `[GIF do upload e processamento de XML de NF-e]`
-- `[Screenshot da documentação interativa Swagger UI]`
 
 ---
 
