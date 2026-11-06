@@ -7,6 +7,9 @@ services:
       POSTGRES_USER: trace
       POSTGRES_PASSWORD: trace_dev_password
       POSTGRES_DB: trace
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
+    command: "postgres -c timezone=America/Sao_Paulo -c log_timezone=America/Sao_Paulo"
     ports:
       - '5433:5432'
     volumes:
@@ -22,6 +25,8 @@ services:
     image: redis:8-alpine
     container_name: trace-redis-dev
     restart: unless-stopped
+    environment:
+      TZ: America/Sao_Paulo
     ports:
       - '6379:6379'
     volumes:
@@ -43,6 +48,7 @@ services:
     ports:
       - '3000:3000'
     environment:
+      - TZ=America/Sao_Paulo
       - DATABASE_URL=postgresql://trace:trace_dev_password@postgres:5432/trace?schema=public
       - PORT=3000
       - HOST=0.0.0.0
@@ -73,6 +79,7 @@ services:
     restart: unless-stopped
     command: sh -c "pnpm --filter @app/shared build && cd server && npx prisma generate && pnpm run worker:upload-xml"
     environment:
+      - TZ=America/Sao_Paulo
       - DATABASE_URL=postgresql://trace:trace_dev_password@postgres:5432/trace?schema=public
       - NODE_ENV=development
       - LOG_LEVEL=debug
