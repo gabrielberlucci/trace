@@ -96,8 +96,12 @@ flowchart TD
 As escolhas que mais impactaram o sistema — e o porquê de cada uma:
 
 - **Worker desacoplado (BullMQ + Redis) para importação de NF-e** — a API tem o papel de receber a requisição, não de processar arquivos pesados. A leitura de um XML com centenas de itens, validação de regras e checagem de assinatura criptográfica bloqueariam o Event Loop do Node.js, derrubando a disponibilidade da API para o resto do sistema. O worker em background processa a fila de forma isolada, permitindo retry em caso de falha sem impactar a operação de vendas e PDV. O estado de cada arquivo é persistido em disco (`pending`, `processed`, `error`), tornando o processamento observável sem consultar o banco.
+- **Validação criptográfica de integridade de NF-e (`xml-crypto`)** — o XML não é tratado apenas como texto estruturado. O parser extrai o certificado `X509Certificate` e valida a assinatura digital da tag `<Signature>` contra a canonicalização da NF-e antes da persistência. Isso blinda a entrada de estoque contra arquivos adulterados manualmente, documentos fiscais não assinados ou sem autorização da SEFAZ.
 - **Fila PendingProduct para itens não catalogados** — uma NF-e com item desconhecido não pode ser descartada. O lote fica retido até o vínculo entre código do fornecedor e SKU interno (`SupplierProduct`) ser resolvido. Prioridade explícita: não perder dados.
 - **Kardex com saldo anterior + movimentação + saldo resultante** — toda alteração de estoque é auditável, incluindo unidades fracionadas (`UN`, `CM`, `MT`, `MM`, `BALDE`, `LITRO`). Base para reconciliação e detecção de divergência entre estoque físico e sistêmico.
+- **Contagem de paginação via Triggers (`TotalCount`) em vez de `COUNT(*)`** — no PostgreSQL, o `SELECT COUNT(*)` exige varredura sequencial completa (devido ao MVCC), tornando-se um gargalo severo em tabelas de vendas e movimentações à medida que o volume cresce. A tabela `TotalCount` sincronizada via triggers automáticos (`AFTER INSERT`, `DELETE`, `TRUNCATE`) transforma o cálculo do total de registros para paginação em uma consulta $O(1)$ de leitura instantânea.
+- **Renderização de PDF no Client-Side (`@react-pdf/renderer`)** — gerar ordens de serviço no backend via headless browser (como Puppeteer ou Chromium) consome centenas de megabytes de RAM por requisição e pode derrubar a API sob concorrência. Ao transferir a montagem do documento para o navegador a partir de payloads JSON leves da API, o servidor mantém consumo mínimo de recursos e o usuário obtém preview e impressão imediatos.
+- **Lock pessimista (`SELECT FOR UPDATE`) e atomicidade transacional (`$transaction`)** — em operações críticas de concorrência como baixa de estoque na venda e ajuste manual de inventário, o sistema bloqueia as linhas do produto no PostgreSQL (`FOR UPDATE`) dentro de transações ACID isoladas. Isso previne race conditions e divergência de saldo quando múltiplos caixas operam em paralelo. Se qualquer etapa falhar (divergência de estoque ou erro de pagamento), o rollback é total, evitando estados parciais e estoque fantasma.
 - **Zod compartilhado via monorepo** — o mesmo schema valida no front e no back; contrato único elimina divergência de payload entre camadas e reduz duplicação de regra de validação.
 - **JWT em cookies HTTP-Only + RBAC granular** — escolha deliberada para mitigar ataques de XSS: o token não fica exposto ao `localStorage` nem pode ser lido por JavaScript via `document.cookie`. O controle de acesso é feito por Role e Permission, em vez de checagens ad-hoc por rota. Rate-limiting atua como camada extra de proteção contra abusos.
 - **Logs estruturados (Pino → Axiom)** — JSON com contexto, enviado para nuvem. Permite rastrear incidente por request sem grep em arquivo local.
@@ -145,6 +149,13 @@ Para rodar os seeds iniciais dentro do container da API:
 cd app
 pnpm dev:docker:seed
 # ou: docker compose -f docker-compose.dev.yml exec api pnpm --filter server run seed:all
+```
+
+Para rodar migrações sob demanda no container:
+
+```bash
+cd app
+pnpm dev:docker:migrate
 ```
 
 ---
