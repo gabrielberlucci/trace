@@ -11,6 +11,7 @@
     "dev:docker": "docker compose -f docker-compose.dev.yml up",
     "dev:docker:build": "docker compose -f docker-compose.dev.yml up --build",
     "dev:docker:down": "docker compose -f docker-compose.dev.yml down",
+    "dev:docker:migrate": "docker compose -f docker-compose.dev.yml exec api sh -c \"cd server && npx prisma migrate deploy\"",
     "dev:docker:seed": "docker compose -f docker-compose.dev.yml exec api pnpm --filter server run seed:all",
     "worker:upload-xml": "concurrently -n --raw \"pnpm --filter server worker:upload-xml\""
   },
