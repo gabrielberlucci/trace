@@ -3,7 +3,7 @@ export const typePerson = {
   PJ: 'PJ',
 } as const;
 
-export const Unity = {
+export const Unit = {
   UN: 'UN',
   CM: 'CM',
   MT: 'MT',

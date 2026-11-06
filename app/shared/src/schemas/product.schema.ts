@@ -1,12 +1,14 @@
 import { z } from './config';
-import { Unity } from '../constants/enums';
+import { Unit } from '../constants/enums';
 
 export const productSchema = z.object({
   description: z
     .string({ error: 'Descrição inválida' })
     .trim()
     .min(1, { error: 'Descrição muito curta. Use pelo menos 1 caractere' })
-    .max(100, { error: 'Descrição muito longa. Use no máximo 50 caracteres' }),
+    .max(100, {
+      error: 'Descrição muito longa. Use no máximo 50 caracteres',
+    }),
 
   barcode: z
     .string({ error: 'Código de barras inválido' })
@@ -14,13 +16,15 @@ export const productSchema = z.object({
     .pipe(
       z
         .string()
-        .min(5, { error: 'Insira pelo menos 5 caracteres no código de barras' })
+        .min(5, {
+          error: 'Insira pelo menos 5 caracteres no código de barras',
+        })
         .max(60, {
           error: 'Insira no máximo 13 caracteres no código de barras',
         }),
     ),
 
-  unity: z.enum(Unity, {
+  unit: z.enum(Unit, {
     error: 'Unidades de medida devem ser UN, CM, MT, MM, BALDE ou LITRO',
   }),
 
@@ -33,4 +37,18 @@ export const productSchema = z.object({
   supplierId: z.int({ error: 'ID do fornecedor inválido' }).optional(),
 });
 
+export const createProductDto = productSchema.superRefine((val, ctx) => {
+  if (
+    val.unit === 'UN' ||
+    (val.unit === 'BALDE' && Number.isInteger(!val.currentStock))
+  )
+    ctx.addIssue({
+      code: 'invalid_format',
+      message: 'Produtos singulares não podem ter valores decimais',
+      format: '',
+    });
+});
+
 export const modifyProductSchema = productSchema.partial();
+
+export type CreateProductDto = z.infer<typeof createProductDto>;

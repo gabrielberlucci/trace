@@ -5,7 +5,12 @@ import type { ProductQueryFilters } from './dto/query-filters.dto';
 import { NotFound } from '@/error';
 
 export const createProduct = async (productData: Prisma.ProductCreateInput) => {
-  await prisma.product.create({ data: productData });
+  await prisma.product.create({
+    data: {
+      ...productData,
+      supplierProducts: {},
+    },
+  });
 };
 
 export const updateProduct = async (
@@ -37,7 +42,7 @@ export const findAllProduct = async (queryFilters: ProductQueryFilters) => {
     description: true,
     barcode: true,
     currentStock: true,
-    unity: true,
+    unit: true,
     salePrice: true,
   };
 
